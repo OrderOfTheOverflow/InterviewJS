@@ -362,7 +362,7 @@ export default class ComposerView extends React.Component {
             </Container>
             <Container flex={[1, 1, `${100 / 3}%`]} align="right" padded>
               {renderSaveIndicator()}
-              <Action href="https://interviewjs.io" target="_blank">
+              <Action href="https://interviewjs.io/help.html" target="_blank">
                 Help
               </Action>
               <Separator dir="v" size="m" />

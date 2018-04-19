@@ -10,6 +10,7 @@ import RavenLambdaWrapper from "serverless-sentry-lib";
 
 AWS.config.update({ region: "us-east-1" });
 const s3 = new AWS.S3({ apiVersion: '2006-03-01' });
+const dynamodb = new AWS.DynamoDB({ apiVersion: '2012-08-10' });
 
 const computeId = (userId, storyId) => {
   let namespace = userId;
@@ -99,25 +100,27 @@ const processRecord = (record, callback) => {
       }, (err, response) => {
         if (err) return callback(err);
 
-        // FIXME: sequence this
-        s3.putObject({
-          Body: "/* */",
-          ACL: "public-read",
-          ContentType: "application/javascript",
-          Bucket: storyBucket,
-          Key: `${publishId}/poll.js`
-        }, () => {}); // FIXME
+        // // FIXME: sequence this
+        // s3.putObject({
+        //   Body: "/* */",
+        //   ACL: "public-read",
+        //   ContentType: "application/javascript",
+        //   Bucket: storyBucket,
+        //   Key: `${publishId}/poll.js`
+        // }, () => {}); // FIXME
+        createPoll(publishId, storyBucket, (err, data) => {
+          if (err) return callback(err, data);
 
-        s3.putObject({
-          Body: index,
-          ACL: "public-read",
-          ContentType: "text/html; charset=utf-8",
-          Bucket: storyBucket,
-          Key: `${publishId}/index.html`
-        }, (err, response) => {
-          if (err) return callback(err);
-
-          callback(null, publishId);
+          s3.putObject({
+            Body: index,
+            ACL: "public-read",
+            ContentType: "text/html; charset=utf-8",
+            Bucket: storyBucket,
+            Key: `${publishId}/index.html`
+          }, (err, response) => {
+            if (err) return callback(err);
+            callback(null, publishId);
+          });
         });
       });
     });
@@ -128,3 +131,48 @@ const processRecord = (record, callback) => {
 export const publish = RavenLambdaWrapper.handler(Raven, (event, context, callback) => {
   async.map(event.Records, processRecord, callback);
 });
+
+const createPoll = (id, storyBucket, callback) => {
+  dynamodb.scan({
+    ExpressionAttributeNames: {
+      "#QI": "questionId",
+      "#AA": "a",
+      "#AB": "b",
+    },
+    ExpressionAttributeValues: {
+      ":s": { S: id }
+    },
+    FilterExpression: "storyId = :s",
+    ProjectionExpression: "#QI, #AA, #AB",
+    TableName: "interviewjs-polls"
+  }, (err, data) => {
+    if (err) return callback(err, data);
+
+    let poll = [];
+    if (data.Count > 0) {
+      poll = data.Items.map(item => {
+        let a = item ? parseInt(item.a.N) : 0;
+        let b = item ? parseInt(item.b.N) : 0;
+
+        const total = a + b;
+
+        return {
+          id: item.questionId.S,
+          answer1: total > 0 ? (a * 1e2 / total).toFixed() : 0,
+          answer2: total > 0 ? (b * 1e2 / total).toFixed() : 0,
+          counts: [a, b],
+        };
+      });
+    }
+
+    s3.putObject({
+      Body: `window.InterviewJS.poll = ${JSON.stringify(poll)};`,
+      ACL: "public-read",
+      ContentType: "application/javascript",
+      Bucket: storyBucket,
+      Key: `${id}/poll.js`
+    }, (err) => {
+      callback(err, data);
+    });
+  });
+};
