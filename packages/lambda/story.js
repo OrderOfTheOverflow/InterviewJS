@@ -151,11 +151,16 @@ const createPoll = (id, storyBucket, callback) => {
     let poll = [];
     if (data.Count > 0) {
       poll = data.Items.map(item => {
-        const total = parseInt(item.a.N) + parseInt(item.b.N);
+        let a = item ? parseInt(item.a.N) : 0;
+        let b = item ? parseInt(item.b.N) : 0;
+
+        const total = a + b;
+
         return {
           id: item.questionId.S,
-          answer1: total > 0 ? (parseInt(item.a.N) * 1e2 / total).toFixed() : 0,
-          answer2: total > 0 ? (parseInt(item.b.N) * 1e2 / total).toFixed() : 0,
+          answer1: total > 0 ? (a * 1e2 / total).toFixed() : 0,
+          answer2: total > 0 ? (b * 1e2 / total).toFixed() : 0,
+          counts: [a, b],
         };
       });
     }
