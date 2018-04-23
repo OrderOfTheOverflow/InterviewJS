@@ -5,7 +5,15 @@ import { withRouter } from "react-router";
 import React, { Component } from "react";
 import { Actionbar, Action, Avatar, Icon, Tip } from "interviewjs-styleguide";
 import { IntervieweeModal, StoryDetailsModal, Storyline } from "../partials/";
-import { EmoActions, NvmActions, Page, PageBody, PageFoot, Topbar, RunAwayActions } from "./chat/";
+import {
+  EmoActions,
+  NvmActions,
+  Page,
+  PageBody,
+  PageFoot,
+  Topbar,
+  RunAwayActions
+} from "./chat/";
 
 class ChatView extends Component {
   constructor(props) {
@@ -15,7 +23,9 @@ class ChatView extends Component {
     const interviewee = interviewees[this.findIntervieweeIndex()];
     const { story } = this.props;
 
-    const localHistory = JSON.parse(localStorage.getItem(`history-${story.id}-${interviewee.id}`));
+    const localHistory = JSON.parse(
+      localStorage.getItem(`history-${story.id}-${interviewee.id}`)
+    );
 
     this.state = {
       actionbar: "scripted",
@@ -23,7 +33,7 @@ class ChatView extends Component {
       history: localHistory || [],
       intervieweeModal: false,
       replayCachedHistory: true, // TODO
-      storyDetailsModal: false,
+      storyDetailsModal: false
     };
     this.findIntervieweeIndex = this.findIntervieweeIndex.bind(this);
     this.initHistory = this.initHistory.bind(this);
@@ -46,12 +56,21 @@ class ChatView extends Component {
     const thisHistoryItemI = thisHistoryItem ? thisHistoryItem.i : 0;
     const thisItemType = thisHistoryItem.type;
 
+    /*
+      we’re inheriting old data model where user actions were either of type `ignore` or `explore`.
+      according to the new spec, where instead of `explore` loops we have  simple branched narratives,
+      the two action types are no longer self-descriptive. which is why this comment.
+      `explore` is from now on an action to go to the next bubble (if allowed)
+      `ignore` is from now on an action to go to the second next bubble (if allowed)
+     */
+
     const isCurrentNotTheLastItem = thisHistoryItemI < storyline.length - 1;
     const isCurrentTheLastItem = thisHistoryItemI === storyline.length - 1;
 
     if (isCurrentNotTheLastItem) {
       const nextHistoryItem = storyline[thisHistoryItemI + 1];
       const secondNextHistoryItem = storyline[thisHistoryItemI + 2];
+      const thirdNextHistoryItem = storyline[thisHistoryItemI + 3];
       const nextItemRole = nextHistoryItem.role;
 
       const isItIntervieweesTurn = nextItemRole === "interviewee";
@@ -74,7 +93,13 @@ class ChatView extends Component {
       } else if (thisItemType === "emoji") {
         return null;
       } else if (thisItemType === "ignore") {
-        const areNextTwoByInterviewee = isItIntervieweesTurn && secondNextHistoryItem.role === "interviewee";
+        /*
+          new type of magic will be happening here
+          so I’m making some space
+        */
+
+        const areNextTwoByInterviewee =
+          isItIntervieweesTurn && secondNextHistoryItem.role === "interviewee";
         const isNextScriptedItemByUser = nextHistoryItem.role === "user";
         if (areNextTwoByInterviewee) {
           this.updateHistory("skip");
@@ -85,6 +110,11 @@ class ChatView extends Component {
         }
         return null;
       } else if (thisItemType === "explore") {
+        /*
+          new type of magic will be happening here
+          so I’m making some space
+        */
+
         const isNextScriptedItemByUser = nextHistoryItem.role === "user";
         if (isNextScriptedItemByUser) {
           this.setState({ actionbar: "scripted" });
@@ -110,11 +140,13 @@ class ChatView extends Component {
     const { story } = this.props;
 
     // get the other interviewee’s history saved in localStorage
-    const localHistory = JSON.parse(localStorage.getItem(`history-${story.id}-${chatId}`));
+    const localHistory = JSON.parse(
+      localStorage.getItem(`history-${story.id}-${chatId}`)
+    );
     this.setState({
       actionbar: "scripted",
       currentIntervieweeId: chatId,
-      history: localHistory || [],
+      history: localHistory || []
     });
     this.props.router.push(`/${story.id}/chat/${chatId}`);
   }
@@ -129,7 +161,7 @@ class ChatView extends Component {
   findIntervieweeIndex() {
     const { interviewees } = this.props.story;
     const { chatId } = this.props.params;
-    return interviewees.findIndex(item => item.id === chatId);
+    return interviewees.findIndex((item) => item.id === chatId);
   }
 
   initHistory() {
@@ -142,9 +174,11 @@ class ChatView extends Component {
       const initHistoryItem = {
         i: 0,
         role: "interviewee",
-        type: "init",
+        type: "init"
       };
-      this.setState({ history: [initHistoryItem] }, () => this.onHistoryUpdate("init"));
+      this.setState({ history: [initHistoryItem] }, () =>
+        this.onHistoryUpdate("init")
+      );
     }
     return null;
   }
@@ -166,7 +200,7 @@ class ChatView extends Component {
       const switchTo = {
         i: thisHistoryItem.i - 1,
         role: "system",
-        type: "switchTo",
+        type: "switchTo"
       };
       history.push(switchTo);
     } else if (type === "nvm") {
@@ -178,13 +212,13 @@ class ChatView extends Component {
         i: thisHistoryItem.i,
         role: "user",
         type: "emoji",
-        value: payload,
+        value: payload
       };
       history.push(emoji);
     } else if (type === "quit") {
       const quit = {
         role: "system",
-        type: "quit",
+        type: "quit"
       };
       history.push(quit);
     } else if (type === "skip") {
@@ -192,7 +226,7 @@ class ChatView extends Component {
       const skip = {
         i: thisHistoryItem.i + 2,
         role: "interviewee",
-        type: "followup",
+        type: "followup"
       };
       history.push(skip);
     } else if (type === "ignore" || type === "explore") {
@@ -201,21 +235,24 @@ class ChatView extends Component {
         i: history.length > 0 ? thisHistoryItem.i + 1 : 0,
         role: "user",
         type,
-        value: payload,
+        value: payload
       };
       history.push(action);
     } else if (type === "followup") {
       const followup = {
         i: thisHistoryItem.i + 1,
         role: "interviewee",
-        type: "followup",
+        type: "followup"
       };
       history.push(followup);
     }
 
     // save updated history in localStorage unless in switch interviewee loop
     if (type !== "nvm" && type !== "switchTo") {
-      localStorage.setItem(`history-${story.id}-${interviewee.id}`, JSON.stringify(history));
+      localStorage.setItem(
+        `history-${story.id}-${interviewee.id}`,
+        JSON.stringify(history)
+      );
     }
 
     // update history state to re-render storyline
@@ -252,9 +289,10 @@ class ChatView extends Component {
     };
 
     // should actionbar side toggles be hidden
-    const hideActionbarSatellites = !isNvmBubble() && !isLastBubble() && hasHistory;
+    const hideActionbarSatellites =
+      !isNvmBubble() && !isLastBubble() && hasHistory;
 
-    const getCurrentScriptActions = arr =>
+    const getCurrentScriptActions = (arr) =>
       arr.map((action, i) => {
         if (action.enabled) {
           return (
@@ -285,7 +323,9 @@ class ChatView extends Component {
         const nextHistoryItem = storyline[thisHistoryItemI + 1];
 
         const isLastBubbleSwitchTo = thisHistoryItem.type === "switchTo";
-        const isTheVeryLastBubble = thisHistoryItemI === storyline.length - 1 || thisHistoryItem.type === "quit";
+        const isTheVeryLastBubble =
+          thisHistoryItemI === storyline.length - 1 ||
+          thisHistoryItem.type === "quit";
 
         if (isTheVeryLastBubble || isActiveActionbarRunaway) {
           return (
@@ -297,7 +337,9 @@ class ChatView extends Component {
             />
           );
         }
-        const isNextHistoryItemUser = nextHistoryItem ? nextHistoryItem.role === "user" : false;
+        const isNextHistoryItemUser = nextHistoryItem
+          ? nextHistoryItem.role === "user"
+          : false;
         if (isNextHistoryItemUser && isActiveActionbarEmot) {
           return <EmoActions updateHistory={this.updateHistory} />;
         } else if (isLastBubbleSwitchTo) {
@@ -325,7 +367,10 @@ class ChatView extends Component {
     return [
       <Page key="page">
         <Topbar limit="m" padded>
-          <Action iconic onClick={() => this.props.router.push(`/${story.id}/listing`)}>
+          <Action
+            iconic
+            onClick={() => this.props.router.push(`/${story.id}/listing`)}
+          >
             <Icon name="arrow-left" />
           </Action>
           <Action onClick={() => this.toggleModal("intervieweeModal")}>
@@ -365,7 +410,9 @@ class ChatView extends Component {
                 }
                 secondary
               >
-                <Icon name={this.state.actionbar === "runaway" ? `cross` : `vdots`} />
+                <Icon
+                  name={this.state.actionbar === "runaway" ? `cross` : `vdots`}
+                />
               </Action>
             ) : null}
             {renderUserActions()}
@@ -380,7 +427,9 @@ class ChatView extends Component {
                 }
                 secondary
               >
-                <Icon name={this.state.actionbar === "emot" ? `cross` : `smile`} />
+                <Icon
+                  name={this.state.actionbar === "emot" ? `cross` : `smile`}
+                />
               </Action>
             ) : null}
           </Actionbar>
@@ -404,7 +453,7 @@ class ChatView extends Component {
           key="detailsModal"
           story={story}
         />
-      ) : null,
+      ) : null
     ];
   }
 }
@@ -413,13 +462,13 @@ ChatView.propTypes = {
   router: object,
   params: shape({ chatId: string }).isRequired,
   story: shape({
-    title: string,
-  }),
+    title: string
+  })
 };
 
 ChatView.defaultProps = {
   router: null,
-  story: {},
+  story: {}
 };
 
 export default withRouter(ChatView);
