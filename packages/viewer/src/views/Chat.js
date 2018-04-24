@@ -56,14 +56,6 @@ class ChatView extends Component {
     const thisHistoryItemI = thisHistoryItem ? thisHistoryItem.i : 0;
     const thisItemType = thisHistoryItem.type;
 
-    /*
-      we’re inheriting old data model where user actions were either of type `ignore` or `explore`.
-      according to the new spec, where instead of `explore` loops we have  simple branched narratives,
-      the two action types are no longer self-descriptive. which is why this comment.
-      `explore` is from now on an action to go to the next bubble (if allowed)
-      `ignore` is from now on an action to go to the second next bubble (if allowed)
-     */
-
     const isCurrentNotTheLastItem = thisHistoryItemI < storyline.length - 1;
     const isCurrentTheLastItem = thisHistoryItemI === storyline.length - 1;
 
@@ -71,62 +63,75 @@ class ChatView extends Component {
       const nextHistoryItem = storyline[thisHistoryItemI + 1];
       const secondNextHistoryItem = storyline[thisHistoryItemI + 2];
       const thirdNextHistoryItem = storyline[thisHistoryItemI + 3];
+
       const nextItemRole = nextHistoryItem.role;
+      const secondNextItemRole = secondNextHistoryItem
+        ? secondNextHistoryItem.role
+        : null;
+      const thirdNextItemRole = thirdNextHistoryItem
+        ? thirdNextHistoryItem.role
+        : null;
+
+      console.log("nextHistoryItem: ", nextHistoryItem);
+      console.log("secondNextHistoryItem: ", secondNextHistoryItem);
+      console.log("thirdNextHistoryItem: ", thirdNextHistoryItem);
 
       const isItIntervieweesTurn = nextItemRole === "interviewee";
+      const isNext1Interviewees =
+        nextItemRole === "interviewee" && secondNextItemRole !== "interviewee";
+      const areNext2Interviewees =
+        nextItemRole === "interviewee" &&
+        secondNextItemRole === "interviewee" &&
+        thirdNextItemRole !== "interviewee";
+      const areNext3Interviewees =
+        nextItemRole === "interviewee" &&
+        secondNextItemRole === "interviewee" &&
+        thirdNextItemRole === "interviewee";
       const isItUsersTurn = nextItemRole === "user";
 
       if (thisItemType === "init") {
         if (isItIntervieweesTurn) {
-          // wait 1050 for the prev bubble to end preloading
-          setTimeout(() => this.updateHistory("followup"), 1050);
+          setTimeout(() => this.updateHistory("followup"), 1050); // wait for the prev bubble to end preloading
         }
         return null;
       } else if (thisItemType === "followup") {
         if (isItIntervieweesTurn) {
-          // wait 1050 for the prev bubble to end preloading
-          setTimeout(() => this.updateHistory("followup"), 1500);
+          setTimeout(() => this.updateHistory("followup"), 1500); // wait for the prev bubble to end preloading
         } else if (isItUsersTurn) {
           setTimeout(() => this.setState({ actionbar: "scripted" }), 1500);
         }
         return null;
-      } else if (thisItemType === "emoji") {
-        return null;
       } else if (thisItemType === "ignore") {
-        /*
-          new type of magic will be happening here
-          so I’m making some space
-        */
-
-        const areNextTwoByInterviewee =
-          isItIntervieweesTurn && secondNextHistoryItem.role === "interviewee";
-        const isNextScriptedItemByUser = nextHistoryItem.role === "user";
-        if (areNextTwoByInterviewee) {
-          this.updateHistory("skip");
-        } else if (isNextScriptedItemByUser) {
-          this.setState({ actionbar: "scripted" });
-        } else {
-          this.updateHistory("followup");
+        // CASE A: if at least the next three are by interviewee
+        if (areNext3Interviewees) {
+          console.log("—— three next are interviewee’s —— ");
+        } else if (areNext2Interviewees) {
+          console.log("—— two next are interviewee’s —— ");
+        } else if (isNext1Interviewees) {
+          console.log("—— only the very next is interviewee’s —— ");
         }
+
+        // CASE B: if just two next are by interviewee
+        // CASE C: if just the next one is by interviewee
+
+        // const areNextTwoByInterviewee =
+        //   isItIntervieweesTurn && secondNextHistoryItem.role === "interviewee";
+        // const isNextScriptedItemByUser = nextHistoryItem.role === "user";
+        // if (areNextTwoByInterviewee) {
+        //   this.updateHistory("skip");
+        // } else if (isNextScriptedItemByUser) {
+        //   this.setState({ actionbar: "scripted" });
+        // } else {
+        //   this.updateHistory("followup");
+        // }
         return null;
       } else if (thisItemType === "explore") {
-        /*
-          new type of magic will be happening here
-          so I’m making some space
-        */
-
         const isNextScriptedItemByUser = nextHistoryItem.role === "user";
         if (isNextScriptedItemByUser) {
           this.setState({ actionbar: "scripted" });
         } else {
           this.updateHistory("followup");
         }
-        return null;
-      } else if (thisItemType === "switchTo") {
-        return null;
-      } else if (thisItemType === "nvm") {
-        return null;
-      } else if (thisItemType === "quit") {
         return null;
       }
       return null;
@@ -248,12 +253,12 @@ class ChatView extends Component {
     }
 
     // save updated history in localStorage unless in switch interviewee loop
-    if (type !== "nvm" && type !== "switchTo") {
-      localStorage.setItem(
-        `history-${story.id}-${interviewee.id}`,
-        JSON.stringify(history)
-      );
-    }
+    // if (type !== "nvm" && type !== "switchTo") {
+    //   localStorage.setItem(
+    //     `history-${story.id}-${interviewee.id}`,
+    //     JSON.stringify(history)
+    //   );
+    // }
 
     // update history state to re-render storyline
     // assume history is up-to-date, fire this.onHistoryUpdate()
