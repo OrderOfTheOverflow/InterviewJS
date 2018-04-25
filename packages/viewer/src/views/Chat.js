@@ -18,23 +18,21 @@ import {
 class ChatView extends Component {
   constructor(props) {
     super(props);
-
-    const { interviewees } = this.props.story;
-    const interviewee = interviewees[this.findIntervieweeIndex()];
-    const { story } = this.props;
-
-    const localHistory = JSON.parse(
-      localStorage.getItem(
-        `history-${story.id}-${story.version}-${interviewee.id}`
-      )
-    );
-
+    // const { interviewees } = this.props.story;
+    // const interviewee = interviewees[this.findIntervieweeIndex()];
+    // const { story } = this.props;
+    // const localHistory = JSON.parse(
+    //   localStorage.getItem(
+    //     `history-${story.id}-${story.version}-${interviewee.id}`
+    //   )
+    // );
     this.state = {
       actionbar: "scripted",
       currentIntervieweeId: this.props.params.chatId,
-      history: localHistory || [],
+      history: [],
+      // history: localHistory || [],
       intervieweeModal: false,
-      replayCachedHistory: true, // TODO
+      replayCachedHistory: true,
       storyDetailsModal: false
     };
     this.findIntervieweeIndex = this.findIntervieweeIndex.bind(this);
@@ -45,10 +43,10 @@ class ChatView extends Component {
     this.updateHistory = this.updateHistory.bind(this);
   }
   componentDidMount() {
-    this.initHistory();
+    this.initHistory(); // init history when mounting the component
   }
   componentDidUpdate() {
-    this.initHistory(); // Init history also when switching between interviewees
+    this.initHistory(); // init history also when switching between interviewees
   }
   onHistoryUpdate() {
     const { history } = this.state;
@@ -74,9 +72,9 @@ class ChatView extends Component {
         ? thirdNextHistoryItem.role
         : null;
 
-      console.log("nextHistoryItem: ", nextHistoryItem);
-      console.log("secondNextHistoryItem: ", secondNextHistoryItem);
-      console.log("thirdNextHistoryItem: ", thirdNextHistoryItem);
+      // console.log("nextHistoryItem: ", nextHistoryItem);
+      // console.log("secondNextHistoryItem: ", secondNextHistoryItem);
+      // console.log("thirdNextHistoryItem: ", thirdNextHistoryItem);
 
       const isItIntervieweesTurn = nextItemRole === "interviewee";
       const isNext1Interviewees =
@@ -91,6 +89,10 @@ class ChatView extends Component {
         thirdNextItemRole === "interviewee";
       const isItUsersTurn = nextItemRole === "user";
 
+      // console.log("isNext1Interviewees: ", isNext1Interviewees);
+      // console.log("areNext2Interviewees: ", areNext2Interviewees);
+      // console.log("areNext3Interviewees: ", areNext3Interviewees);
+
       if (thisItemType === "init") {
         if (isItIntervieweesTurn) {
           setTimeout(() => this.updateHistory("followup"), 1050); // wait for the prev bubble to end preloading
@@ -104,19 +106,15 @@ class ChatView extends Component {
         }
         return null;
       } else if (thisItemType === "ignore") {
-        const areNextTwoByInterviewee =
-          isItIntervieweesTurn && secondNextHistoryItem.role === "interviewee";
-        const isNextScriptedItemByUser = nextHistoryItem.role === "user";
-        if (areNextTwoByInterviewee) {
-          this.updateHistory("skip");
-        } else if (isNextScriptedItemByUser) {
-          this.setState({ actionbar: "scripted" });
-        } else {
-          this.updateHistory("followup");
-        }
+        // enter ignore flow
 
-        // CASE B: if just two next are by interviewee
-        // CASE C: if just the next one is by interviewee
+        if (isNext1Interviewees) {
+          console.log("isNext1Interviewees");
+        } else if (areNext2Interviewees) {
+          console.log("areNext2Interviewees");
+        } else if (areNext3Interviewees) {
+          console.log("areNext3Interviewees");
+        }
 
         // const areNextTwoByInterviewee =
         //   isItIntervieweesTurn && secondNextHistoryItem.role === "interviewee";
@@ -130,12 +128,22 @@ class ChatView extends Component {
         // }
         return null;
       } else if (thisItemType === "explore") {
-        const isNextScriptedItemByUser = nextHistoryItem.role === "user";
-        if (isNextScriptedItemByUser) {
-          this.setState({ actionbar: "scripted" });
-        } else {
-          this.updateHistory("followup");
+        // enter explore flow
+
+        if (isNext1Interviewees) {
+          console.log("isNext1Interviewees");
+        } else if (areNext2Interviewees) {
+          console.log("areNext2Interviewees");
+        } else if (areNext3Interviewees) {
+          console.log("areNext3Interviewees");
         }
+
+        // const isNextScriptedItemByUser = nextHistoryItem.role === "user";
+        // if (isNextScriptedItemByUser) {
+        //   this.setState({ actionbar: "scripted" });
+        // } else {
+        //   this.updateHistory("followup");
+        // }
         return null;
       }
       return null;
@@ -147,32 +155,29 @@ class ChatView extends Component {
 
   switchChat(chatId) {
     const { story } = this.props;
-
     // get the other interviewee’s history saved in localStorage
-    const localHistory = JSON.parse(
-      localStorage.getItem(`history-${story.id}-${story.version}-${chatId}`)
-    );
+    // const localHistory = JSON.parse(
+    //   localStorage.getItem(`history-${story.id}-${story.version}-${chatId}`)
+    // );
     this.setState({
       actionbar: "scripted",
       currentIntervieweeId: chatId,
-      history: localHistory || []
+      history: []
+      // history: localHistory || []
     });
     this.props.router.push(`/${story.id}/chat/${chatId}`);
   }
-
   toggleToolbar(toolbar) {
     this.setState({ [toolbar]: !this.state[toolbar] });
   }
   toggleModal(modal) {
     this.setState({ [modal]: !this.state[modal] });
   }
-
   findIntervieweeIndex() {
     const { interviewees } = this.props.story;
     const { chatId } = this.props.params;
     return interviewees.findIndex((item) => item.id === chatId);
   }
-
   initHistory() {
     const { interviewees } = this.props.story;
     const { storyline } = interviewees[this.findIntervieweeIndex()];
@@ -191,7 +196,6 @@ class ChatView extends Component {
     }
     return null;
   }
-
   updateHistory(type, payload) {
     // hide actionbar till onHistoryUpdate will trigger another updateHistory loop that will enable it
     this.setState({ actionbar: null });
@@ -257,12 +261,12 @@ class ChatView extends Component {
     }
 
     // save updated history in localStorage unless in switch interviewee loop
-    if (type !== "nvm" && type !== "switchTo") {
-      localStorage.setItem(
-        `history-${story.id}-${story.version}-${interviewee.id}`,
-        JSON.stringify(history)
-      );
-    }
+    // if (type !== "nvm" && type !== "switchTo") {
+    //   localStorage.setItem(
+    //     `history-${story.id}-${story.version}-${interviewee.id}`,
+    //     JSON.stringify(history)
+    //   );
+    // }
 
     // update history state to re-render storyline
     // assume history is up-to-date, fire this.onHistoryUpdate()
