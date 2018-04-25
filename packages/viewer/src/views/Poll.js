@@ -42,7 +42,9 @@ export default class PollView extends Component {
   constructor(props) {
     super(props);
     const { story } = this.props;
-    const localPoll = JSON.parse(localStorage.getItem(`poll-${story.id}`));
+    const localPoll = JSON.parse(
+      localStorage.getItem(`poll-${story.id}-${story.version}`)
+    );
     this.state = {
       formData: localPoll || {},
       hasLocalPoll: !!localPoll,
@@ -90,7 +92,7 @@ export default class PollView extends Component {
   submitPoll() {
     const { story } = this.props;
     localStorage.setItem(
-      `poll-${story.id}`,
+      `poll-${story.id}-${story.version}`,
       JSON.stringify(this.state.formData)
     );
     console.log(this.state.formData);
@@ -176,11 +178,7 @@ export default class PollView extends Component {
           ))}
           <Separator size="l" silent />
           <Actionbar>
-            <Action
-              fixed
-              onClick={this.moveOn}
-              secondary
-            >
+            <Action fixed onClick={this.moveOn} secondary>
               Skip
             </Action>
             <Action

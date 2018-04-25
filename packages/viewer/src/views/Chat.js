@@ -24,7 +24,9 @@ class ChatView extends Component {
     const { story } = this.props;
 
     const localHistory = JSON.parse(
-      localStorage.getItem(`history-${story.id}-${interviewee.id}`)
+      localStorage.getItem(
+        `history-${story.id}-${story.version}-${interviewee.id}`
+      )
     );
 
     this.state = {
@@ -102,13 +104,15 @@ class ChatView extends Component {
         }
         return null;
       } else if (thisItemType === "ignore") {
-        // CASE A: if at least the next three are by interviewee
-        if (areNext3Interviewees) {
-          console.log("—— three next are interviewee’s —— ");
-        } else if (areNext2Interviewees) {
-          console.log("—— two next are interviewee’s —— ");
-        } else if (isNext1Interviewees) {
-          console.log("—— only the very next is interviewee’s —— ");
+        const areNextTwoByInterviewee =
+          isItIntervieweesTurn && secondNextHistoryItem.role === "interviewee";
+        const isNextScriptedItemByUser = nextHistoryItem.role === "user";
+        if (areNextTwoByInterviewee) {
+          this.updateHistory("skip");
+        } else if (isNextScriptedItemByUser) {
+          this.setState({ actionbar: "scripted" });
+        } else {
+          this.updateHistory("followup");
         }
 
         // CASE B: if just two next are by interviewee
@@ -146,7 +150,7 @@ class ChatView extends Component {
 
     // get the other interviewee’s history saved in localStorage
     const localHistory = JSON.parse(
-      localStorage.getItem(`history-${story.id}-${chatId}`)
+      localStorage.getItem(`history-${story.id}-${story.version}-${chatId}`)
     );
     this.setState({
       actionbar: "scripted",
@@ -253,12 +257,12 @@ class ChatView extends Component {
     }
 
     // save updated history in localStorage unless in switch interviewee loop
-    // if (type !== "nvm" && type !== "switchTo") {
-    //   localStorage.setItem(
-    //     `history-${story.id}-${interviewee.id}`,
-    //     JSON.stringify(history)
-    //   );
-    // }
+    if (type !== "nvm" && type !== "switchTo") {
+      localStorage.setItem(
+        `history-${story.id}-${story.version}-${interviewee.id}`,
+        JSON.stringify(history)
+      );
+    }
 
     // update history state to re-render storyline
     // assume history is up-to-date, fire this.onHistoryUpdate()

@@ -8,6 +8,7 @@ if (
     author: "David Harrison",
     authorLink: "http://www.imdb.com/name/nm0307497/",
     pubDate: "Apr 24, 2016",
+    version: 24,
     modDate: 1517999999478,
     intro: "Investigate the true scale of modern slavery in suburban Britain.",
     context:
