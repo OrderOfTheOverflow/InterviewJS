@@ -202,9 +202,9 @@ class ChatView extends Component {
 
     // grab necessary information
     const { history } = this.state;
-    const { story } = this.props;
-    const { interviewees } = story;
-    const interviewee = interviewees[this.findIntervieweeIndex()];
+    // const { story } = this.props;
+    // const { interviewees } = story;
+    // const interviewee = interviewees[this.findIntervieweeIndex()];
     const thisHistoryItem = history[history.length - 1];
 
     // local redux-y way of handling updateHistory logic
