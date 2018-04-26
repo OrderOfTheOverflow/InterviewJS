@@ -1,3 +1,18 @@
+/*
+ *
+ *
+
+  Good luck editing the scripting logic
+  now that we use an array of storyline
+  items to playback branched narratives
+  onHistoryUpdate() and updateHistory()
+  got incredibly complex since then.
+
+ *
+ *
+ *
+*/
+
 /* eslint react/forbid-prop-types: 0 */
 /* eslint no-case-declarations: 0 */
 import { object, shape, string } from "prop-types";
@@ -28,6 +43,7 @@ class ChatView extends Component {
     // );
     this.state = {
       actionbar: "scripted",
+      conditions: { loop: null },
       currentIntervieweeId: this.props.params.chatId,
       history: [],
       // history: localHistory || [],
@@ -49,102 +65,101 @@ class ChatView extends Component {
     this.initHistory(); // init history also when switching between interviewees
   }
   onHistoryUpdate() {
+    console.log("onHistoryUpdate()");
     const { history } = this.state;
     const { interviewees } = this.props.story;
     const { storyline } = interviewees[this.findIntervieweeIndex()];
+
     const thisHistoryItem = history[history.length - 1];
-    const thisHistoryItemI = thisHistoryItem ? thisHistoryItem.i : 0;
-    const thisItemType = thisHistoryItem.type;
+    const thisItemIndex = thisHistoryItem ? thisHistoryItem.i : 0;
+    const thisItemType = thisHistoryItem ? thisHistoryItem.type : null;
 
-    const isCurrentNotTheLastItem = thisHistoryItemI < storyline.length - 1;
-    const isCurrentTheLastItem = thisHistoryItemI === storyline.length - 1;
+    const isCurrentTheLastItem = thisItemIndex === storyline.length - 1;
 
-    if (isCurrentNotTheLastItem) {
-      const nextHistoryItem = storyline[thisHistoryItemI + 1];
-      const secondNextHistoryItem = storyline[thisHistoryItemI + 2];
-      const thirdNextHistoryItem = storyline[thisHistoryItemI + 3];
+    if (!isCurrentTheLastItem) {
+      // grab items
+      const secondPrevItem = history[history.length - 3];
+      const prevItem = history[history.length - 2];
+      const nextItem = storyline[thisItemIndex + 1];
+      const secondNextItem = storyline[thisItemIndex + 2];
 
-      const nextItemRole = nextHistoryItem.role;
-      const secondNextItemRole = secondNextHistoryItem
-        ? secondNextHistoryItem.role
-        : null;
-      const thirdNextItemRole = thirdNextHistoryItem
-        ? thirdNextHistoryItem.role
-        : null;
+      // grab roles
+      const secondPrevRole = secondPrevItem ? secondPrevItem.role : null;
+      const prevRole = prevItem ? prevItem.role : null;
+      const nextRole = nextItem ? nextItem.role : null;
+      const secondNextRole = secondNextItem ? secondNextItem.role : null;
 
-      // console.log("nextHistoryItem: ", nextHistoryItem);
-      // console.log("secondNextHistoryItem: ", secondNextHistoryItem);
-      // console.log("thirdNextHistoryItem: ", thirdNextHistoryItem);
+      // detect conditions
+      const isIntervieweesTurn = nextRole === "interviewee";
+      const isUsersTurn = nextRole === "user";
+      const willIntervieweeCarryOn = secondNextRole === "interviewee";
 
-      const isItIntervieweesTurn = nextItemRole === "interviewee";
-      const isNext1Interviewees =
-        nextItemRole === "interviewee" && secondNextItemRole !== "interviewee";
-      const areNext2Interviewees =
-        nextItemRole === "interviewee" &&
-        secondNextItemRole === "interviewee" &&
-        thirdNextItemRole !== "interviewee";
-      const areNext3Interviewees =
-        nextItemRole === "interviewee" &&
-        secondNextItemRole === "interviewee" &&
-        thirdNextItemRole === "interviewee";
-      const isItUsersTurn = nextItemRole === "user";
+      if (thisItemType === "followup") {
+        const isExploring = prevRole === "user" && prevItem.value === 1;
+        const didSkip = secondPrevRole === "user" && secondPrevItem.value === 0;
 
-      // console.log("isNext1Interviewees: ", isNext1Interviewees);
-      // console.log("areNext2Interviewees: ", areNext2Interviewees);
-      // console.log("areNext3Interviewees: ", areNext3Interviewees);
+        const conditions = {
+          isCurrentTheLastItem,
+          isIntervieweesTurn,
+          isUsersTurn,
+          thisHistoryItem,
+          thisItemType,
+          willIntervieweeCarryOn,
+          isExploring,
+          didSkip
+        };
 
-      if (thisItemType === "init") {
-        if (isItIntervieweesTurn) {
-          setTimeout(() => this.updateHistory("followup"), 1050); // wait for the prev bubble to end preloading
+        if (isExploring) {
+          this.setState({
+            conditions: { ...this.state.conditions, loop: "exploring" }
+          });
+        } else if (didSkip) {
+          this.setState({
+            conditions: { ...this.state.conditions, loop: "skipping" }
+          });
+        } else {
+          this.setState({
+            conditions: { ...this.state.conditions, loop: null }
+          });
         }
-        return null;
-      } else if (thisItemType === "followup") {
-        if (isItIntervieweesTurn) {
-          setTimeout(() => this.updateHistory("followup"), 1500); // wait for the prev bubble to end preloading
-        } else if (isItUsersTurn) {
-          setTimeout(() => this.setState({ actionbar: "scripted" }), 1500);
-        }
-        return null;
+
+        this.setState({ ...this.state.conditions, conditions }, () => {
+          // now that conditions are available in the state to renderUserActions():
+          if (isExploring && isIntervieweesTurn && willIntervieweeCarryOn) {
+            setTimeout(() => this.updateHistory("skip"), 1500); // wait for the prev bubble to end preloading
+          } else if (
+            isExploring &&
+            isIntervieweesTurn &&
+            !willIntervieweeCarryOn
+          ) {
+            return null;
+          } else if (didSkip && isIntervieweesTurn) {
+            setTimeout(() => this.updateHistory("followup"), 1500); // wait for the prev bubble to end preloading
+          } else if (isIntervieweesTurn) {
+            setTimeout(() => this.updateHistory("followup"), 1500); // wait for the prev bubble to end preloading
+          } else if (isUsersTurn) {
+            setTimeout(() => this.setState({ actionbar: "scripted" }), 1500);
+          }
+          return null;
+        });
       } else if (thisItemType === "ignore") {
-        // enter ignore flow
-
-        if (isNext1Interviewees) {
-          console.log("isNext1Interviewees");
-        } else if (areNext2Interviewees) {
-          console.log("areNext2Interviewees");
-        } else if (areNext3Interviewees) {
-          console.log("areNext3Interviewees");
+        if (isIntervieweesTurn) {
+          this.updateHistory("skip");
+        } else if (isUsersTurn) {
+          this.setState({ actionbar: "scripted" });
+        } else {
+          this.updateHistory("followup");
         }
-
-        // const areNextTwoByInterviewee =
-        //   isItIntervieweesTurn && secondNextHistoryItem.role === "interviewee";
-        // const isNextScriptedItemByUser = nextHistoryItem.role === "user";
-        // if (areNextTwoByInterviewee) {
-        //   this.updateHistory("skip");
-        // } else if (isNextScriptedItemByUser) {
-        //   this.setState({ actionbar: "scripted" });
-        // } else {
-        //   this.updateHistory("followup");
-        // }
         return null;
       } else if (thisItemType === "explore") {
-        // enter explore flow
-
-        if (isNext1Interviewees) {
-          console.log("isNext1Interviewees");
-        } else if (areNext2Interviewees) {
-          console.log("areNext2Interviewees");
-        } else if (areNext3Interviewees) {
-          console.log("areNext3Interviewees");
+        if (isIntervieweesTurn) {
+          this.updateHistory("followup");
+        } else if (isUsersTurn) {
+          this.setState({ actionbar: "scripted" });
         }
-
-        // const isNextScriptedItemByUser = nextHistoryItem.role === "user";
-        // if (isNextScriptedItemByUser) {
-        //   this.setState({ actionbar: "scripted" });
-        // } else {
-        //   this.updateHistory("followup");
-        // }
         return null;
+      } else if (thisItemType === "init" && isIntervieweesTurn) {
+        setTimeout(() => this.updateHistory("followup"), 1050); // wait for the prev bubble to end preloading
       }
       return null;
     } else if (isCurrentTheLastItem) {
@@ -197,6 +212,7 @@ class ChatView extends Component {
     return null;
   }
   updateHistory(type, payload) {
+    console.log("updateHistory()");
     // hide actionbar till onHistoryUpdate will trigger another updateHistory loop that will enable it
     this.setState({ actionbar: null });
 
@@ -244,8 +260,14 @@ class ChatView extends Component {
       history.push(skip);
     } else if (type === "ignore" || type === "explore") {
       this.setState({ actionbar: null });
+      const getNewI = () => {
+        if (this.state.conditions.isExploring) {
+          return history.length > 0 ? thisHistoryItem.i + 2 : 0;
+        }
+        return history.length > 0 ? thisHistoryItem.i + 1 : 0;
+      };
       const action = {
-        i: history.length > 0 ? thisHistoryItem.i + 1 : 0,
+        i: getNewI(),
         role: "user",
         type,
         value: payload
@@ -275,11 +297,16 @@ class ChatView extends Component {
 
   render() {
     const { history } = this.state;
+    const { conditions } = this.state;
     const { story } = this.props;
     const { interviewees } = story;
     const { storyline } = interviewees[this.findIntervieweeIndex()];
     const interviewee = interviewees[this.findIntervieweeIndex()];
     const hasHistory = history.length > 0;
+
+    console.log(this.state.conditions);
+    console.log("storyline:", storyline);
+    console.log("history:", history);
 
     // if current bubble is the last one
     const isLastBubble = () => {
@@ -332,15 +359,25 @@ class ChatView extends Component {
 
       if (hasHistory) {
         const thisHistoryItem = history[history.length - 1];
-        const thisHistoryItemI = thisHistoryItem.i;
-        const nextHistoryItem = storyline[thisHistoryItemI + 1];
+        const thisItemIndex = thisHistoryItem.i;
+        const nextItem = storyline[thisItemIndex + 1];
+        const secondNextItem = storyline[thisItemIndex + 2];
 
         const isLastBubbleSwitchTo = thisHistoryItem.type === "switchTo";
         const isTheVeryLastBubble =
-          thisHistoryItemI === storyline.length - 1 ||
+          thisItemIndex === storyline.length - 1 ||
           thisHistoryItem.type === "quit";
 
-        if (isTheVeryLastBubble || isActiveActionbarRunaway) {
+        if (
+          conditions.isExploring &&
+          conditions.isIntervieweesTurn &&
+          secondNextItem.role === "user"
+        ) {
+          // console.log("its a match for the user actions1!");
+          // console.log("thisHistoryItem", thisHistoryItem);
+          // console.log("secondNextItem", secondNextItem);
+          return getCurrentScriptActions(secondNextItem.content);
+        } else if (isTheVeryLastBubble || isActiveActionbarRunaway) {
           return (
             <RunAwayActions
               isSwitchPossible={interviewees.length > 1}
@@ -350,15 +387,15 @@ class ChatView extends Component {
             />
           );
         }
-        const isNextHistoryItemUser = nextHistoryItem
-          ? nextHistoryItem.role === "user"
+        const isNextHistoryItemUser = nextItem
+          ? nextItem.role === "user"
           : false;
         if (isNextHistoryItemUser && isActiveActionbarEmot) {
           return <EmoActions updateHistory={this.updateHistory} />;
         } else if (isLastBubbleSwitchTo) {
           return <NvmActions updateHistory={this.updateHistory} />;
         } else if (isNextHistoryItemUser && isActiveActionbarScripted) {
-          return getCurrentScriptActions(nextHistoryItem.content);
+          return getCurrentScriptActions(nextItem.content);
         }
         return null;
       } else if (userStarts && isActiveActionbarScripted) {
