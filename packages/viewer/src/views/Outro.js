@@ -72,7 +72,9 @@ export default class OutroView extends Component {
     const histories = [];
     interviewees.forEach((interviewee) => {
       const localHistory = JSON.parse(
-        localStorage.getItem(`history-${story.id}-${interviewee.id}`)
+        localStorage.getItem(
+          `history-${story.id}-${story.version}-${interviewee.id}`
+        )
       );
       return localHistory ? histories.push(localHistory) : null;
     });
