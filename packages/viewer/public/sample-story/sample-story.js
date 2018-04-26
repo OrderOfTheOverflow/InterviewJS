@@ -697,17 +697,18 @@ if (
             content: [
               {
                 enabled: true,
-                value: "Ignore",
+                value: "Ignore1",
                 type: "ignore"
               },
               {
                 enabled: true,
-                value: "Explore",
+                value: "Explore1",
                 type: "explore"
               }
             ],
             id: "edd0029a-9008-4a31-826e-2e5c81587b44",
-            role: "user"
+            role: "user",
+            branching: true
           },
           {
             content: {
@@ -737,17 +738,18 @@ if (
             content: [
               {
                 enabled: true,
-                value: "Ignore",
+                value: "Ignore2",
                 type: "ignore"
               },
               {
                 enabled: true,
-                value: "Explore",
+                value: "Explore2",
                 type: "explore"
               }
             ],
             id: "81931eb1-872f-4d11-b853-9ec7753f6737",
-            role: "user"
+            role: "user",
+            branching: true
           },
           {
             content: {
@@ -769,16 +771,138 @@ if (
             content: [
               {
                 enabled: true,
-                value: "Ignore",
+                value: "Ignore3",
                 type: "ignore"
               },
               {
                 enabled: true,
-                value: "Explore",
+                value: "Explore3",
                 type: "explore"
               }
             ],
             id: "81931eb1-872fsdfsdg-4d11-b853-9ec7753f6737",
+            role: "user",
+            branching: true
+          },
+          {
+            content: {
+              value: "Only one interviewee bubble"
+            },
+            id: "1d783b8c-e5sdfs73-4b03-aa5b-2a0f3c67382a",
+            role: "interviewee",
+            type: "text"
+          },
+          {
+            content: [
+              {
+                enabled: true,
+                value: "Ignore4",
+                type: "ignore"
+              },
+              {
+                enabled: true,
+                value: "Explore4",
+                type: "explore"
+              }
+            ],
+            id: "81931eb1-87sdgsgfds2f-4d11-b853-9ec7753f6737",
+            role: "user",
+            branching: true
+          },
+          {
+            content: {
+              value: "Next one up are user actions"
+            },
+            id: "09040sdf54-871a-47b4-b22f-588c0d61bfd0",
+            role: "interviewee",
+            type: "text"
+          },
+          {
+            content: [
+              {
+                enabled: true,
+                value: "Ignore5",
+                type: "ignore"
+              },
+              {
+                enabled: true,
+                value: "Explore5",
+                type: "explore"
+              }
+            ],
+            id: "edd0029a-9008-4a3dfg1-826e-2e5c81587b44",
+            role: "user"
+          },
+          {
+            content: {
+              value: "First interviewee bubble"
+            },
+            id: "09040a54-871a-47b4-b2df2f-df588c0d6dd1bfd0",
+            role: "interviewee",
+            type: "text"
+          },
+          {
+            content: {
+              value: "Second interviewee bubble"
+            },
+            id: "09040a54-871sdfa-47fdb4-b22f-df588c0d61bfdfd0",
+            role: "interviewee",
+            type: "text"
+          },
+          {
+            content: {
+              value: "Third interviewee bubble"
+            },
+            id: "09040a54-87sdf1sdfa-47sdb4-b22f-df588sdfc0d61bfd0",
+            role: "interviewee",
+            type: "text"
+          },
+          {
+            content: [
+              {
+                enabled: true,
+                value: "Ignore6",
+                type: "ignore"
+              },
+              {
+                enabled: true,
+                value: "Explore6",
+                type: "explore"
+              }
+            ],
+            id: "81931eb1-872f-sdfsds4d11-b853-9ec7753f6737",
+            role: "user"
+          },
+          {
+            content: {
+              value: "First interviewee bubble"
+            },
+            id: "09040a54-871a-4ds7b4-b22f-df588sdf-c0d61bfd0",
+            role: "interviewee",
+            type: "text"
+          },
+          {
+            content: {
+              value: "Second interviewee bubble"
+            },
+            id: "09040a54-871sdfa-47b4-bgsdsdc-fd22f-df588c0d61bfd0",
+            role: "interviewee",
+            type: "text"
+          },
+          {
+            content: [
+              {
+                enabled: true,
+                value: "Ignore7",
+                type: "ignore"
+              },
+              {
+                enabled: true,
+                value: "Explore7",
+                type: "explore"
+              }
+            ],
+            id: "8193sdfsa-1eb1-872fsdfsdg-4d11-b853-9ec7753f6737",
             role: "user"
           },
           {
@@ -793,16 +917,16 @@ if (
             content: [
               {
                 enabled: true,
-                value: "Ignore",
+                value: "Ignore8",
                 type: "ignore"
               },
               {
                 enabled: true,
-                value: "Explore",
+                value: "Explore8",
                 type: "explore"
               }
             ],
-            id: "81931eb1-87sdgsgfds2f-4d11-b853-9ec7753f6737",
+            id: "81931eb1-87sss0-dgsgfds2f-4d11-b853-9ec7753f6737",
             role: "user"
           }
         ]
