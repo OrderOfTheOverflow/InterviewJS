@@ -1,4 +1,3 @@
-@@ -1,487 +0,0 @@
 /* eslint react/forbid-prop-types: 0 */
 /* eslint no-case-declarations: 0 */
 import { object, shape, string } from "prop-types";
