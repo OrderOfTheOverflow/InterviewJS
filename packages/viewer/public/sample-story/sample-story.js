@@ -707,8 +707,7 @@ if (
               }
             ],
             id: "edd0029a-9008-4a31-826e-2e5c81587b44",
-            role: "user",
-            branching: true
+            role: "user"
           },
           {
             content: {
@@ -748,8 +747,7 @@ if (
               }
             ],
             id: "81931eb1-872f-4d11-b853-9ec7753f6737",
-            role: "user",
-            branching: true
+            role: "user"
           },
           {
             content: {
@@ -781,8 +779,7 @@ if (
               }
             ],
             id: "81931eb1-872fsdfsdg-4d11-b853-9ec7753f6737",
-            role: "user",
-            branching: true
+            role: "user"
           },
           {
             content: {
@@ -806,8 +803,7 @@ if (
               }
             ],
             id: "81931eb1-87sdgsgfds2f-4d11-b853-9ec7753f6737",
-            role: "user",
-            branching: true
+            role: "user"
           },
           {
             content: {
