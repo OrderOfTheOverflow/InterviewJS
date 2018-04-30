@@ -278,7 +278,11 @@ export default class Storyline extends React.Component {
             persona={role}
             theme={{ backg: interviewee.color, font: "PT sans" }}
           >
-            {content.value}
+            <div
+              dangerouslySetInnerHTML={{
+                __html: content.value.replace(/\r?\n/g, '<br />')
+              }}
+            />
           </Bubble>
         );
       } else if (type === "link") {
