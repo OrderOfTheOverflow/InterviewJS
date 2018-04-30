@@ -149,6 +149,9 @@ export default class StoryDetailsModal extends React.Component {
                   Google DNI & Al Jazeera-backed web app for newsrooms that enables journalists to compose and manage 
                   scripted chats for a more immersive storytelling experience.
                 </p>
+                <p>
+                  If you want to make interview.js story please visit our website www.interviewjs.io
+                </p>
               </DetailsCopy>
               <Separator silent size="m" />
               <PageSubtitle typo="h5">Connect with InterviewJS</PageSubtitle>
