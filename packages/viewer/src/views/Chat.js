@@ -80,7 +80,7 @@ class ChatView extends Component {
           // wait 1050 for the prev bubble to end preloading
           setTimeout(() => this.updateHistory("followup"), 1500);
         } else if (isItUsersTurn) {
-          setTimeout(() => this.setState({ actionbar: "scripted" }), 1500);
+          setTimeout(() => this.setState({ actionbar: "scripted" }), 2000);
         }
         return null;
       } else if (thisItemType === "emoji") {

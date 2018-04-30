@@ -15,7 +15,7 @@ export default class Bubble extends Component {
   componentDidMount() {
     this.preloaderTimer = setTimeout(() => {
       this.setState({ loading: false });
-    }, this.props.delay + 1000);
+    }, this.props.delay + 1500);
     this.renderTimeout = setTimeout(() => {
       this.setState({ rendering: false });
     }, this.props.delay);
