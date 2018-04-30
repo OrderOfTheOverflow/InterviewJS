@@ -130,6 +130,11 @@ export default class PollView extends Component {
           <Cover image={story.cover} compact />
         </PageHead>
         <PageBody limit="x" flex={[1, 0, `${100 / 4}%`]}>
+
+          <Aside typo="p6">
+            This is a simple poll. We won’t use your data for anything else.
+          </Aside>
+          <Separator size="s" silent />
           {poll.filter((item) => !!item.id).map((item) => (
             <PollItem key={item.id}>
               <PageSubtitle typo="h3">{item.question}</PageSubtitle>
@@ -189,10 +194,6 @@ export default class PollView extends Component {
               Show me results
             </Action>
           </Actionbar>
-          <Separator size="s" silent />
-          <Aside typo="p6">
-            This is a simple poll. We won’t use your data for anything else.
-          </Aside>
         </PageBody>
       </Page>,
       this.state.storyDetailsModal ? (
