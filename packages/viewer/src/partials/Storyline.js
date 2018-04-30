@@ -71,11 +71,11 @@ class Storyline extends Component {
   }
   scrollToBottom(behaviour) {
     return this.anchor
-      ? this.anchor.scrollIntoView({
-          behavior: behaviour || "smooth",
-          block: "end",
-          inline: "end",
-        })
+      ? this.anchor.parentElement.scroll({
+        top: this.anchor.offsetTop, 
+        left: 0, 
+        behavior: behaviour || "smooth",
+      })
       : null;
   }
   render() {
