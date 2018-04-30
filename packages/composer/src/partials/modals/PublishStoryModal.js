@@ -77,6 +77,11 @@ const PlaceHolder = css.div`
   width: 100%
 `;
 
+const LoaderContainer = css.div`
+  position: absolute;
+  top:0px;
+`;
+
 const computeId = (userId, storyId) => {
   let namespace = userId;
   if (namespace.indexOf(":") > 0) namespace = namespace.split(":").pop();
@@ -250,9 +255,11 @@ export default class PublishStoryModal extends Component {
             </PageSubtitle>
             <Separator size="m" silent />
             <PreviewWrapper>
-              <Separator size="l" silent />
-              <Text>Please wait. Your InterviewJS story is being created.</Text>
-              <Separator size="m" silent />
+              <LoaderContainer>
+                <Separator size="l" silent />
+                <Text>Please wait. Your InterviewJS story is being created.</Text>
+                <Separator size="m" silent />
+              </LoaderContainer>
               <Preloader />
               <img src={iframeRatioSpacer} alt="" />
               <iframe
