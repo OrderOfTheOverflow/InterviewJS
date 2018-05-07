@@ -11,8 +11,6 @@ import {
   Text,
   breakpoint,
   color,
-  font,
-  radius,
   setSpace
 } from "interviewjs-styleguide";
 
@@ -94,7 +92,6 @@ export default class ComposerView extends React.Component {
       welcomeModal: false
     };
     this.deleteInterviewee = this.deleteInterviewee.bind(this);
-    this.initTour = this.initTour.bind(this);
     this.setCurrentBubbleNone = this.setCurrentBubbleNone.bind(this);
     this.showSavedIndicator = this.showSavedIndicator.bind(this);
     this.switchInterviewee = this.switchInterviewee.bind(this);
@@ -102,10 +99,6 @@ export default class ComposerView extends React.Component {
     this.toggleDetailsModal = this.toggleDetailsModal.bind(this);
     this.togglePublishModal = this.togglePublishModal.bind(this);
     this.updateStory = this.updateStory.bind(this);
-  }
-
-  componentDidMount() {
-    this.initTour();
   }
 
   setCurrentBubbleNone() {
