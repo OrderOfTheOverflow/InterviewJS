@@ -24,9 +24,7 @@ class ChatView extends Component {
     const { story } = this.props;
 
     const localHistory = JSON.parse(
-      localStorage.getItem(
-        `history-${story.id}-${story.version}-${interviewee.id}`
-      )
+      localStorage.getItem(`history-${story.id}-${interviewee.id}`)
     );
 
     this.state = {
@@ -124,7 +122,7 @@ class ChatView extends Component {
 
     // get the other interviewee’s history saved in localStorage
     const localHistory = JSON.parse(
-      localStorage.getItem(`history-${story.id}-${story.version}-${chatId}`)
+      localStorage.getItem(`history-${story.id}-${chatId}`)
     );
     this.setState({
       actionbar: "scripted",
@@ -144,7 +142,7 @@ class ChatView extends Component {
   findIntervieweeIndex() {
     const { interviewees } = this.props.story;
     const { chatId } = this.props.params;
-    return interviewees.findIndex((item) => item.id === chatId);
+    return interviewees.findIndex(item => item.id === chatId);
   }
 
   initHistory() {
@@ -233,7 +231,7 @@ class ChatView extends Component {
     // save updated history in localStorage unless in switch interviewee loop
     if (type !== "nvm" && type !== "switchTo") {
       localStorage.setItem(
-        `history-${story.id}-${story.version}-${interviewee.id}`,
+        `history-${story.id}-${interviewee.id}`,
         JSON.stringify(history)
       );
     }
@@ -275,7 +273,7 @@ class ChatView extends Component {
     const hideActionbarSatellites =
       !isNvmBubble() && !isLastBubble() && hasHistory;
 
-    const getCurrentScriptActions = (arr) =>
+    const getCurrentScriptActions = arr =>
       arr.map((action, i) => {
         if (action.enabled) {
           return (
