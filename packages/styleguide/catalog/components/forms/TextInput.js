@@ -3,6 +3,7 @@ import React from "react";
 import { bool, string } from "prop-types";
 
 import { color, font, radius, setSpace, setType, time } from "../../../utils";
+import {Preloader} from "../"
 
 const Input = css.input`
   ${setSpace("phm")};
@@ -72,9 +73,17 @@ const TextInput = (props) => {
       e.preventDefault();
       props.onClick();
     };
+    if(props.loading) {
+      return (
+        <Button {...props} onClick={(e) => handler(e)}>
+          <Preloader />
+        </Button>
+        );
+    }
+    
     return (
       <Button {...props} onClick={(e) => handler(e)}>
-        {props.selected ? "" : "Select file…"}
+        {props.uploaded ? props.uploaded: "Select file…"}
       </Button>
     );
   }
@@ -86,7 +95,9 @@ TextInput.propTypes = {
   file: bool,
   input: bool,
   nooffset: bool,
-  place: string
+  place: string,
+  loading: bool,
+  uploaded: string
 };
 
 TextInput.defaultProps = {
@@ -94,7 +105,9 @@ TextInput.defaultProps = {
   file: false,
   input: false,
   nooffset: false,
-  place: null
+  place: null,
+  loading: null,
+  uploaded: null
 };
 
 export default TextInput;

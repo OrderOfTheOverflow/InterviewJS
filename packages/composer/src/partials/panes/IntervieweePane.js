@@ -58,11 +58,12 @@ export default class IntervieweePane extends React.Component {
     super(props);
     this.state = {
       draft: {
-        text: { value: "" },
+        text: { value: "", source:"" },
         link: { value: "", title: "" },
         image: {
           value: "",
-          title: ""
+          title: "",
+          filename: ""
         },
         embed: { value: "" },
         map: { value: "" },
@@ -108,11 +109,12 @@ export default class IntervieweePane extends React.Component {
   constructDrafts() {
     this.setState({
       draft: {
-        text: { value: "" },
+        text: { value: "", source: "" },
         link: { value: "", title: "" },
         image: {
           value: "",
-          title: ""
+          title: "",
+          filename: ""
         },
         embed: { value: "" },
         map: { value: "" },
@@ -147,7 +149,10 @@ export default class IntervieweePane extends React.Component {
     );
 
     this.setState({
-      draft: { ...this.state.draft, [source]: { value: "", title: "" } }
+      draft: {
+        ...this.state.draft,
+        [source]: { value: "", title: "", source: "", filename: "" }
+      }
     });
 
     this.props.showSavedIndicator();
@@ -170,7 +175,9 @@ export default class IntervieweePane extends React.Component {
         ...this.state.draft,
         [this.state.tab]: {
           value: "",
-          title: ""
+          title: "",
+          source: "",
+          filename: ""
         }
       }
     });
@@ -313,9 +320,12 @@ IntervieweePane.propTypes = {
   showSavedIndicator: func.isRequired,
   currentBubble: object,
   currentInterviewee: number.isRequired,
+  currentBubbleIndex: number.isRequired,
   story: object.isRequired /* eslint react/forbid-prop-types: 0 */,
   storyIndex: number.isRequired,
-  updateInterviewee: func.isRequired
+  updateInterviewee: func.isRequired,
+  setCurrentBubbleNone: func.isRequired,
+  updateStorylineItem: func.isRequired
 };
 
 IntervieweePane.defaultProps = {

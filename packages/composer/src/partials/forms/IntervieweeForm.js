@@ -29,6 +29,7 @@ import {
   Tip
 } from "interviewjs-styleguide";
 
+import "./picker.css";
 import validateField from "./validateField";
 
 const fileToKey = (data, storyId) => {
@@ -48,6 +49,10 @@ const ColorPickerWrapper = styled.span`
   bottom: 0;
   right: 0;
   z-index: 1000;
+  background: #fff;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 1px,
+    rgba(0, 0, 0, 0.15) 0px 8px 16px;
 `;
 const ColorPickerOverlay = styled.div`
   background: transparent;
@@ -73,7 +78,8 @@ export default class IntervieweeForm extends Component {
         title: null
       },
       moreDropdown: false,
-      colorPicker: false
+      colorPicker: false,
+      avatarUploading: false
     };
     this.closeColorPicker = this.closeColorPicker.bind(this);
     this.deleteInterviewee = this.deleteInterviewee.bind(this);
@@ -107,6 +113,7 @@ export default class IntervieweeForm extends Component {
 
   handleFile(f) {
     const { type, preview, name } = f[0];
+    this.setState({ avatarUploading: true });
     const offScreenImage = document.createElement("img");
     offScreenImage.addEventListener("load", () => {
       const targetWidth =
@@ -165,8 +172,10 @@ export default class IntervieweeForm extends Component {
                   ...this.state.formData,
                   avatar: `https://story.interviewjs.io/files/${
                     this.props.user.id
-                  }/${this.props.story.id}/${fkey}`
-                }
+                  }/${this.props.story.id}/${fkey}`,
+                  avatarFilename: name
+                },
+                avatarUploading: false
               });
             })
             .catch((err) => console.log(err));
@@ -338,6 +347,8 @@ export default class IntervieweeForm extends Component {
                 >
                   <TextInput
                     file
+                    uploaded={this.state.formData.avatarFilename}
+                    loading={this.state.avatarUploading}
                     place="left"
                     onClick={() => {
                       this.dropzoneRef.open();
@@ -347,6 +358,8 @@ export default class IntervieweeForm extends Component {
               ) : (
                 <TextInput
                   file
+                  uploaded={this.state.formData.avatarFilename}
+                  loading={this.state.avatarUploading}
                   place="left"
                   onClick={() => {
                     this.dropzoneRef.open();
@@ -360,7 +373,7 @@ export default class IntervieweeForm extends Component {
           </Container>
           <Container flex={[0, 0, "50%"]}>
             <FormItem>
-              <Label>Colour</Label>
+              <Label>Bubble Colour</Label>
               <TextInput
                 input
                 place="right"
@@ -401,7 +414,17 @@ export default class IntervieweeForm extends Component {
                   disableAlpha
                   color={this.state.formData.color}
                   onChangeComplete={this.handleChangeColor}
+                  className="sketchPicker"
                 />
+                <Actionbar>
+                  <Action 
+                    primary 
+                    onClick={this.closeColorPicker}
+                  >
+                    Select
+                  </Action>
+                </Actionbar>
+                <Separator size="s" silent />
               </ColorPickerWrapper>
             ]
           : null}

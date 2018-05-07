@@ -52,8 +52,12 @@ export default class MetaForm extends React.Component {
         cover: this.props.story.cover,
         logo: this.props.story.logo,
         pubDate: this.props.story.pubDate,
-        title: this.props.story.title
+        title: this.props.story.title,
+        coverFilename: this.props.story.coverFilename,
+        logoFilename: this.props.story.logoFilename,
       },
+      coverUploading : false,
+      logoUploading : false,
       formValidation: {
         title: null
       }
@@ -89,6 +93,7 @@ export default class MetaForm extends React.Component {
   }
 
   handleFile(key, f) {
+    this.setState({[`${key}Uploading`]: true});
     const { type, preview, name } = f[0];
     const offScreenImage = document.createElement("img");
     offScreenImage.addEventListener("load", () => {
@@ -114,11 +119,17 @@ export default class MetaForm extends React.Component {
       pica
         .resize(offScreenImage, offScreenCanvas, {
           unsharpAmount: 80,
+          alpha: true, // enable transparency for logo type images
           unsharpRadius: 0.6,
           unsharpThreshold: 2,
           transferable: true
         })
-        .then((result) => pica.toBlob(result, "image/jpeg", 0.9))
+        .then(
+          result =>
+            key === "logo"
+              ? pica.toBlob(result, type, 0.9)
+              : pica.toBlob(result, "image/jpeg", 0.9)
+        )
         .then((blob) => {
           // const reader = new FileReader();
           // reader.onloadend = () => {
@@ -149,9 +160,16 @@ export default class MetaForm extends React.Component {
                   ...this.state.formData,
                   [key]: `https://story.interviewjs.io/files/${
                     this.props.user.id
-                  }/${this.props.story.id}/${fkey}`
-                }
+                  }/${this.props.story.id}/${fkey}`,
+                  [`${key}Filename`]: name
+                },
+                [`${key}Uploading`]: false
               });
+              if((key === "cover" || key === "logo") && this.props.handleSave) 
+                this.props.handleSave({
+                  [key]: this.state.formData[key], 
+                  [`${key}Filename`]: this.state.formData[[`${key}Filename`]] 
+                });
             })
             .catch((err) => console.log(err));
           //
@@ -270,6 +288,8 @@ export default class MetaForm extends React.Component {
                 >
                   <TextInput
                     file
+                    uploaded={this.state.formData.coverFilename}
+                    loading={this.state.coverUploading}
                     place="left"
                     onClick={() => {
                       this.dropzoneRef.open();
@@ -279,6 +299,8 @@ export default class MetaForm extends React.Component {
               ) : (
                 <TextInput
                   file
+                  uploaded={this.state.formData.coverFilename}
+                  loading={this.state.coverUploading}
                   place="left"
                   onClick={() => {
                     this.dropzoneRef.open();
@@ -320,6 +342,8 @@ export default class MetaForm extends React.Component {
                 >
                   <TextInput
                     file
+                    uploaded={this.state.formData.logoFilename}
+                    loading={this.state.logoUploading}
                     place="right"
                     onClick={() => {
                       this.dropzoneRef2.open();
@@ -329,6 +353,8 @@ export default class MetaForm extends React.Component {
               ) : (
                 <TextInput
                   file
+                  uploaded={this.state.formData.logoFilename}
+                  loading={this.state.logoUploading}
                   place="right"
                   onClick={() => {
                     this.dropzoneRef2.open();
