@@ -398,20 +398,7 @@ class ChatView extends Component {
             ) : null}
             {renderUserActions()}
             {hideActionbarSatellites ? (
-              <Action
-                iconic
-                active={this.state.actionbar === "emot"}
-                onClick={
-                  this.state.actionbar !== "emot"
-                    ? () => this.setState({ actionbar: "emot" })
-                    : () => this.setState({ actionbar: "scripted" })
-                }
-                secondary
-              >
-                <Icon
-                  name={this.state.actionbar === "emot" ? `cross` : `smile`}
-                />
-              </Action>
+              <span />
             ) : null}
           </Actionbar>
         </PageFoot>
