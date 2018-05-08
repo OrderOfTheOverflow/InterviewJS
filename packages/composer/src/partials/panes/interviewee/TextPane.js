@@ -2,7 +2,7 @@ import { func, shape, string } from "prop-types";
 import css from "styled-components";
 import React, { Component } from "react";
 
-import { color, font, setSpace, setType } from "interviewjs-styleguide";
+import { color, font, setSpace, setType, TextInput } from "interviewjs-styleguide";
 import PaneFrame from "../PaneFrame";
 
 const SrcText = css.textarea`
@@ -12,7 +12,7 @@ const SrcText = css.textarea`
   bottom: 0;
   color: ${color.blueBlk};
   font-family: ${font.serif};
-  height: 100%;
+  height: 90%;
   left: 0;
   position: absolute;
   resize: none;
@@ -29,7 +29,7 @@ const SrcPlaceholder = css.p`
   flex-direction: column;
   font-style: italic;
   line-height: 1.5em;
-  height: 100%;
+  height: 90%;
   justify-content: center;
   left: 0;
   position: absolute;
@@ -53,12 +53,18 @@ const Draft = css.textarea`
   width: 100%;
 `;
 
+const SourceText = css(TextInput)`
+  position: absolute;
+  bottom: 0%;
+`;
+
 export default class TextPane extends Component {
   constructor(props) {
     super(props);
     this.state = {
       draft: this.props.draft,
       srcText: this.props.srcText,
+      source: this.props.draft.source
     };
 
     this.onBlur = this.onBlur.bind(this);
@@ -66,14 +72,15 @@ export default class TextPane extends Component {
     this.onDraftEdit = this.onDraftEdit.bind(this);
     this.onSelect = this.onSelect.bind(this);
     this.saveChanges = this.saveChanges.bind(this);
+    this.onSourceChange = this.onSourceChange.bind(this);
   }
   componentWillReceiveProps(nextProps) {
     const { draft, srcText } = nextProps;
     if (srcText !== this.props.srcText) {
       this.setState({ srcText });
     } else if (draft !== this.props.draft) {
-      this.setState({ draft });
-    }
+      this.setState({ draft, source: draft.source });
+    } 
     return null;
   }
   onBlur() {
@@ -82,16 +89,21 @@ export default class TextPane extends Component {
   onChange(e) {
     this.setState({ srcText: e.target.value });
   }
+  onSourceChange(e) {
+    this.setState({source: e.target.value})
+    const draft = { value: this.state.draft.value, source: e.target.value };
+    this.props.updateDraft(draft);
+  }
   onSelect(e) {
     const { currentTarget } = e;
     const { selectionStart, selectionEnd } = e.currentTarget;
     const sel = currentTarget.value.substring(selectionStart, selectionEnd);
-    const newDraft = { value: sel };
+    const newDraft = { value: sel, source: this.state.source };
     this.props.updateDraft(newDraft, "text");
   }
   onDraftEdit(e) {
     const { value } = e.currentTarget;
-    const draft = { value };
+    const draft = { value, source: this.state.source };
     this.props.updateDraft(draft);
   }
   saveChanges() {
@@ -107,6 +119,14 @@ export default class TextPane extends Component {
         side="left"
       >
         <SrcText onBlur={this.onBlur} onChange={this.onChange} onSelect={this.onSelect} value={this.state.srcText} />
+        <SourceText
+            input
+            onChange={this.onSourceChange}
+            placeholder="Add a source to your bubble here (Optional)"
+            required
+            type="url"
+            value={this.state.source}
+          />
         {this.state.srcText.length === 0 ? (
           <SrcPlaceholder>
             Here’s where you can type your interview notes or copy and paste existing transcripts to convert into chat
