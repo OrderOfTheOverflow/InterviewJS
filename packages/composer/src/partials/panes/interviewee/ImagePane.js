@@ -197,6 +197,7 @@ export default class ImagePane extends Component {
               name="title"
               onChange={(e) => this.handleChange(e)}
               value={this.props.draft.title}
+              placeholder="Type your text here"
               required
               type="text"
             />

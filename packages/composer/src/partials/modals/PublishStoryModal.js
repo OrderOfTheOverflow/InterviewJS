@@ -250,7 +250,9 @@ export default class PublishStoryModal extends Component {
         return (
           <Container limit="s" align="center">
             <PageSubtitle typo="h3">
-              Engage your readers. Ask them to have their say…
+              Engage your readers by asking them to have their say. 
+              Create questions based on the content of your story with a clear choice. 
+              You need at least one question. 
             </PageSubtitle>
             <Separator size="m" silent />
             <Poll
@@ -296,6 +298,11 @@ export default class PublishStoryModal extends Component {
                 {" "}
               </iframe>
             </PreviewWrapper>
+            <Separator size="m" silent />
+            <PageSubtitle typo="h4">
+              You can edit your story any time.
+              The link will stay the same. 
+            </PageSubtitle>
             <Separator size="m" silent />
             <Actionbar>
               <Action fixed secondary onClick={this.handleStep3}>

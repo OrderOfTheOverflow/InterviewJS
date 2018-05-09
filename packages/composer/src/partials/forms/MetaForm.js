@@ -236,7 +236,7 @@ export default class MetaForm extends React.Component {
                 required={this.props.required}
                 value={this.state.formData.authorLink}
               />
-              <Legend tip="Add a link e.g. to your website">i</Legend>
+              <Legend tip="Add a link e.g. to your website or twitter">i</Legend>
             </FormItem>
           </Container>
           <Container flex={[0, 0, `${100 / 3}%`]}>

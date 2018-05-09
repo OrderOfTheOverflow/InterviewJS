@@ -248,12 +248,14 @@ export default class IntervieweeForm extends Component {
         </Tip>
       </Dropdown>
     );
+    console.log("============>", this.state.formData)
     return (
       <Form onSubmit={(e) => this.handleSubmit(e)}>
         <FormItem>
           <Label>Name</Label>
           <CharacterCount>
-            {35 - this.state.formData.name.length}
+            {35 - (this.state.formData.name === "Name of interviewee"?
+              0 : this.state.formData.name.length)}
           </CharacterCount>
           <TextInput
             input
@@ -377,7 +379,7 @@ export default class IntervieweeForm extends Component {
               <TextInput
                 input
                 place="right"
-                placeholder="i.e. #495abd, red…"
+                placeholder="Select Colour"
                 name="color"
                 onClick={() => this.setState({ colorPicker: true })}
                 value={this.state.formData.color}

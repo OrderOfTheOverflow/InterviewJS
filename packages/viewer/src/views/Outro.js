@@ -108,11 +108,11 @@ export default class OutroView extends Component {
       } else if (resultScore >= 70) {
         return `Nice one, you have explored ${resultScore}% of the story. Go back to the interviews for more or have your say now.`;
       } else if (resultScore >= 50) {
-        return `You have explored ${resultScore}% of the story, you can revisit the interviews at any time or have your say now.`;
+        return `You have explored ${resultScore}% of the story. Choose to revisit the interviews at any time or have your say now.`;
       } else if (resultScore >= 25) {
-        return `You have explored ${resultScore}% of the story, but there is plenty more to find out, you can revisit the interviews at any time or have your say now.`;
+        return `You have explored ${resultScore}% of the story, but there is plenty more to find out. You can revisit the interviews at any time or have your say now.`;
       }
-      return `Were you in a rush? You have explored ${resultScore}% of the information, but there is plenty more to find out, you can revisit the interviews at any time or have your say now.`;
+      return `Were you in a rush? You have explored ${resultScore}% of the information, but there is plenty more to find out. You can revisit the interviews at any time or have your say now.`;
     };
     return [
       <Topbar

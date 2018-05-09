@@ -135,7 +135,7 @@ export default class IntroView extends Component {
           <Separator size="m" silent />
           <Actionbar>
             <Action fixed onClick={() => this.props.router.push(`/${story.id}/context`)} primary>
-              Continue
+              Enter story
             </Action>
           </Actionbar>
         </PageBody>

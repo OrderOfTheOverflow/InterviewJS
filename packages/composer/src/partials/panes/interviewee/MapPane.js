@@ -79,7 +79,7 @@ export default class MapPane extends Component {
       >
         <Separator size="x" silent />
         <FormItem>
-          <Label>Google Maps embed code</Label>
+          <Label>Embed map</Label>
           <TextInput
             area
             name="value"

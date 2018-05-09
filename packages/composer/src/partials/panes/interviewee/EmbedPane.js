@@ -77,7 +77,7 @@ export default class EmbedPane extends Component {
       >
         <Separator size="x" silent />
         <FormItem>
-          <Label>Embed URL</Label>
+          <Label>Embed iframe</Label>
           <TextInput
             area
             name="value"

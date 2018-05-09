@@ -132,7 +132,7 @@ export default class PollView extends Component {
         <PageBody limit="x" flex={[1, 0, `${100 / 4}%`]}>
 
           <Aside typo="p6">
-            This is a simple poll. We won’t use your data for anything else.
+            This is a simple poll. <br /> We won’t use your data for anything else.
           </Aside>
           <Separator size="s" silent />
           {poll.filter((item) => !!item.id).map((item) => (

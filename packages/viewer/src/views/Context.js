@@ -64,7 +64,7 @@ export default class ContextView extends Component {
         </PageHead>
         <PageBody limit="x" flex={[1, 0, `${100 / 2}%`]}>
           <Aside typo="p3">
-            With InterviewJS you can interact directly with interviewees. Explore different perspectives, then opt to
+            With InterviewJS you can interact with interviewees. Explore different perspectives, then opt to
             have your say.
           </Aside>
           <Separator size="m" silent />

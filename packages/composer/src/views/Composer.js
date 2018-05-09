@@ -209,7 +209,7 @@ export default class ComposerView extends React.Component {
                 onClick={this.togglePublishModal}
                 className="jr-step8"
               >
-                Publish Story
+                Review story
               </Action>
             </Container>
           </PageHead>
