@@ -75,9 +75,8 @@ export default class NewStoryModal extends Component {
           <Container limit="s" align="center">
             <PageSubtitle typo="h3">
               Motivate your users with an assignment: 
-              what will they learn by speaking to your interviewees?
-              Then give them some context to the story.
-              You’ll be able to change your text later.
+              Tell them what they will learn by speaking to your interviewees. 
+              Then give them some context to the story so that the interviews make sense. 
             </PageSubtitle>
             <Separator size="m" silent />
             <DetailsForm handleSubmit={this.handleStep1} story={this.props.stories[0]} />

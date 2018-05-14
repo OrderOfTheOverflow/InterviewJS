@@ -92,7 +92,7 @@ export default class PollForm extends React.Component {
                 valid={this.state.formValidation.question}
                 value={this.state.formData.question}
               />
-              {isNew ? <Legend tip="Ask a question based on the content of your story">i</Legend> : null}
+              {isNew ? <Legend tip="For example:  “Do you agree with X?” “Should Y do Z?”">i</Legend> : null}
             </FormItem>
           </Container>
           <Separator dir="v" silent size="s" />
@@ -133,7 +133,6 @@ export default class PollForm extends React.Component {
                   />
                 </Container>
               </Container>
-              {isNew ? <Legend tip="Provide mutually exclusive, binary choices">i</Legend> : null}
             </FormItem>
           </Container>
           <Separator dir="v" silent size="s" />

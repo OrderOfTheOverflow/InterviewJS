@@ -230,7 +230,7 @@ export default class ListingView extends Component {
             </MobileNewStoryToggle>
             <DesktopNewStoryToggle>
               <Action primary onClick={this.toggleNewStoryModal}>
-                <Icon name="plus" size="s" /> Create new
+                <Icon name="plus" size="s" /> New story 
               </Action>
             </DesktopNewStoryToggle>
           </Container>

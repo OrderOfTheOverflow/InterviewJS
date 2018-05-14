@@ -57,6 +57,13 @@ export default class IntroView extends Component {
     super(props);
     this.state = { storyDetailsModal: false };
     this.toggleDetailsModal = this.toggleDetailsModal.bind(this);
+    const { clearStorage } = this.props.params;
+    if (
+      typeof clearStorage !== "undefined" &&
+      clearStorage === "nolocalstorage"
+    ) {
+      localStorage.clear();
+    }
   }
 
   componentDidMount() {
@@ -128,7 +135,7 @@ export default class IntroView extends Component {
           <Separator size="m" silent />
           <Actionbar>
             <Action fixed onClick={() => this.props.router.push(`/${story.id}/context`)} primary>
-              Continue
+              Enter story
             </Action>
           </Actionbar>
         </PageBody>

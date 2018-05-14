@@ -544,7 +544,7 @@ export default class UserPane extends React.Component {
                     <FormItem fullWidth>
                       <TextInput
                         type="text"
-                        placeholder="Type your own text label…"
+                        placeholder="Type a second comment or question here"
                         maxLength={GLOBALS.fixedButtonCharLimit}
                         value={this.state.customExploreVal}
                         onChange={(e) =>
@@ -553,7 +553,7 @@ export default class UserPane extends React.Component {
                         style={{ paddingRight: "40px" }}
                       />
                       <Legend
-                        tip="Use this box to script the second user interaction or question. It must be in the users voice!"
+                        tip="Use this box to script the second user interaction or question."
                         style={{ top: "16px" }}
                       >
                         i

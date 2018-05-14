@@ -51,6 +51,7 @@ class Routes extends React.Component {
           <Route path="/:storyId/outro" component={Outro} />
           <Route path="/:storyId/poll" component={Poll} />
           <Route path="/:storyId/results" component={Results} />
+          <Route path="/:storyId/:clearStorage" component={Intro} />
         </Route>
         <Redirect from="/" to="sample-story" />
       </Router>

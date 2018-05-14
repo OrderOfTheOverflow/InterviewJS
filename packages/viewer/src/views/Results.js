@@ -40,7 +40,7 @@ export default class ResultsView extends Component {
         false
       );
     }
-
+    
     // Load story via storyId -> getStoryURL
     if (
       (!this.props.story || Object.keys(this.props.story).length === 0) &&
@@ -91,6 +91,9 @@ export default class ResultsView extends Component {
           ))}
           <Separator size="m" silent />
           <Actionbar>
+          <Action secondary fixed target="_blank" href="https://interviewjs.io/#examples">
+              More stories
+            </Action>
             <Action primary fixed onClick={this.toggleShareStoryModal}>
               Share this story
             </Action>

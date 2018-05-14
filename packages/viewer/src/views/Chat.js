@@ -106,7 +106,7 @@ class ChatView extends Component {
         } else if (isIntervieweesTurn) {
           setTimeout(() => this.updateHistory("followup"), 1500);
         } else if (isUsersTurn) {
-          setTimeout(() => this.setState({ actionbar: "scripted" }), 1500);
+          setTimeout(() => this.setState({ actionbar: "scripted" }), 2000);
         }
       }
       return null;
@@ -398,20 +398,7 @@ class ChatView extends Component {
             ) : null}
             {renderUserActions()}
             {hideActionbarSatellites ? (
-              <Action
-                iconic
-                active={this.state.actionbar === "emot"}
-                onClick={
-                  this.state.actionbar !== "emot"
-                    ? () => this.setState({ actionbar: "emot" })
-                    : () => this.setState({ actionbar: "scripted" })
-                }
-                secondary
-              >
-                <Icon
-                  name={this.state.actionbar === "emot" ? `cross` : `smile`}
-                />
-              </Action>
+              <span />
             ) : null}
           </Actionbar>
         </PageFoot>
