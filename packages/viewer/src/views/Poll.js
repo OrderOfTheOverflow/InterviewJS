@@ -51,6 +51,7 @@ export default class PollView extends Component {
       storyDetailsModal: false
     };
     this.moveOn = this.moveOn.bind(this);
+    this.skipPoll = this.skipPoll.bind(this);
     this.submitPoll = this.submitPoll.bind(this);
     this.toggleDetailsModal = this.toggleDetailsModal.bind(this);
   }
@@ -90,11 +91,6 @@ export default class PollView extends Component {
   }
 
   submitPoll() {
-    const { story } = this.props;
-    localStorage.setItem(
-      `poll-${story.id}-${story.version}`,
-      JSON.stringify(this.state.formData)
-    );
     console.log(this.state.formData);
     axios
       .post("https://api.interviewjs.io/v1/polls", {
@@ -110,6 +106,31 @@ export default class PollView extends Component {
   }
 
   moveOn() {
+      const empty = !window.InterviewJS.poll.length
+      if(Object.keys(this.state.formData).length) {
+        const { story } = this.props;
+        localStorage.setItem(
+          `poll-${story.id}-${story.version}`,
+          JSON.stringify(this.state.formData)
+        );
+      }
+      if(empty) {
+        const { poll } = this.props.story;
+        this.props.storePolls(poll); 
+        this.props.updatePoll(this.state.formData);
+      } else if (!this.state.hasLocalPoll) {
+        this.props.updatePoll(this.state.formData);
+      }
+    this.props.router.push(`/${this.props.story.id}/results`);
+  }
+
+  skipPoll() {
+    const empty = !window.InterviewJS.poll.length
+    if(empty) {
+      const { poll } = this.props.story;
+      this.props.storePolls(poll); 
+      this.props.updatePoll(this.state.formData);
+    } 
     this.props.router.push(`/${this.props.story.id}/results`);
   }
 
@@ -183,7 +204,7 @@ export default class PollView extends Component {
           ))}
           <Separator size="l" silent />
           <Actionbar>
-            <Action fixed onClick={this.moveOn} secondary>
+            <Action fixed onClick={this.skipPoll} secondary>
               Skip
             </Action>
             <Action
