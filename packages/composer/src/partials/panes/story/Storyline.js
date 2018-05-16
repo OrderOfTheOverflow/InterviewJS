@@ -280,7 +280,11 @@ export default class Storyline extends React.Component {
           >
             <div
               dangerouslySetInnerHTML={{
-                __html: content.value.replace(/\r?\n/g, '<br />')
+                __html: `${content.value.replace(/\r?\n/g, "<br />")} ${
+                  content.source
+                    ? `<br /><a href="#">source</a>`
+                    : ""
+                }`
               }}
             />
           </Bubble>
