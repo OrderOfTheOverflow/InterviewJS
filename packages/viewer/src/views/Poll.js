@@ -106,31 +106,31 @@ export default class PollView extends Component {
   }
 
   moveOn() {
-      const empty = !window.InterviewJS.poll.length
-      if(Object.keys(this.state.formData).length) {
-        const { story } = this.props;
-        localStorage.setItem(
-          `poll-${story.id}-${story.version}`,
-          JSON.stringify(this.state.formData)
-        );
-      }
-      if(empty) {
-        const { poll } = this.props.story;
-        this.props.storePolls(poll); 
-        this.props.updatePoll(this.state.formData);
-      } else if (!this.state.hasLocalPoll) {
-        this.props.updatePoll(this.state.formData);
-      }
+    const empty = !window.InterviewJS.poll.length;
+    if (Object.keys(this.state.formData).length) {
+      const { story } = this.props;
+      localStorage.setItem(
+        `poll-${story.id}-${story.version}`,
+        JSON.stringify(this.state.formData)
+      );
+    }
+    if (empty) {
+      const { poll } = this.props.story;
+      this.props.storePolls(poll);
+      this.props.updatePoll(this.state.formData);
+    } else if (!this.state.hasLocalPoll) {
+      this.props.updatePoll(this.state.formData);
+    }
     this.props.router.push(`/${this.props.story.id}/results`);
   }
 
   skipPoll() {
-    const empty = !window.InterviewJS.poll.length
-    if(empty) {
+    const empty = !window.InterviewJS.poll.length;
+    if (empty) {
       const { poll } = this.props.story;
-      this.props.storePolls(poll); 
+      this.props.storePolls(poll);
       this.props.updatePoll(this.state.formData);
-    } 
+    }
     this.props.router.push(`/${this.props.story.id}/results`);
   }
 
@@ -151,11 +151,10 @@ export default class PollView extends Component {
           <Cover image={story.cover} compact />
         </PageHead>
         <PageBody limit="x" flex={[1, 0, `${100 / 4}%`]}>
-
-          <Aside typo="p6">
-            This is a simple poll. <br /> We won’t use your data for anything else.
+          <Aside typo="p3">
+            This is a simple poll. We won’t use your data for anything else.
           </Aside>
-          <Separator size="s" silent />
+          <Separator size="m" silent />
           {poll.filter((item) => !!item.id).map((item) => (
             <PollItem key={item.id}>
               <PageSubtitle typo="h3">{item.question}</PageSubtitle>
