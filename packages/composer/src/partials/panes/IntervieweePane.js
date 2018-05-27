@@ -1,5 +1,5 @@
 import { func, number, object } from "prop-types";
-import css from "styled-components";
+import styled from "styled-components";
 import React from "react";
 
 import {
@@ -8,7 +8,12 @@ import {
   PaneTab,
   PaneTabs,
   Tip,
-  radius
+  color,
+  font,
+  radius,
+  setSpace,
+  setType,
+  track
 } from "interviewjs-styleguide";
 
 import {
@@ -20,20 +25,27 @@ import {
   TextPane
 } from "./interviewee";
 
-const PaneEl = css(Container)`
+const PaneEl = styled(Container)`
   align-items: stretch;
   height: 100%;
   overflow: visible;
+  width: 100%;
   ${PaneTabs} {
-    border-radius: ${radius.h} 21px 0 0;
     transform: translateY(-1px);
-    & > *:first-child {
-      border-radius: ${radius.h} 0 0 0;
-    }
-    & > *:last-child {
-      border-radius: 0 ${radius.h} 0 0;
-    }
   }
+`;
+const PaneTitle = styled.h2`
+  ${setSpace("pam")};
+  ${setType("x")};
+  background: ${color.greyWt};
+  border-radius: ${radius.h} ${radius.h} ${radius.n} ${radius.n};
+  color: ${color.greyBlk};
+  display: block;
+  font-family: ${font.serif};
+  letter-spacing: ${track.s};
+  text-align: center;
+  text-transform: uppercase;
+  width: 100%;
 `;
 
 export default class IntervieweePane extends React.Component {
@@ -58,7 +70,7 @@ export default class IntervieweePane extends React.Component {
     super(props);
     this.state = {
       draft: {
-        text: { value: "", source:"" },
+        text: { value: "", source: "" },
         link: { value: "", title: "" },
         image: {
           value: "",
@@ -196,8 +208,9 @@ export default class IntervieweePane extends React.Component {
     const { currentInterviewee, story } = this.props;
     return (
       <PaneEl fill="white" rounded shift dir="column">
+        <PaneTitle>Add interviewee’s bubbles</PaneTitle>
         <Container flex={[0, 0, "auto"]}>
-          <PaneTabs className="jr-step3">
+          <PaneTabs>
             <PaneTab
               active={tab === "text"}
               onClick={() => this.switchTab("text")}

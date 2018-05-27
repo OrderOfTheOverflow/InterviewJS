@@ -162,7 +162,7 @@ export default class ComposerView extends React.Component {
       this.props.router.push(`/`);
       return null;
     }
-    
+
     const { storyline } = story.interviewees[this.state.currentInterviewee];
 
     const renderSaveIndicator = () => {
