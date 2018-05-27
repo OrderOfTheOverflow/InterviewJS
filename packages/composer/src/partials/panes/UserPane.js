@@ -6,7 +6,9 @@ import {
   Action,
   Checkbox,
   Container,
+  FormItem,
   Icon,
+  Legend,
   PageSubtitle,
   PaneTab,
   PaneTabs,
@@ -19,8 +21,7 @@ import {
   setSpace,
   setType,
   time,
-  Legend,
-  FormItem
+  track
 } from "interviewjs-styleguide";
 
 import PaneFrame from "./PaneFrame";
@@ -29,6 +30,21 @@ import { GLOBALS, USER_ACTIONS } from "../../options";
 
 const PaneEl = styled(Container)`
   height: 100%;
+  width: 100%;
+`;
+const PaneTitle = styled.h2`
+  ${setSpace("pam")};
+  ${setType("x")};
+  background: ${color.greyWt};
+  border-bottom: 1px solid ${color.greyHL};
+  border-radius: ${radius.h} ${radius.h} ${radius.n} ${radius.n};
+  color: ${color.greyBlk};
+  display: block;
+  font-family: ${font.serif};
+  letter-spacing: ${track.s};
+  text-align: center;
+  text-transform: uppercase;
+  width: 100%;
 `;
 
 const UserActions = styled(Container)`
@@ -356,6 +372,7 @@ export default class UserPane extends React.Component {
     } = this.state;
     return (
       <PaneEl fill="white" rounded shift dir="column">
+        <PaneTitle>Add user actions</PaneTitle>
         <PaneFrame
           {...this.props}
           active
@@ -384,7 +401,7 @@ export default class UserPane extends React.Component {
           }
         >
           <UserActions>
-            <Container className="jr-step5">
+            <Container>
               <UserAction dir="row" active>
                 <Container
                   align="center"
@@ -507,7 +524,7 @@ export default class UserPane extends React.Component {
               </UserAction>
             </Container>
             <Separator silent size="s" />
-            <Container className="jr-step6">
+            <Container>
               <UserAction dir="row" active={enableExplore}>
                 <Container
                   align="center"
