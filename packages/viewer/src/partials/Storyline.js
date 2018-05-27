@@ -91,7 +91,10 @@ class Storyline extends Component {
       const getBubbleContent = () => {
         switch (type) {
           case "text":
-            return <p>{content.value}</p>;
+            return [
+              <p>{content.value}</p>, 
+              content.source ? <a href={content.source} >source </a> : null
+            ];
           case "image":
             return [
               <img src={content.value} alt={content.title} key="image" />,

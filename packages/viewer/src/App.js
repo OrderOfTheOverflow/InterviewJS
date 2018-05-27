@@ -6,6 +6,7 @@ import * as actionCreators from "./actions/actionCreators";
 
 const mapStateToProps = state => ({
   story: state.story,
+  poll: state.poll
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(actionCreators, dispatch);

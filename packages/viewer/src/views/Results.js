@@ -21,7 +21,6 @@ export default class ResultsView extends Component {
     this.state = {
       storyDetailsModal: false,
       shareStoryModal: false,
-      results: window.InterviewJS.poll || [],
     };
 
     this.toggleDetailsModal = this.toggleDetailsModal.bind(this);
@@ -84,8 +83,8 @@ export default class ResultsView extends Component {
               <Chart
                 answer1={item.answer1}
                 answer2={item.answer2}
-                val1={this.state.results.find(result => result.id === item.id) ? this.state.results.find(result => result.id === item.id).answer1 : 0}
-                val2={this.state.results.find(result => result.id === item.id) ? this.state.results.find(result => result.id === item.id).answer2 : 0}
+                val1={this.props.poll.find(result => result.id === item.id) ? this.props.poll.find(result => result.id === item.id).answer1 : 0}
+                val2={this.props.poll.find(result => result.id === item.id) ? this.props.poll.find(result => result.id === item.id).answer2 : 0}
               />
             </PollItem>
           ))}
