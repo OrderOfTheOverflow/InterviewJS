@@ -13,20 +13,20 @@ const MessageEl = css.p`
 export default class Message extends Component {
   constructor(props) {
     super(props);
-    this.state = { rendering: true };
+    this.state = { waiting: true };
   }
   componentDidMount() {
     this.renderTimeout = setTimeout(() => {
-      this.setState({ rendering: false });
+      this.setState({ waiting: false });
     }, this.props.delay);
   }
   componentWillUnmount() {
     clearTimeout(this.renderTimeout);
   }
   render() {
-    const { rendering } = this.state;
+    const { waiting } = this.state;
     const { children } = this.props;
-    if (!rendering) {
+    if (!waiting) {
       return <MessageEl {...this.props}>{children}</MessageEl>;
     }
     return null;
