@@ -38,6 +38,7 @@ class ChatView extends Component {
     this.findIntervieweeIndex = this.findIntervieweeIndex.bind(this);
     this.initHistory = this.initHistory.bind(this);
     this.onHistoryUpdate = this.onHistoryUpdate.bind(this);
+    this.resetHistory = this.resetHistory.bind(this);
     this.switchChat = this.switchChat.bind(this);
     this.toggleToolbar = this.toggleToolbar.bind(this);
     this.updateHistory = this.updateHistory.bind(this);
@@ -240,7 +241,15 @@ class ChatView extends Component {
     }
     return null;
   }
-
+  resetHistory() {
+    const { story } = this.props;
+    const { interviewees } = story;
+    const interviewee = interviewees[this.findIntervieweeIndex()];
+    localStorage.removeItem(
+      `history-${story.id}-${story.version}-${interviewee.id}`
+    );
+    window.location.reload();
+  }
   render() {
     const { history } = this.state;
     const { story } = this.props;
@@ -315,6 +324,7 @@ class ChatView extends Component {
               navigateAway={this.props.router.push}
               updateHistory={this.updateHistory}
               story={this.props.story}
+              resetHistory={this.resetHistory}
             />
           );
         }
@@ -337,6 +347,7 @@ class ChatView extends Component {
             isSwitchPossible={interviewees.length > 1}
             navigateAway={this.props.router.push}
             updateHistory={this.updateHistory}
+            resetHistory={this.resetHistory}
           />
         );
       } else if (userStarts && isActiveActionbarEmot) {
@@ -397,9 +408,7 @@ class ChatView extends Component {
               </Action>
             ) : null}
             {renderUserActions()}
-            {hideActionbarSatellites ? (
-              <span />
-            ) : null}
+            {hideActionbarSatellites ? <span /> : null}
           </Actionbar>
         </PageFoot>
       </Page>,

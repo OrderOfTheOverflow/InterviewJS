@@ -3,7 +3,7 @@ import React from "react";
 import { bool, func, object } from "prop-types";
 import { Action } from "interviewjs-styleguide";
 
-const RunAwayActions = props => [
+const RunAwayActions = (props) => [
   props.isSwitchPossible ? (
     <Action
       fixed
@@ -12,9 +12,18 @@ const RunAwayActions = props => [
       primary
       theme={{ font: "PT sans" }}
     >
-      I want to talk to somebody else
+      Talk to somebody else
     </Action>
   ) : null,
+  <Action
+    fixed
+    key="resetHistory"
+    onClick={props.resetHistory}
+    secondary
+    theme={{ font: "PT sans" }}
+  >
+    Reset progress
+  </Action>,
   <Action
     fixed
     key="doneChatting"
@@ -23,15 +32,16 @@ const RunAwayActions = props => [
     tone="negative"
     theme={{ font: "PT sans" }}
   >
-    I’m done chatting
-  </Action>,
+    Done chatting
+  </Action>
 ];
 
 RunAwayActions.propTypes = {
   isSwitchPossible: bool.isRequired,
   updateHistory: func.isRequired,
   navigateAway: func.isRequired,
-  story: object,
+  resetHistory: func.isRequired,
+  story: object
 };
 
 export default RunAwayActions;
