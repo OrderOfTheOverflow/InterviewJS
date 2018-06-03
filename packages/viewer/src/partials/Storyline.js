@@ -110,7 +110,7 @@ class Storyline extends Component {
       : null;
   }
   render() {
-    const { storyline, history, interviewee, story } = this.props;
+    const { storyline, history, interviewee, story, LANG } = this.props;
     const { replayCachedHistory } = this.state;
 
     // const animateAndDelay = true;
@@ -124,7 +124,9 @@ class Storyline extends Component {
           case "text":
             return [
               <p>{content.value}</p>,
-              content.source ? <a href={content.source}>source </a> : null
+              content.source ? (
+                <a href={content.source}>{LANG.chatBubbleSource}</a>
+              ) : null
             ];
           case "image":
             return [
@@ -224,7 +226,7 @@ class Storyline extends Component {
         return (
           <BubbleBlock key={index}>
             <Bubble persona="system" theme={{ font: "PT sans" }}>
-              Choose another interviewee to talk to:
+              {LANG.chatChooseAnother}
             </Bubble>
             {story.interviewees.map(
               (character, i) =>
@@ -253,7 +255,11 @@ class Storyline extends Component {
           </BubbleBlock>
         );
       } else if (type === "quit") {
-        return <Message delay={500}>{interviewee.name} left the chat</Message>;
+        return (
+          <Message delay={500}>
+            {interviewee.name} {LANG.chatLeft}
+          </Message>
+        );
       }
       return null;
     };

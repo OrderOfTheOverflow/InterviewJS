@@ -25,6 +25,8 @@ import {
   Topbar
 } from "../partials";
 
+import LOCALES from "../locales";
+
 const PollItem = css(Container)`
   &:not(:last-child) {
     ${setSpace("mbl")};
@@ -137,6 +139,10 @@ export default class PollView extends Component {
   render() {
     const { hasLocalPoll } = this.state;
     const { story } = this.props;
+
+    const LOCALE = story.locale ? story.locale : "en";
+    const LANG = LOCALES[LOCALE];
+
     if (!story || Object.keys(story).length === 0) return null; // FIXME show spinner
 
     const { poll } = story;
@@ -151,9 +157,7 @@ export default class PollView extends Component {
           <Cover image={story.cover} compact />
         </PageHead>
         <PageBody limit="x" flex={[1, 0, `${100 / 4}%`]}>
-          <Aside typo="p3">
-            This is a simple poll. We won’t use your data for anything else.
-          </Aside>
+          <Aside typo="p3">{LANG.pollTitle}</Aside>
           <Separator size="m" silent />
           {poll.filter((item) => !!item.id).map((item) => (
             <PollItem key={item.id}>
@@ -204,14 +208,14 @@ export default class PollView extends Component {
           <Separator size="l" silent />
           <Actionbar>
             <Action fixed onClick={this.skipPoll} secondary>
-              Skip
+              {LANG.pollSkipButton}
             </Action>
             <Action
               fixed
               onClick={hasLocalPoll ? this.moveOn : this.submitPoll}
               primary
             >
-              Show me results
+              {LANG.pollResultsButton}
             </Action>
           </Actionbar>
         </PageBody>
@@ -222,6 +226,7 @@ export default class PollView extends Component {
           isOpen={this.state.storyDetailsModal}
           key="detailsModal"
           story={story}
+          LANG={LANG}
         />
       ) : null
     ];
