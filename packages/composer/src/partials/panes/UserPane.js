@@ -372,7 +372,7 @@ export default class UserPane extends React.Component {
     } = this.state;
     return (
       <PaneEl fill="white" rounded shift dir="column">
-        <PaneTitle>Add user actions</PaneTitle>
+        <PaneTitle>Your end-reader</PaneTitle>
         <PaneFrame
           {...this.props}
           active

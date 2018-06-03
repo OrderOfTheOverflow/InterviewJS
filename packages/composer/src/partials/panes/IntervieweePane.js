@@ -208,7 +208,7 @@ export default class IntervieweePane extends React.Component {
     const { currentInterviewee, story } = this.props;
     return (
       <PaneEl fill="white" rounded shift dir="column">
-        <PaneTitle>Add interviewee’s bubbles</PaneTitle>
+        <PaneTitle>Your interviewee</PaneTitle>
         <Container flex={[0, 0, "auto"]}>
           <PaneTabs>
             <PaneTab
