@@ -12,7 +12,7 @@ const RunAwayActions = (props) => [
       primary
       theme={{ font: "PT sans" }}
     >
-      Talk to somebody else
+      {props.LANG.chatChangeSpeaker}
     </Action>
   ) : null,
   <Action
@@ -22,7 +22,7 @@ const RunAwayActions = (props) => [
     secondary
     theme={{ font: "PT sans" }}
   >
-    Reset progress
+    {props.LANG.chatResetHistory}
   </Action>,
   <Action
     fixed
@@ -32,7 +32,7 @@ const RunAwayActions = (props) => [
     tone="negative"
     theme={{ font: "PT sans" }}
   >
-    Done chatting
+    {props.LANG.chatQuit}
   </Action>
 ];
 

@@ -4,9 +4,25 @@ import React, { Component } from "react";
 import { object, shape, string, func } from "prop-types";
 import axios from "axios";
 
-import { Action, Actionbar, PageParagraph, PageSubtitle, Separator, color } from "interviewjs-styleguide";
+import {
+  Action,
+  Actionbar,
+  PageParagraph,
+  PageSubtitle,
+  Separator,
+  color
+} from "interviewjs-styleguide";
 
-import { Cover, Page, PageBody, PageHead, StoryDetailsModal, Topbar } from "../partials";
+import {
+  Cover,
+  Page,
+  PageBody,
+  PageHead,
+  StoryDetailsModal,
+  Topbar
+} from "../partials";
+
+import LOCALES from "../locales";
 
 const Aside = css(PageParagraph)`
   color: ${color.flareHD};
@@ -39,8 +55,13 @@ export default class ContextView extends Component {
       window.InterviewJS &&
       window.InterviewJS.getStoryURL
     ) {
-      const storyURL = window.InterviewJS.getStoryURL(this.props.params.storyId);
-      if (storyURL) axios.get(storyURL).then(response => this.props.createStory(response.data));
+      const storyURL = window.InterviewJS.getStoryURL(
+        this.props.params.storyId
+      );
+      if (storyURL)
+        axios
+          .get(storyURL)
+          .then((response) => this.props.createStory(response.data));
     }
   }
 
@@ -50,6 +71,8 @@ export default class ContextView extends Component {
 
   render() {
     const { story } = this.props;
+    const LOCALE = story.locale ? story.locale : "en";
+    const LANG = LOCALES[LOCALE];
     if (!story || Object.keys(story).length === 0) return null; // FIXME show spinner
 
     return [
@@ -63,16 +86,19 @@ export default class ContextView extends Component {
           <Cover image={story.cover} compact />
         </PageHead>
         <PageBody limit="x" flex={[1, 0, `${100 / 2}%`]}>
-          <Aside typo="p3">
-            With InterviewJS you can interact with interviewees. Explore different perspectives, then opt to
-            have your say.
-          </Aside>
+          <Aside typo="p3">{LANG.contextText}</Aside>
           <Separator size="m" silent />
           <PageSubtitle typo="h4">{story.context}</PageSubtitle>
           <Separator size="l" silent />
           <Actionbar>
-            <Action fixed onClick={() => this.props.router.push(`/${story.id}/interviewees`)} primary>
-              Meet your interviewees
+            <Action
+              fixed
+              onClick={() =>
+                this.props.router.push(`/${story.id}/interviewees`)
+              }
+              primary
+            >
+              {LANG.contextButton}
             </Action>
           </Actionbar>
         </PageBody>
@@ -83,8 +109,9 @@ export default class ContextView extends Component {
           isOpen={this.state.storyDetailsModal}
           key="detailsModal"
           story={story}
+          LANG={LANG}
         />
-      ) : null,
+      ) : null
     ];
   }
 }
@@ -93,11 +120,11 @@ ContextView.propTypes = {
   createStory: func.isRequired,
   router: object,
   story: shape({
-    title: string,
-  }),
+    title: string
+  })
 };
 
 ContextView.defaultProps = {
   router: null,
-  story: {},
+  story: {}
 };
