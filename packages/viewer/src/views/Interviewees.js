@@ -198,7 +198,7 @@ export default class ContextView extends Component {
               }`
             )
           }
-          LANG={LANG}
+          cta={LANG.intervieweesStartChat}
         />
       ) : null,
       this.state.storyDetailsModal ? (
