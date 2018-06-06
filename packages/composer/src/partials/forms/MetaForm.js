@@ -372,7 +372,6 @@ export default class MetaForm extends React.Component {
         <FormItem>
           <Label>Language</Label>
           <TextInput
-            disabled
             name="language"
             onBlur={(e) => this.handleBlur(e)}
             onChange={(e) => this.handleChange(e)}
@@ -381,7 +380,10 @@ export default class MetaForm extends React.Component {
             select
             value={this.state.formData.language}
           >
-            <option value="en">English</option>
+            <option value="en" default>
+              English
+            </option>
+            <option value="pl">Polish</option>
           </TextInput>
           <Legend tip="Select language of your story. Your choice will be reflected in the chat interface available to your end-readers.">
             i
