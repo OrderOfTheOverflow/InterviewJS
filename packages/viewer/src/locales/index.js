@@ -1,7 +1,9 @@
 import en from "./en";
+import pl from "./pl";
 
 const LOCALES = {
-  en
+  en,
+  pl
 };
 
 export default LOCALES;
