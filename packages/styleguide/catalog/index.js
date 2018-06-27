@@ -51,6 +51,11 @@ const pages = [
         path: "actions/inverted-variations",
         title: "Inverted",
         content: require("./pages/actions-inverted.js")
+      },
+      {
+        path: "actions/tile",
+        title: "Tile Actions",
+        content: require("./pages/actions-tile.js")
       }
     ]
   },
@@ -178,11 +183,6 @@ const pages = [
         content: require("./pages/text-extends.js")
       }
     ]
-  },
-  {
-    content: require("./pages/tiles.js"),
-    path: "/tiles",
-    title: "Tiles"
   }
 ];
 
