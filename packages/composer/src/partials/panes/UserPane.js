@@ -20,30 +20,16 @@ import {
   radius,
   setSpace,
   setType,
-  time,
-  track
+  time
 } from "interviewjs-styleguide";
 
 import PaneFrame from "./PaneFrame";
+import PaneTitle from "./PaneTitle";
 
 import { GLOBALS, USER_ACTIONS } from "../../options";
 
 const PaneEl = styled(Container)`
   height: 100%;
-  width: 100%;
-`;
-const PaneTitle = styled.h2`
-  ${setSpace("pam")};
-  ${setType("x")};
-  background: ${color.greyWt};
-  border-bottom: 1px solid ${color.greyHL};
-  border-radius: ${radius.h} ${radius.h} ${radius.n} ${radius.n};
-  color: ${color.greyBlk};
-  display: block;
-  font-family: ${font.serif};
-  letter-spacing: ${track.s};
-  text-align: center;
-  text-transform: uppercase;
   width: 100%;
 `;
 
@@ -372,7 +358,7 @@ export default class UserPane extends React.Component {
     } = this.state;
     return (
       <PaneEl fill="white" rounded shift dir="column">
-        <PaneTitle>Your end-reader</PaneTitle>
+        <PaneTitle>End-reader</PaneTitle>
         <PaneFrame
           {...this.props}
           active
