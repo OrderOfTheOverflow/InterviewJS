@@ -1,7 +1,7 @@
 import css from "styled-components";
 import { string } from "prop-types";
 
-import { setType, skin, track } from "../../../utils";
+import { setType, skin } from "../../../utils";
 
 const Text = css.span`
   font-family: ${skin.font};
