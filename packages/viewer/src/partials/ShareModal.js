@@ -41,7 +41,7 @@ export default class ShareModal extends React.Component {
     this.state = {};
   }
   render() {
-    const { story } = this.props;
+    const { story, LANG } = this.props;
     const storyUrl = window.location.href.replace(/results/g, "");
     return (
       <ReactModal
@@ -55,9 +55,7 @@ export default class ShareModal extends React.Component {
           <ModalHead>
             <PageTitle typo="p4">“{story.title}”</PageTitle>
             <Separator silent size="x" />
-            <PageSubtitle typo="h2">
-              Share this story with your network:
-            </PageSubtitle>
+            <PageSubtitle typo="h2">{LANG.shareTitle}</PageSubtitle>
           </ModalHead>
           <ModalBody>
             <Container align="center">
@@ -85,7 +83,7 @@ export default class ShareModal extends React.Component {
           <ModalFoot>
             <Actionbar>
               <Action primary fixed onClick={this.props.handleClose}>
-                Done
+                {LANG.shareCloseButton}
               </Action>
             </Actionbar>
           </ModalFoot>

@@ -52,12 +52,13 @@ export default class MetaForm extends React.Component {
         cover: this.props.story.cover,
         logo: this.props.story.logo,
         pubDate: this.props.story.pubDate,
+        language: this.props.story.language,
         title: this.props.story.title,
         coverFilename: this.props.story.coverFilename,
-        logoFilename: this.props.story.logoFilename,
+        logoFilename: this.props.story.logoFilename
       },
-      coverUploading : false,
-      logoUploading : false,
+      coverUploading: false,
+      logoUploading: false,
       formValidation: {
         title: null
       }
@@ -93,7 +94,7 @@ export default class MetaForm extends React.Component {
   }
 
   handleFile(key, f) {
-    this.setState({[`${key}Uploading`]: true});
+    this.setState({ [`${key}Uploading`]: true });
     const { type, preview, name } = f[0];
     const offScreenImage = document.createElement("img");
     offScreenImage.addEventListener("load", () => {
@@ -125,7 +126,7 @@ export default class MetaForm extends React.Component {
           transferable: true
         })
         .then(
-          result =>
+          (result) =>
             key === "logo"
               ? pica.toBlob(result, type, 0.9)
               : pica.toBlob(result, "image/jpeg", 0.9)
@@ -165,10 +166,10 @@ export default class MetaForm extends React.Component {
                 },
                 [`${key}Uploading`]: false
               });
-              if((key === "cover" || key === "logo") && this.props.handleSave) 
+              if ((key === "cover" || key === "logo") && this.props.handleSave)
                 this.props.handleSave({
-                  [key]: this.state.formData[key], 
-                  [`${key}Filename`]: this.state.formData[[`${key}Filename`]] 
+                  [key]: this.state.formData[key],
+                  [`${key}Filename`]: this.state.formData[[`${key}Filename`]]
                 });
             })
             .catch((err) => console.log(err));
@@ -236,7 +237,9 @@ export default class MetaForm extends React.Component {
                 required={this.props.required}
                 value={this.state.formData.authorLink}
               />
-              <Legend tip="Add a link e.g. to your website or twitter">i</Legend>
+              <Legend tip="Add a link e.g. to your website or twitter">
+                i
+              </Legend>
             </FormItem>
           </Container>
           <Container flex={[0, 0, `${100 / 3}%`]}>
@@ -365,6 +368,27 @@ export default class MetaForm extends React.Component {
             </FormItem>
           </Container>
         </Container>
+        <Separator size="m" silent />
+        <FormItem>
+          <Label>Language</Label>
+          <TextInput
+            name="language"
+            onBlur={(e) => this.handleBlur(e)}
+            onChange={(e) => this.handleChange(e)}
+            placeholder="Make it short and simple!"
+            required
+            select
+            value={this.state.formData.language}
+          >
+            <option value="en" default>
+              English
+            </option>
+            <option value="pl">Polish</option>
+          </TextInput>
+          <Legend tip="Select language of your story. Your choice will be reflected in the chat interface available to your end-readers.">
+            i
+          </Legend>
+        </FormItem>
         <Separator size="m" silent />
         <Actionbar>
           <Action fixed primary type="submit">

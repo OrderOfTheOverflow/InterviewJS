@@ -3,17 +3,20 @@ if (!window.InterviewJS.ignoreSampleStory && document.location.hostname === "loc
     {
       answer1: 25,
       answer2: 75,
-      id: "q1"
+      id: "q1",
+      counts: [1, 3]
     },
     {
       answer1: 50,
       answer2: 50,
-      id: "q2"
+      id: "q2",
+      counts: [2, 2]
     },
     {
-      answer1: 80,
-      answer2: 20,
-      id: "q3"
+      answer1: 25,
+      answer2: 75,
+      id: "q3",
+      counts: [1, 3]
     }
   ];
 }

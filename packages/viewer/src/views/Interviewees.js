@@ -27,6 +27,8 @@ import {
   Topbar
 } from "../partials";
 
+import LOCALES from "../locales";
+
 const Interviewees = css.ul`
   display: block;
   width: 100%;
@@ -113,6 +115,9 @@ export default class ContextView extends Component {
 
   render() {
     const { story } = this.props;
+    const LOCALE = story.locale ? story.locale : "en";
+    const LANG = LOCALES[LOCALE];
+
     if (!story || Object.keys(story).length === 0) return null; // FIXME show spinner
 
     return [
@@ -126,7 +131,7 @@ export default class ContextView extends Component {
           <Cover image={story.cover} compact />
         </PageHead>
         <PageBody limit="x" flex={[1, 0, `${100 / 2}%`]}>
-          <Aside typo="p3">Select an interviewee to chat with:</Aside>
+          <Aside typo="p3">{LANG.intervieweesText}</Aside>
           <Separator size="m" silent />
           <Interviewees>
             {story.interviewees.map((interviewee, i) => (
@@ -154,7 +159,7 @@ export default class ContextView extends Component {
                     </IntervieweeTitle>
                   </Container>
                   <Container flex={[1, 0, "auto"]}>
-                    <Tip title="About this interviewee">
+                    <Tip title={LANG.intervieweesAbout}>
                       <Action
                         iconic
                         inverted
@@ -163,7 +168,7 @@ export default class ContextView extends Component {
                         <Icon name="info" />
                       </Action>
                     </Tip>
-                    <Tip title="Start chatting">
+                    <Tip title={LANG.intervieweesStartChat}>
                       <Action
                         iconic
                         onClick={(e) => this.startChat(e, interviewee.id)}
@@ -193,6 +198,7 @@ export default class ContextView extends Component {
               }`
             )
           }
+          cta={LANG.intervieweesStartChat}
         />
       ) : null,
       this.state.storyDetailsModal ? (
@@ -201,6 +207,7 @@ export default class ContextView extends Component {
           isOpen={this.state.storyDetailsModal}
           key="detailsModal"
           story={story}
+          LANG={LANG}
         />
       ) : null
     ];

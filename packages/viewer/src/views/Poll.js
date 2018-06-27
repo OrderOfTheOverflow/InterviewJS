@@ -25,6 +25,8 @@ import {
   Topbar
 } from "../partials";
 
+import LOCALES from "../locales";
+
 const PollItem = css(Container)`
   &:not(:last-child) {
     ${setSpace("mbl")};
@@ -51,6 +53,7 @@ export default class PollView extends Component {
       storyDetailsModal: false
     };
     this.moveOn = this.moveOn.bind(this);
+    this.skipPoll = this.skipPoll.bind(this);
     this.submitPoll = this.submitPoll.bind(this);
     this.toggleDetailsModal = this.toggleDetailsModal.bind(this);
   }
@@ -90,11 +93,6 @@ export default class PollView extends Component {
   }
 
   submitPoll() {
-    const { story } = this.props;
-    localStorage.setItem(
-      `poll-${story.id}-${story.version}`,
-      JSON.stringify(this.state.formData)
-    );
     console.log(this.state.formData);
     axios
       .post("https://api.interviewjs.io/v1/polls", {
@@ -110,12 +108,41 @@ export default class PollView extends Component {
   }
 
   moveOn() {
+    const empty = !window.InterviewJS.poll.length;
+    if (Object.keys(this.state.formData).length) {
+      const { story } = this.props;
+      localStorage.setItem(
+        `poll-${story.id}-${story.version}`,
+        JSON.stringify(this.state.formData)
+      );
+    }
+    if (empty) {
+      const { poll } = this.props.story;
+      this.props.storePolls(poll);
+      this.props.updatePoll(this.state.formData);
+    } else if (!this.state.hasLocalPoll) {
+      this.props.updatePoll(this.state.formData);
+    }
+    this.props.router.push(`/${this.props.story.id}/results`);
+  }
+
+  skipPoll() {
+    const empty = !window.InterviewJS.poll.length;
+    if (empty) {
+      const { poll } = this.props.story;
+      this.props.storePolls(poll);
+      this.props.updatePoll(this.state.formData);
+    }
     this.props.router.push(`/${this.props.story.id}/results`);
   }
 
   render() {
     const { hasLocalPoll } = this.state;
     const { story } = this.props;
+
+    const LOCALE = story.locale ? story.locale : "en";
+    const LANG = LOCALES[LOCALE];
+
     if (!story || Object.keys(story).length === 0) return null; // FIXME show spinner
 
     const { poll } = story;
@@ -130,11 +157,8 @@ export default class PollView extends Component {
           <Cover image={story.cover} compact />
         </PageHead>
         <PageBody limit="x" flex={[1, 0, `${100 / 4}%`]}>
-
-          <Aside typo="p6">
-            This is a simple poll. <br /> We won’t use your data for anything else.
-          </Aside>
-          <Separator size="s" silent />
+          <Aside typo="p3">{LANG.pollTitle}</Aside>
+          <Separator size="m" silent />
           {poll.filter((item) => !!item.id).map((item) => (
             <PollItem key={item.id}>
               <PageSubtitle typo="h3">{item.question}</PageSubtitle>
@@ -183,15 +207,15 @@ export default class PollView extends Component {
           ))}
           <Separator size="l" silent />
           <Actionbar>
-            <Action fixed onClick={this.moveOn} secondary>
-              Skip
+            <Action fixed onClick={this.skipPoll} secondary>
+              {LANG.pollSkipButton}
             </Action>
             <Action
               fixed
               onClick={hasLocalPoll ? this.moveOn : this.submitPoll}
               primary
             >
-              Show me results
+              {LANG.pollResultsButton}
             </Action>
           </Actionbar>
         </PageBody>
@@ -202,6 +226,7 @@ export default class PollView extends Component {
           isOpen={this.state.storyDetailsModal}
           key="detailsModal"
           story={story}
+          LANG={LANG}
         />
       ) : null
     ];

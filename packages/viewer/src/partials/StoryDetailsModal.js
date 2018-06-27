@@ -14,7 +14,7 @@ import {
   color,
   font,
   setSpace,
-  setType,
+  setType
 } from "interviewjs-styleguide";
 
 import { Cover, PageBody, PageHead } from "../partials";
@@ -90,7 +90,7 @@ export default class StoryDetailsModal extends React.Component {
     this.state = {};
   }
   render() {
-    const { story } = this.props;
+    const { story, LANG } = this.props;
     return (
       <ReactModal
         ariaHideApp={false}
@@ -112,62 +112,80 @@ export default class StoryDetailsModal extends React.Component {
               <Cover image={story.cover} compact />
             </PageHead>
             <PageBody limit="x" flex={[1, 0, `${100 / 2}%`]}>
-              <PageSubtitle typo="h3">Credits</PageSubtitle>
+              <PageSubtitle typo="h3">{LANG.detailsCreditsTitle}</PageSubtitle>
               <Separator silent size="m" />
               <DetailsCopy>
                 <dl>
-                  {story.title ? [<dt>Full title</dt>, <dd>{story.title}</dd>] : null}
+                  {story.title
+                    ? [<dt>{LANG.detailsFullTitle}</dt>, <dd>{story.title}</dd>]
+                    : null}
                   {story.author && story.authorLink
                     ? [
-                        <dt>Author</dt>,
+                        <dt>{LANG.detailsAuthor}</dt>,
                         <dd>
-                          <a href={story.authorLink} target="_blank" rel="noopener noreferrer">
+                          <a
+                            href={story.authorLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
                             {story.author}
                           </a>
-                        </dd>,
+                        </dd>
                       ]
                     : null}
                   {!story.author && story.authorLink
                     ? [
-                        <dt>Author link</dt>,
+                        <dt>{LANG.detailsAuthorLink}</dt>,
                         <dd>
-                          <a href={story.authorLink} target="_blank" rel="noopener noreferrer">
+                          <a
+                            href={story.authorLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
                             {story.authorLink}
                           </a>
-                        </dd>,
+                        </dd>
                       ]
                     : null}
-                  {story.pubDate ? [<dt>Published</dt>, <dd>{story.pubDate}</dd>] : null}
+                  {story.pubDate
+                    ? [
+                        <dt>{LANG.detailsPublished}</dt>,
+                        <dd>{story.pubDate}</dd>
+                      ]
+                    : null}
                 </dl>
               </DetailsCopy>
               <Separator silent size="m" />
-              <PageSubtitle typo="h5">About InterviewJS</PageSubtitle>
+              <PageSubtitle typo="h5">{LANG.detailsAboutTitle}</PageSubtitle>
               <Separator silent size="m" />
               <DetailsCopy>
-                <p>
-                  Turn interview transcripts into shareable and embeddable interactive chats—InterviewJS is an open-source
-                  Google DNI & Al Jazeera-backed web app for newsrooms that enables journalists to compose and manage 
-                  scripted chats for a more immersive storytelling experience.
-                </p>
-                <p>
-                  If you want to make interview.js story please visit our website www.interviewjs.io
-                </p>
+                <p>{LANG.detailsAboutCopy1}</p>
+                <p>{LANG.detailsAboutCopy2}</p>
               </DetailsCopy>
               <Separator silent size="m" />
-              <PageSubtitle typo="h5">Connect with InterviewJS</PageSubtitle>
+              <PageSubtitle typo="h5">
+                {LANG.detailsdetailsConnectTitle}
+              </PageSubtitle>
               <Separator silent size="m" />
               <DetailsCopy>
-                <p>
-                  InterviewJS is an open-source software happily accepting stars, forks and PRs on Github and followers
-                  on Twitter:
-                </p>
+                <p>{LANG.detailsConnectCopy}</p>
               </DetailsCopy>
               <Separator silent size="m" />
               <Actionbar>
-                <Action href="https://github.com/AJInteractive/InterviewJS" target="_blank" inverted fixed>
+                <Action
+                  href="https://github.com/AJInteractive/InterviewJS"
+                  target="_blank"
+                  inverted
+                  fixed
+                >
                   <Icon name="github" /> Github
                 </Action>
-                <Action href="https://twitter.com/interview_js" target="_blank" inverted fixed>
+                <Action
+                  href="https://twitter.com/interview_js"
+                  target="_blank"
+                  inverted
+                  fixed
+                >
                   <Icon name="twitter" /> Twitter
                 </Action>
               </Actionbar>
@@ -182,7 +200,7 @@ export default class StoryDetailsModal extends React.Component {
 StoryDetailsModal.propTypes = {
   handleClose: func.isRequired,
   isOpen: bool.isRequired,
-  story: shape({}).isRequired,
+  story: shape({}).isRequired
 };
 
 StoryDetailsModal.defaultProps = {};

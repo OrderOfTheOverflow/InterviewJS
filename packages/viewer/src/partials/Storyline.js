@@ -1,12 +1,31 @@
 /* eslint react/no-danger: 0 */
 import { arrayOf, func, string, object, shape } from "prop-types";
-import css from "styled-components";
+import styled, { keyframes } from "styled-components";
 import React, { Component } from "react";
 import { withRouter } from "react-router";
 
-import { Action, Avatar, Bubble, BubbleBlock, Message, Container, Icon, color, setSpace } from "interviewjs-styleguide";
+import {
+  Action,
+  Avatar,
+  Bubble,
+  BubbleBlock,
+  Message,
+  Container,
+  Icon,
+  color,
+  setSpace
+} from "interviewjs-styleguide";
 
-const StorylineEl = css(Container)`
+const fader = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
+
+const StorylineEl = styled(Container)`
   ${setSpace("phl")};
   border-left: 1px solid ${color.greyHL};
   border-right: 1px solid ${color.greyHL};
@@ -27,13 +46,25 @@ const StorylineEl = css(Container)`
   }
 `;
 
-const Push = css.div`
+const BubbleAvatar = styled(Container)`
+  opacity: 0;
+  animation-delay: 350ms;
+  animation-direction: normal;
+  animation-duration: 350ms;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+  animation-name: ${fader};
+  animation-play-state: running;
+  animation-timing-function: ease-in;
+`;
+
+const Push = styled.div`
   height: calc(100% - 80px);
   margin: 0;
   padding: 0;
 `;
 
-const AvatarHolder = css(Container)`
+const AvatarHolder = styled(Container)`
   ${setSpace("prs")};
 `;
 
@@ -41,7 +72,7 @@ class Storyline extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      replayCachedHistory: true,
+      replayCachedHistory: true
     };
     this.scrollToBottom = this.scrollToBottom.bind(this);
   }
@@ -72,14 +103,14 @@ class Storyline extends Component {
   scrollToBottom(behaviour) {
     return this.anchor
       ? this.anchor.parentElement.scroll({
-        top: this.anchor.offsetTop, 
-        left: 0, 
-        behavior: behaviour || "smooth",
-      })
+          top: this.anchor.offsetTop,
+          left: 0,
+          behavior: behaviour || "smooth"
+        })
       : null;
   }
   render() {
-    const { storyline, history, interviewee, story } = this.props;
+    const { storyline, history, interviewee, story, LANG } = this.props;
     const { replayCachedHistory } = this.state;
 
     // const animateAndDelay = true;
@@ -91,11 +122,16 @@ class Storyline extends Component {
       const getBubbleContent = () => {
         switch (type) {
           case "text":
-            return <p>{content.value}</p>;
+            return [
+              <p>{content.value}</p>,
+              content.source ? (
+                <a href={content.source}>{LANG.chatBubbleSource}</a>
+              ) : null
+            ];
           case "image":
             return [
               <img src={content.value} alt={content.title} key="image" />,
-              content.title ? <p key="caption">{content.title}</p> : null,
+              content.title ? <p key="caption">{content.title}</p> : null
             ];
           case "link":
             return (
@@ -124,18 +160,32 @@ class Storyline extends Component {
       };
 
       return (
-        <BubbleBlock key={index} persona="interviewee">
-          <Bubble
-            animated={animateAndDelay}
-            delay={animateAndDelay ? 350 : null}
-            displayType={getBubbleDisplayType()}
-            loading={animateAndDelay}
-            persona="interviewee"
-            theme={{ backg: interviewee.color, font: "PT sans" }}
-          >
-            {getBubbleContent()}
-          </Bubble>
-        </BubbleBlock>
+        <Container
+          dir="row"
+          style={{ justifyContent: "flex-end", alignItems: "flex-end" }}
+        >
+          <BubbleAvatar dir="column" flex={[0, 0, "auto"]}>
+            <Avatar
+              size="s"
+              image={interviewee.avatar}
+              style={{ margin: "0 5px 2px 0" }}
+            />
+          </BubbleAvatar>
+          <Container flex={[1, 1, "100%"]}>
+            <BubbleBlock key={index} persona="interviewee">
+              <Bubble
+                animated={animateAndDelay}
+                delay={animateAndDelay ? 350 : null}
+                displayType={getBubbleDisplayType()}
+                loading={animateAndDelay}
+                persona="interviewee"
+                theme={{ backg: interviewee.color, font: "PT sans" }}
+              >
+                {getBubbleContent()}
+              </Bubble>
+            </BubbleBlock>
+          </Container>
+        </Container>
       );
     };
 
@@ -146,7 +196,8 @@ class Storyline extends Component {
         if (type === "ignore" || type === "explore") {
           const { i } = item;
           const { content } = storyline[i];
-          const filterByType = () => content.findIndex(contentEl => contentEl.type === type);
+          const filterByType = () =>
+            content.findIndex((contentEl) => contentEl.type === type);
           return content[filterByType()].value;
         } else if (type === "diss") {
           return item.value;
@@ -158,7 +209,11 @@ class Storyline extends Component {
 
       return (
         <BubbleBlock key={index} persona="user">
-          <Bubble persona="user" animated={animateAndDelay} theme={{ font: "PT sans" }}>
+          <Bubble
+            persona="user"
+            animated={animateAndDelay}
+            theme={{ font: "PT sans" }}
+          >
             {getBubbleContent()}
           </Bubble>
         </BubbleBlock>
@@ -171,7 +226,7 @@ class Storyline extends Component {
         return (
           <BubbleBlock key={index}>
             <Bubble persona="system" theme={{ font: "PT sans" }}>
-              Choose another interviewee to talk to:
+              {LANG.chatChooseAnother}
             </Bubble>
             {story.interviewees.map(
               (character, i) =>
@@ -187,7 +242,11 @@ class Storyline extends Component {
                         <Avatar image={character.avatar} size="s" />
                       </AvatarHolder>
                       <Container flex={[1, 1, "100%"]}>
-                        <Action onClick={() => this.props.switchChat(character.id)}>{character.name}</Action>
+                        <Action
+                          onClick={() => this.props.switchChat(character.id)}
+                        >
+                          {character.name}
+                        </Action>
                       </Container>
                     </Container>
                   </Bubble>
@@ -196,7 +255,11 @@ class Storyline extends Component {
           </BubbleBlock>
         );
       } else if (type === "quit") {
-        return <Message delay={350}>{interviewee.name} left the chat</Message>;
+        return (
+          <Message delay={500}>
+            {interviewee.name} {LANG.chatLeft}
+          </Message>
+        );
       }
       return null;
     };
@@ -218,7 +281,7 @@ class Storyline extends Component {
             })
           : null}
         <div
-          ref={el => {
+          ref={(el) => {
             this.anchor = el;
           }}
         />
@@ -232,18 +295,18 @@ Storyline.propTypes = {
   currentIntervieweeId: string.isRequired,
   switchChat: func.isRequired,
   interviewee: shape({
-    color: string.isRequired,
+    color: string.isRequired
   }).isRequired,
   storyline: arrayOf(object),
   story: shape({
-    interviewees: arrayOf(object),
-  }),
+    interviewees: arrayOf(object)
+  })
 };
 
 Storyline.defaultProps = {
   history: [],
   storyline: [],
-  story: {},
+  story: {}
 };
 
 export default withRouter(Storyline);

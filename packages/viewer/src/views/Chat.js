@@ -15,6 +15,8 @@ import {
   RunAwayActions
 } from "./chat/";
 
+import LOCALES from "../locales";
+
 class ChatView extends Component {
   constructor(props) {
     super(props);
@@ -38,6 +40,7 @@ class ChatView extends Component {
     this.findIntervieweeIndex = this.findIntervieweeIndex.bind(this);
     this.initHistory = this.initHistory.bind(this);
     this.onHistoryUpdate = this.onHistoryUpdate.bind(this);
+    this.resetHistory = this.resetHistory.bind(this);
     this.switchChat = this.switchChat.bind(this);
     this.toggleToolbar = this.toggleToolbar.bind(this);
     this.updateHistory = this.updateHistory.bind(this);
@@ -240,7 +243,15 @@ class ChatView extends Component {
     }
     return null;
   }
-
+  resetHistory() {
+    const { story } = this.props;
+    const { interviewees } = story;
+    const interviewee = interviewees[this.findIntervieweeIndex()];
+    localStorage.removeItem(
+      `history-${story.id}-${story.version}-${interviewee.id}`
+    );
+    window.location.reload();
+  }
   render() {
     const { history } = this.state;
     const { story } = this.props;
@@ -248,6 +259,9 @@ class ChatView extends Component {
     const { storyline } = interviewees[this.findIntervieweeIndex()];
     const interviewee = interviewees[this.findIntervieweeIndex()];
     const hasHistory = history.length > 0;
+
+    const LOCALE = story.locale ? story.locale : "en";
+    const LANG = LOCALES[LOCALE];
 
     // if current bubble is the last one
     const isLastBubble = () => {
@@ -315,6 +329,8 @@ class ChatView extends Component {
               navigateAway={this.props.router.push}
               updateHistory={this.updateHistory}
               story={this.props.story}
+              resetHistory={this.resetHistory}
+              LANG={LANG}
             />
           );
         }
@@ -324,7 +340,7 @@ class ChatView extends Component {
         if (isNextHistoryItemUser && isActiveActionbarEmot) {
           return <EmoActions updateHistory={this.updateHistory} />;
         } else if (isLastBubbleSwitchTo) {
-          return <NvmActions updateHistory={this.updateHistory} />;
+          return <NvmActions updateHistory={this.updateHistory} LANG={LANG} />;
         } else if (isNextHistoryItemUser && isActiveActionbarScripted) {
           return getCurrentScriptActions(nextItem.content);
         }
@@ -337,6 +353,8 @@ class ChatView extends Component {
             isSwitchPossible={interviewees.length > 1}
             navigateAway={this.props.router.push}
             updateHistory={this.updateHistory}
+            resetHistory={this.resetHistory}
+            LANG={LANG}
           />
         );
       } else if (userStarts && isActiveActionbarEmot) {
@@ -375,6 +393,7 @@ class ChatView extends Component {
               storyline={storyline}
               switchChat={this.switchChat}
               updateHistory={this.updateHistory}
+              LANG={LANG}
             />
           ) : null}
         </PageBody>
@@ -397,21 +416,20 @@ class ChatView extends Component {
               </Action>
             ) : null}
             {renderUserActions()}
-            {hideActionbarSatellites ? (
-              <span />
-            ) : null}
+            {hideActionbarSatellites ? <span /> : null}
           </Actionbar>
         </PageFoot>
       </Page>,
       this.state.intervieweeModal ? (
         <IntervieweeModal
           {...this.props}
-          cta="Get back to chat"
+          cta={LANG.chatGetBack}
           handleClose={() => this.toggleModal("intervieweeModal")}
           handleSubmit={() => this.toggleModal("intervieweeModal")}
           interviewee={interviewee}
           isOpen={this.state.intervieweeModal !== null}
           key="intervieweeModal"
+          LANG={LANG}
         />
       ) : null,
       this.state.storyDetailsModal ? (
@@ -420,6 +438,7 @@ class ChatView extends Component {
           isOpen={this.state.storyDetailsModal}
           key="detailsModal"
           story={story}
+          LANG={LANG}
         />
       ) : null
     ];
