@@ -9,11 +9,7 @@ import {
   PaneTabs,
   Tip,
   color,
-  font,
-  radius,
-  setSpace,
-  setType,
-  track
+  radius
 } from "interviewjs-styleguide";
 
 import {
@@ -25,27 +21,27 @@ import {
   TextPane
 } from "./interviewee";
 
+import PaneTitle from "./PaneTitle";
+
 const PaneEl = styled(Container)`
   align-items: stretch;
   height: 100%;
   overflow: visible;
   width: 100%;
   ${PaneTabs} {
-    transform: translateY(-1px);
+    background: ${color.white};
+    border-radius: ${radius.l} ${radius.l} 0 0;
+    overflow: hidden;
+    & > * {
+      transform: translateY(-1px);
+    }
+    & > *:first-child {
+      border-radius: ${radius.l} 0 0 0;
+    }
+    & > *:last-child {
+      border-radius: 0 ${radius.l} 0 0;
+    }
   }
-`;
-const PaneTitle = styled.h2`
-  ${setSpace("pam")};
-  ${setType("x")};
-  background: ${color.greyWt};
-  border-radius: ${radius.h} ${radius.h} ${radius.n} ${radius.n};
-  color: ${color.greyBlk};
-  display: block;
-  font-family: ${font.serif};
-  letter-spacing: ${track.s};
-  text-align: center;
-  text-transform: uppercase;
-  width: 100%;
 `;
 
 export default class IntervieweePane extends React.Component {
@@ -208,7 +204,7 @@ export default class IntervieweePane extends React.Component {
     const { currentInterviewee, story } = this.props;
     return (
       <PaneEl fill="white" rounded shift dir="column">
-        <PaneTitle>Your interviewee</PaneTitle>
+        <PaneTitle>Interviewee</PaneTitle>
         <Container flex={[0, 0, "auto"]}>
           <PaneTabs>
             <PaneTab
