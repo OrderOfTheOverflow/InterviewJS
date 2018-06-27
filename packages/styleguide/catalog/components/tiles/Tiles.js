@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {} from "prop-types";
+import { number } from "prop-types";
 
 import { radius } from "../../../utils";
 
@@ -10,6 +10,7 @@ const Tiles = styled.div`
   flex-direction: row;
   text-align: center;
   & > * {
+    ${({ force }) => (force ? `flex: 0 0 ${100 / force}%` : ``)};
     border-radius: ${radius.n} !important;
   }
   & > *:first-child {
@@ -20,8 +21,8 @@ const Tiles = styled.div`
   }
 `;
 
-Tiles.propTypes = {};
+Tiles.propTypes = { force: number };
 
-Tiles.defaultProps = {};
+Tiles.defaultProps = { force: null };
 
 export default Tiles;

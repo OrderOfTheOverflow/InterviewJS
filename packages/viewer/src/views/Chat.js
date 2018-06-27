@@ -402,7 +402,6 @@ class ChatView extends Component {
                   />
                 </DropdownContent>
               }
-              className="HELLODEH"
               onRequestClose={() => this.toggleDropdown("runawayDropdown")}
               open={this.state.runawayDropdown}
             >

@@ -4,7 +4,7 @@ import { bool, func, object } from "prop-types";
 import { Icon, Tiles, Tile, color } from "interviewjs-styleguide";
 
 const RunAwayActions = (props) => (
-  <Tiles>
+  <Tiles force={3}>
     {props.isSwitchPossible ? (
       <Tile
         onClick={() => props.updateHistory("switchTo")}

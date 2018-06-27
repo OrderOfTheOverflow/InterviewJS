@@ -4,8 +4,7 @@ import { array, func, node, oneOfType, string } from "prop-types";
 import { color, font, radius, setSpace, setType, time } from "../../../utils";
 
 const Tile = styled.button`
-  ${setSpace("phm")};
-  ${setSpace("pvl")};
+  ${setSpace("pam")};
   ${setType("x")};
   align-content: center;
   align-items: center;
