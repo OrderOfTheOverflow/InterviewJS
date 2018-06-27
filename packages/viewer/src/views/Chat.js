@@ -16,7 +16,6 @@ import {
 } from "interviewjs-styleguide";
 import { IntervieweeModal, StoryDetailsModal, Storyline } from "../partials/";
 import {
-  EmoActions,
   NvmActions,
   Page,
   PageBody,
@@ -169,15 +168,6 @@ class ChatView extends Component {
         type: "followup"
       };
       history.push(skip);
-    } else if (type === "emoji") {
-      this.setState({ actionbar: "scripted" });
-      const emoji = {
-        i: thisItem.i,
-        role: "user",
-        type: "emoji",
-        value: payload
-      };
-      history.push(emoji);
     } else if (type === "switchTo") {
       this.setState({ actionbar: "scripted" });
       const switchTo = {
@@ -322,7 +312,6 @@ class ChatView extends Component {
       });
 
     const renderUserActions = () => {
-      const isActiveActionbarEmot = this.state.actionbar === "emot";
       const isActiveActionbarRunaway = this.state.actionbar === "runaway";
       const isActiveActionbarScripted = this.state.actionbar === "scripted";
       const userStarts = !hasHistory && storyline[0].role === "user";
@@ -352,9 +341,7 @@ class ChatView extends Component {
         const isNextHistoryItemUser = nextItem
           ? nextItem.role === "user"
           : false;
-        if (isNextHistoryItemUser && isActiveActionbarEmot) {
-          return <EmoActions updateHistory={this.updateHistory} />;
-        } else if (isLastBubbleSwitchTo) {
+        if (isLastBubbleSwitchTo) {
           return <NvmActions updateHistory={this.updateHistory} LANG={LANG} />;
         } else if (isNextHistoryItemUser && isActiveActionbarScripted) {
           return getCurrentScriptActions(nextItem.content);
@@ -372,8 +359,6 @@ class ChatView extends Component {
             LANG={LANG}
           />
         );
-      } else if (userStarts && isActiveActionbarEmot) {
-        return <EmoActions updateHistory={this.updateHistory} />;
       }
       return null;
     };
