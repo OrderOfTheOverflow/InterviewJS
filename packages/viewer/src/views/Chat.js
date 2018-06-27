@@ -394,17 +394,17 @@ class ChatView extends Component {
                 <DropdownContent>
                   <RunAwayActions
                     isSwitchPossible={interviewees.length > 1}
-                    navigateAway={this.props.router.push}
-                    updateHistory={this.updateHistory}
-                    story={this.props.story}
-                    resetHistory={this.resetHistory}
                     LANG={LANG}
+                    navigateAway={this.props.router.push}
+                    resetHistory={this.resetHistory}
+                    story={this.props.story}
+                    updateHistory={this.updateHistory}
                   />
                 </DropdownContent>
               }
-              onRequrestClose={() => this.toggleDropdown("runawayDropdown")}
+              className="HELLODEH"
+              onRequestClose={() => this.toggleDropdown("runawayDropdown")}
               open={this.state.runawayDropdown}
-              position="bottom"
             >
               <Action
                 iconic

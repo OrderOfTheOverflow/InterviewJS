@@ -4,22 +4,24 @@ import { array, func, node, oneOfType, string } from "prop-types";
 import { color, font, radius, setSpace, setType, time } from "../../../utils";
 
 const Tile = styled.button`
-  ${setSpace("pam")};
+  ${setSpace("phm")};
+  ${setSpace("pvl")};
   ${setType("x")};
-  cursor: pointer;
   align-content: center;
-  align-items: stretch;
+  align-items: center;
   background: none;
   border-radius: ${radius.l};
   border: 1px solid ${color.greyHL};
   color: ${({ paint }) => paint};
-  display: flex;
+  cursor: pointer;
+  display: flex !important;
   flex-direction: column;
   font-family: ${font.sans};
-  justify-content: flex-start;
+  justify-content: center;
+  line-height: 1.2em;
   outline: none;
   position: relative;
-  width: 100%;
+  text-align: center !important;
   transition: border ${time.m};
   &:not(:first-child) {
     margin-left: -1px;
@@ -28,8 +30,8 @@ const Tile = styled.button`
     border-color: ${({ paint }) => paint};
     z-index: 5;
   }
-  & > * {
-    ${setSpace("mbs")};
+  & > div {
+    ${setSpace("mts")};
   }
 `;
 

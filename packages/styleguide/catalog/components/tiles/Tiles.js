@@ -8,14 +8,15 @@ const Tiles = styled.div`
   align-items: stretch;
   display: flex;
   flex-direction: row;
+  text-align: center;
   & > * {
-    border-radius: ${radius.n};
+    border-radius: ${radius.n} !important;
   }
   & > *:first-child {
-    border-radius: ${radius.l} ${radius.n} ${radius.n} ${radius.l};
+    border-radius: ${radius.l} ${radius.n} ${radius.n} ${radius.l} !important;
   }
   & > *:last-child {
-    border-radius: ${radius.n} ${radius.l} ${radius.l} ${radius.n};
+    border-radius: ${radius.n} ${radius.l} ${radius.l} ${radius.n} !important;
   }
 `;
 
