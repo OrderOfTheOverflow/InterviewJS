@@ -26,7 +26,7 @@ const fader = keyframes`
 `;
 
 const StorylineEl = styled(Container)`
-  ${setSpace("phl")};
+  ${setSpace("phm")};
   border-left: 1px solid ${color.greyHL};
   border-right: 1px solid ${color.greyHL};
   bottom: 0;
