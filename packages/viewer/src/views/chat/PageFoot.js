@@ -1,12 +1,15 @@
-import css from "styled-components";
+import styled from "styled-components";
 
 import { Container, color } from "interviewjs-styleguide";
 
-const PageFoot = css(Container)`
-  border: 1px solid ${color.greyHL};
+const PageFoot = styled(Container)`
+  align-content: stretch;
+  align-items: center;
+  border-left: 1px solid ${color.greyHL};
+  border-right: 1px solid ${color.greyHL};
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: stretch;
   width: 100%;
 `;
 

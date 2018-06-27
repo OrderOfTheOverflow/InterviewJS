@@ -11,11 +11,13 @@ import {
   DropdownContent,
   Icon,
   Separator,
+  TileAction,
   Tip
 } from "interviewjs-styleguide";
 import { IntervieweeModal, StoryDetailsModal, Storyline } from "../partials/";
 import {
   NvmActions,
+  ChatActions,
   Page,
   PageBody,
   PageFoot,
@@ -271,16 +273,13 @@ class ChatView extends Component {
       arr.map((action, i) => {
         if (action.enabled) {
           return (
-            <Action
-              fixed
+            <TileAction
               key={action.type}
               onClick={() => this.updateHistory(action.type, i)}
-              primary={action.type === "explore"}
-              secondary={action.type === "ignore"}
-              theme={{ font: "PT sans" }}
+              primary
             >
               {action.value}
-            </Action>
+            </TileAction>
           );
         }
         return null;
@@ -405,8 +404,8 @@ class ChatView extends Component {
             />
           ) : null}
         </PageBody>
-        <PageFoot limit="m" flex={[0, 0, `80px`]} padded>
-          {renderActions()}
+        <PageFoot limit="m" flex={[0, 0, `116px`]}>
+          <ChatActions>{renderActions()}</ChatActions>
         </PageFoot>
       </Page>,
       this.state.intervieweeModal ? (
