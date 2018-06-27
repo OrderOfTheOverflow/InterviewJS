@@ -18,7 +18,7 @@ const en = {
   listingStartChat: "Start chatting",
 
   chatChangeSpeaker: "Talk to somebody else",
-  chatResetHistory: "Reset progress",
+  chatResetHistory: "Reload this conversation",
   chatQuit: "Done chatting",
   chatNVM: "Nevermind",
   chatChooseAnother: "Choose another interviewee to talk to:",
