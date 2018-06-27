@@ -4,7 +4,6 @@ import { object, shape, string } from "prop-types";
 import { withRouter } from "react-router";
 import React, { Component } from "react";
 import {
-  Actionbar,
   Action,
   Avatar,
   Container,
@@ -268,31 +267,7 @@ class ChatView extends Component {
     const LOCALE = story.locale ? story.locale : "en";
     const LANG = LOCALES[LOCALE];
 
-    // if current bubble is the last one
-    const isLastBubble = () => {
-      if (hasHistory) {
-        const thisHistoryItem = history[history.length - 1];
-        const thisBubbleI = thisHistoryItem.i;
-        const lastBubbleI = storyline.length - 1;
-        return thisBubbleI === lastBubbleI || thisHistoryItem.type === "quit";
-      }
-      return false;
-    };
-
-    // if current action should be `nevermind`
-    const isNvmBubble = () => {
-      if (hasHistory) {
-        const thisHistoryItem = history[history.length - 1];
-        return thisHistoryItem.type === "switchTo";
-      }
-      return false;
-    };
-
-    // should actionbar side toggles be hidden
-    const hideActionbarSatellites =
-      !isNvmBubble() && !isLastBubble() && hasHistory;
-
-    const getCurrentScriptActions = (arr) =>
+    const getActions = (arr) =>
       arr.map((action, i) => {
         if (action.enabled) {
           return (
@@ -311,7 +286,7 @@ class ChatView extends Component {
         return null;
       });
 
-    const renderUserActions = () => {
+    const renderActions = () => {
       const isActiveActionbarRunaway = this.state.actionbar === "runaway";
       const isActiveActionbarScripted = this.state.actionbar === "scripted";
       const userStarts = !hasHistory && storyline[0].role === "user";
@@ -344,11 +319,11 @@ class ChatView extends Component {
         if (isLastBubbleSwitchTo) {
           return <NvmActions updateHistory={this.updateHistory} LANG={LANG} />;
         } else if (isNextHistoryItemUser && isActiveActionbarScripted) {
-          return getCurrentScriptActions(nextItem.content);
+          return getActions(nextItem.content);
         }
         return null;
       } else if (userStarts && isActiveActionbarScripted) {
-        return getCurrentScriptActions(storyline[0].content);
+        return getActions(storyline[0].content);
       } else if (userStarts && isActiveActionbarRunaway) {
         return (
           <RunAwayActions
@@ -431,26 +406,7 @@ class ChatView extends Component {
           ) : null}
         </PageBody>
         <PageFoot limit="m" flex={[0, 0, `80px`]} padded>
-          <Actionbar satellite={hideActionbarSatellites ? "both" : null}>
-            {hideActionbarSatellites ? (
-              <Action
-                iconic
-                active={this.state.actionbar === "runaway"}
-                onClick={
-                  this.state.actionbar !== "runaway"
-                    ? () => this.setState({ actionbar: "runaway" })
-                    : () => this.setState({ actionbar: "scripted" })
-                }
-                secondary
-              >
-                <Icon
-                  name={this.state.actionbar === "runaway" ? `cross` : `vdots`}
-                />
-              </Action>
-            ) : null}
-            {renderUserActions()}
-            {hideActionbarSatellites ? <span /> : null}
-          </Actionbar>
+          {renderActions()}
         </PageFoot>
       </Page>,
       this.state.intervieweeModal ? (
