@@ -41,6 +41,16 @@ export default () => markdown`
   )}
   ${(
     <ReactSpecimen span={1}>
+      <Icon name="question" />
+    </ReactSpecimen>
+  )}
+  ${(
+    <ReactSpecimen span={1}>
+      <Icon name="rearrange" />
+    </ReactSpecimen>
+  )}
+  ${(
+    <ReactSpecimen span={1}>
       <Icon name="plus" />
     </ReactSpecimen>
   )}
@@ -66,7 +76,7 @@ export default () => markdown`
   )}
   ${(
     <ReactSpecimen span={1}>
-      <Icon name="mage" />
+      <Icon name="image" />
     </ReactSpecimen>
   )}
   ${(
@@ -231,17 +241,17 @@ export default () => markdown`
   )}
   ${(
     <ReactSpecimen span={1}>
-      <Icon name="enlarge" />
+      <Icon name="users" />
     </ReactSpecimen>
   )}
   ${(
     <ReactSpecimen span={1}>
-      <Icon name="question" />
+      <Icon name="replayconv" />
     </ReactSpecimen>
   )}
   ${(
     <ReactSpecimen span={1}>
-      <Icon name="rearrange" />
+      <Icon name="exit" />
     </ReactSpecimen>
   )}
 `;

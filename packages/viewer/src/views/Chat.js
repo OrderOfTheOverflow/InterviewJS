@@ -3,7 +3,17 @@
 import { object, shape, string } from "prop-types";
 import { withRouter } from "react-router";
 import React, { Component } from "react";
-import { Actionbar, Action, Avatar, Icon, Tip } from "interviewjs-styleguide";
+import {
+  Actionbar,
+  Action,
+  Avatar,
+  Container,
+  Dropdown,
+  DropdownContent,
+  Icon,
+  Separator,
+  Tip
+} from "interviewjs-styleguide";
 import { IntervieweeModal, StoryDetailsModal, Storyline } from "../partials/";
 import {
   EmoActions,
@@ -31,10 +41,10 @@ class ChatView extends Component {
     this.state = {
       actionbar: "scripted",
       currentIntervieweeId: this.props.params.chatId,
-      // history: [],
       history: localHistory || [],
       intervieweeModal: false,
       replayCachedHistory: true,
+      runawayDropdown: false,
       storyDetailsModal: false
     };
     this.findIntervieweeIndex = this.findIntervieweeIndex.bind(this);
@@ -42,6 +52,7 @@ class ChatView extends Component {
     this.onHistoryUpdate = this.onHistoryUpdate.bind(this);
     this.resetHistory = this.resetHistory.bind(this);
     this.switchChat = this.switchChat.bind(this);
+    this.toggleDropdown = this.toggleDropdown.bind(this);
     this.toggleToolbar = this.toggleToolbar.bind(this);
     this.updateHistory = this.updateHistory.bind(this);
   }
@@ -220,6 +231,10 @@ class ChatView extends Component {
   toggleModal(modal) {
     this.setState({ [modal]: !this.state[modal] });
   }
+  toggleDropdown(dropdown, e) {
+    if (e) e.preventDefault();
+    this.setState({ [dropdown]: !this.state[dropdown] });
+  }
   findIntervieweeIndex() {
     const { interviewees } = this.props.story;
     const { chatId } = this.props.params;
@@ -366,20 +381,54 @@ class ChatView extends Component {
     return [
       <Page key="page">
         <Topbar limit="m" padded>
-          <Action
-            iconic
-            onClick={() => this.props.router.push(`/${story.id}/listing`)}
-          >
-            <Icon name="arrow-left" />
-          </Action>
-          <Action onClick={() => this.toggleModal("intervieweeModal")}>
-            <Tip title={interviewee.name}>
-              <Avatar image={interviewee.avatar} size="l" />
-            </Tip>
-          </Action>
-          <Action iconic onClick={() => this.toggleModal("storyDetailsModal")}>
-            <Icon name="info" />
-          </Action>
+          <Container flex={[0, 0, `${100 / 3}%`]} align="left">
+            <Action
+              iconic
+              onClick={() => this.props.router.push(`/${story.id}/listing`)}
+            >
+              <Icon name="arrow-left" />
+            </Action>
+            <Separator dir="v" size="m" />
+            <Dropdown
+              html={
+                <DropdownContent>
+                  <RunAwayActions
+                    isSwitchPossible={interviewees.length > 1}
+                    LANG={LANG}
+                    navigateAway={this.props.router.push}
+                    resetHistory={this.resetHistory}
+                    story={this.props.story}
+                    updateHistory={this.updateHistory}
+                  />
+                </DropdownContent>
+              }
+              className="HELLODEH"
+              onRequestClose={() => this.toggleDropdown("runawayDropdown")}
+              open={this.state.runawayDropdown}
+            >
+              <Action
+                iconic
+                onClick={(e) => this.toggleDropdown("runawayDropdown", e)}
+              >
+                <Icon name="hdots" />
+              </Action>
+            </Dropdown>
+          </Container>
+          <Container flex={[0, 0, `${100 / 3}%`]}>
+            <Action onClick={() => this.toggleModal("intervieweeModal")}>
+              <Tip title={interviewee.name}>
+                <Avatar image={interviewee.avatar} size="l" />
+              </Tip>
+            </Action>
+          </Container>
+          <Container flex={[0, 0, `${100 / 3}%`]} align="right">
+            <Action
+              iconic
+              onClick={() => this.toggleModal("storyDetailsModal")}
+            >
+              <Icon name="info" />
+            </Action>
+          </Container>
         </Topbar>
         <PageBody flex={[1, 1, `100%`]}>
           {this.state.currentIntervieweeId ? (

@@ -44,4 +44,6 @@ export { default as Tabs } from "./tabs/Tabs";
 export { default as Text } from "./texts/Text";
 export { default as TextBlock } from "./texts/TextBlock";
 export { default as TextInput } from "./forms/TextInput";
+export { default as Tile } from "./tiles/Tile";
+export { default as Tiles } from "./tiles/Tiles";
 export { default as Tip } from "./contextuals/Tip";

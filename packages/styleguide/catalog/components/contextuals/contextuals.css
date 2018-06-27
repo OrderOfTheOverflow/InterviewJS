@@ -5,7 +5,6 @@
   transition: none !important;
 }
 .tippy-popper {
-  max-width: 200px;
   -webkit-perspective: 800px;
   perspective: 800px;
   z-index: 9999;
@@ -515,7 +514,8 @@
 }
 .tippy-popper .tippy-tooltip.light-theme {
   color: #26323d;
-  box-shadow: 0 2px 10px 0 rgba(0,0,0,.07), 0 -2px 10px 0 rgba(0,0,0,.07);
+  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.07),
+    0 -2px 10px 0 rgba(0, 0, 0, 0.07);
   background-color: #fff;
 }
 .tippy-popper .tippy-tooltip.light-theme[data-animatefill] {

@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?vnswc9');
-  src:  url('fonts/icomoon.eot?vnswc9#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?vnswc9') format('truetype'),
-    url('fonts/icomoon.woff?vnswc9') format('woff'),
-    url('fonts/icomoon.svg?vnswc9#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?nlxfsx');
+  src:  url('fonts/icomoon.eot?nlxfsx#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?nlxfsx') format('truetype'),
+    url('fonts/icomoon.woff?nlxfsx') format('woff'),
+    url('fonts/icomoon.svg?nlxfsx#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -26,9 +26,6 @@
 
 .icon-reorder:before {
   content: "\e900";
-}
-.icon-enlarge:before {
-  content: "\eb46";
 }
 .icon-question:before {
   content: "\ed55";
@@ -149,4 +146,13 @@
 }
 .icon-twitter:before {
   content: "\eef5";
+}
+.icon-users:before {
+  content: "\eaf8";
+}
+.icon-replayconv:before {
+  content: "\eb2c";
+}
+.icon-exit:before {
+  content: "\ed7b";
 }
