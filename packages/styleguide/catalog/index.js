@@ -178,6 +178,11 @@ const pages = [
         content: require("./pages/text-extends.js")
       }
     ]
+  },
+  {
+    content: require("./pages/tiles.js"),
+    path: "/tiles",
+    title: "Tiles"
   }
 ];
 
