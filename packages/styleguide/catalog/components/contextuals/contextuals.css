@@ -6,11 +6,12 @@
 }
 .tippy-popper {
   -webkit-perspective: 800px;
-  perspective: 800px;
-  z-index: 9999;
+  max-width: 200px;
   outline: 0;
-  transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+  perspective: 800px;
   pointer-events: none;
+  transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+  z-index: 9999;
 }
 .tippy-popper.html-template {
   max-width: 96%;
