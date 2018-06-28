@@ -175,6 +175,15 @@ class ChatView extends Component {
       history.push(quit);
     }
 
+    // save updated history in localStorage unless in switch interviewee loop
+    const { story } = this.props;
+    const { interviewees } = story;
+    const interviewee = interviewees[this.findIntervieweeIndex()];
+    localStorage.setItem(
+      `history-${story.id}-${story.version}-${interviewee.id}`,
+      JSON.stringify(history)
+    );
+
     // update history to re-render storyline, then fire onHistoryUpdate
     this.setState({ history }, () => this.onHistoryUpdate());
   }
