@@ -222,39 +222,7 @@ class Storyline extends Component {
 
     const renderSystemBubble = (item, index) => {
       const { type } = item;
-      if (type === "switchTo") {
-        return (
-          <BubbleBlock key={index}>
-            <Bubble persona="system" theme={{ font: "PT sans" }}>
-              {LANG.chatChooseAnother}
-            </Bubble>
-            {story.interviewees.map(
-              (character, i) =>
-                character.id !== this.props.currentIntervieweeId ? (
-                  <Bubble
-                    key={character.name}
-                    persona="system"
-                    onClick={() => this.props.switchChat(character.id)}
-                    theme={{ font: "PT sans" }}
-                  >
-                    <Container dir="row">
-                      <AvatarHolder flex={[1, 0, "auto"]}>
-                        <Avatar image={character.avatar} size="s" />
-                      </AvatarHolder>
-                      <Container flex={[1, 1, "100%"]}>
-                        <Action
-                          onClick={() => this.props.switchChat(character.id)}
-                        >
-                          {character.name}
-                        </Action>
-                      </Container>
-                    </Container>
-                  </Bubble>
-                ) : null
-            )}
-          </BubbleBlock>
-        );
-      } else if (type === "quit") {
+      if (type === "quit") {
         return (
           <Message delay={500}>
             {interviewee.name} {LANG.chatLeft}
@@ -293,7 +261,6 @@ class Storyline extends Component {
 Storyline.propTypes = {
   history: arrayOf(object),
   currentIntervieweeId: string.isRequired,
-  switchChat: func.isRequired,
   interviewee: shape({
     color: string.isRequired
   }).isRequired,

@@ -51,7 +51,6 @@ class ChatView extends Component {
     this.initHistory = this.initHistory.bind(this);
     this.onHistoryUpdate = this.onHistoryUpdate.bind(this);
     this.resetHistory = this.resetHistory.bind(this);
-    this.switchChat = this.switchChat.bind(this);
     this.toggleDropdown = this.toggleDropdown.bind(this);
     this.toggleToolbar = this.toggleToolbar.bind(this);
     this.updateHistory = this.updateHistory.bind(this);
@@ -169,14 +168,6 @@ class ChatView extends Component {
         type: "followup"
       };
       history.push(skip);
-    } else if (type === "switchTo") {
-      this.setState({ actionbar: "scripted" });
-      const switchTo = {
-        i: thisItem.i - 1,
-        role: "system",
-        type: "switchTo"
-      };
-      history.push(switchTo);
     } else if (type === "nvm") {
       this.setState({ actionbar: "scripted" });
       history.splice(-1, 1);
@@ -188,33 +179,8 @@ class ChatView extends Component {
       history.push(quit);
     }
 
-    // save updated history in localStorage unless in switch interviewee loop
-    if (type !== "nvm" && type !== "switchTo") {
-      const { story } = this.props;
-      const { interviewees } = story;
-      const interviewee = interviewees[this.findIntervieweeIndex()];
-      localStorage.setItem(
-        `history-${story.id}-${story.version}-${interviewee.id}`,
-        JSON.stringify(history)
-      );
-    }
-
     // update history to re-render storyline, then fire onHistoryUpdate
     this.setState({ history }, () => this.onHistoryUpdate());
-  }
-  switchChat(chatId) {
-    const { story } = this.props;
-    // get the other interviewee’s history saved in localStorage
-    const localHistory = JSON.parse(
-      localStorage.getItem(`history-${story.id}-${story.version}-${chatId}`)
-    );
-    this.setState({
-      actionbar: "scripted",
-      currentIntervieweeId: chatId,
-      // history: []
-      history: localHistory || []
-    });
-    this.props.router.push(`/${story.id}/chat/${chatId}`);
   }
   toggleToolbar(toolbar) {
     this.setState({ [toolbar]: !this.state[toolbar] });
@@ -295,7 +261,6 @@ class ChatView extends Component {
         const thisItemIndex = thisHistoryItem.i;
         const nextItem = storyline[thisItemIndex + 1];
 
-        const isLastBubbleSwitchTo = thisHistoryItem.type === "switchTo";
         const isTheVeryLastBubble =
           thisItemIndex === storyline.length - 1 ||
           thisHistoryItem.type === "quit";
@@ -303,7 +268,6 @@ class ChatView extends Component {
         if (isTheVeryLastBubble || isActiveActionbarRunaway) {
           return (
             <RunAwayActions
-              isSwitchPossible={interviewees.length > 1}
               navigateAway={this.props.router.push}
               updateHistory={this.updateHistory}
               story={this.props.story}
@@ -315,9 +279,7 @@ class ChatView extends Component {
         const isNextHistoryItemUser = nextItem
           ? nextItem.role === "user"
           : false;
-        if (isLastBubbleSwitchTo) {
-          return <NvmActions updateHistory={this.updateHistory} LANG={LANG} />;
-        } else if (isNextHistoryItemUser && isActiveActionbarScripted) {
+        if (isNextHistoryItemUser && isActiveActionbarScripted) {
           return getActions(nextItem.content);
         }
         return null;
@@ -326,7 +288,6 @@ class ChatView extends Component {
       } else if (userStarts && isActiveActionbarRunaway) {
         return (
           <RunAwayActions
-            isSwitchPossible={interviewees.length > 1}
             navigateAway={this.props.router.push}
             updateHistory={this.updateHistory}
             resetHistory={this.resetHistory}
@@ -352,7 +313,6 @@ class ChatView extends Component {
               html={
                 <DropdownContent>
                   <RunAwayActions
-                    isSwitchPossible={interviewees.length > 1}
                     LANG={LANG}
                     navigateAway={this.props.router.push}
                     resetHistory={this.resetHistory}
@@ -398,7 +358,6 @@ class ChatView extends Component {
               interviewee={interviewee}
               story={story}
               storyline={storyline}
-              switchChat={this.switchChat}
               updateHistory={this.updateHistory}
               LANG={LANG}
             />
