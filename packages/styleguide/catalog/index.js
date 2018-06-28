@@ -90,7 +90,7 @@ const pages = [
       {
         content: require("./pages/bubble-types.js"),
         path: "/bubbles-types",
-        title: "Interviewee bubble types"
+        title: "Bubble types"
       },
       {
         content: require("./pages/bubblegroups.js"),

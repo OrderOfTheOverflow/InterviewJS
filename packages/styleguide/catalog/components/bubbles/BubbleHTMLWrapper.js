@@ -9,6 +9,7 @@ import ratioSpacer from "./ratioSpacer.png";
 const BubbleHTMLWrapperEl = css.div`
   ${setType("x")};
   border-radius: ${radius.m};
+  width: 100%;
   & > img {
     height: 100%;
     width: 100%;
@@ -35,7 +36,8 @@ const BubbleHTMLWrapperEl = css.div`
       width: 100%;
     }
   }
-  ${({ displayType }) => (displayType === "embed" ? `line-height: 0;` : ``)};
+  ${({ displayType }) =>
+    displayType === "embed" || displayType === "rich" ? `line-height: 0;` : ``};
 `;
 
 const BubbleHTMLWrapper = (props) => (

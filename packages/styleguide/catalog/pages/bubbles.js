@@ -19,23 +19,6 @@ export default () => markdown`
       </Bubble>
     </ReactSpecimen>
   )}
-  
-  ## Bubbles rendering other components
-
-  ${(
-    <ReactSpecimen span={3} dark>
-      <Bubble>
-        <Icon name="smile" />
-      </Bubble>
-    </ReactSpecimen>
-  )}
-  ${(
-    <ReactSpecimen span={3} dark>
-      <Bubble>
-        <Icon name="shocked" />
-      </Bubble>
-    </ReactSpecimen>
-  )}
 
   ## User / System / Interviewee bubbles
 

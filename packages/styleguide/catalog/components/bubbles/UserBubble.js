@@ -1,10 +1,10 @@
 import css from "styled-components";
 import { shape, string } from "prop-types";
 
-import { color, radius, skin, setSpace } from "../../../utils";
+import { radius, skin, setSpace } from "../../../utils";
 import bubbleBase from "./bubbleBase";
 
-const SystemBubble = css.div`
+const UserBubble = css.div`
   ${bubbleBase};
   ${setSpace("mlm")};
   ${({ animated }) =>
@@ -19,7 +19,11 @@ const SystemBubble = css.div`
   align-self: flex-end;
   background-color: ${({ theme }) =>
     theme.backg ? theme.backg : skin.userBackg};
-  color: ${({ theme }) => (theme.color ? theme.color : skin.userColor)};
+  &,
+  & * {
+    color: ${({ theme }) =>
+      theme.color ? theme.color : skin.userColor} !important;
+  }
   flex-direction: row;
   font-family: ${({ theme }) => (theme.font ? theme.font : skin.font)};
   text-align: right;
@@ -48,9 +52,20 @@ const SystemBubble = css.div`
     width: 100%;
   `
       : ``};
+
+  /* tweak bubble styles depending on wether the content is iframe or image */
+
+   ${({ displayType }) =>
+     displayType === "embed" || displayType === "rich"
+       ? `
+         ${setSpace("phs")};
+         min-height: 100px;
+         width: 100%;
+         `
+       : ``};
 `;
 
-SystemBubble.propTypes = {
+UserBubble.propTypes = {
   theme: shape({
     backg: string,
     color: string,
@@ -58,7 +73,7 @@ SystemBubble.propTypes = {
   })
 };
 
-SystemBubble.defaultProps = {
+UserBubble.defaultProps = {
   theme: {
     backg: skin.userBackg,
     color: skin.userColor,
@@ -66,4 +81,4 @@ SystemBubble.defaultProps = {
   }
 };
 
-export default SystemBubble;
+export default UserBubble;
