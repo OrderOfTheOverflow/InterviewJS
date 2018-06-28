@@ -16,7 +16,6 @@ import {
 } from "interviewjs-styleguide";
 import { IntervieweeModal, StoryDetailsModal, Storyline } from "../partials/";
 import {
-  NvmActions,
   ChatActions,
   Page,
   PageBody,
@@ -168,9 +167,6 @@ class ChatView extends Component {
         type: "followup"
       };
       history.push(skip);
-    } else if (type === "nvm") {
-      this.setState({ actionbar: "scripted" });
-      history.splice(-1, 1);
     } else if (type === "quit") {
       const quit = {
         role: "system",
