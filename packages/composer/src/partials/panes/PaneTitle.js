@@ -10,7 +10,7 @@ const PaneTitle = styled.h2`
   color: ${color.blueBlk};
   display: inline-block;
   font-family: ${font.serif};
-  font-size: 12px;
+  font-size: 13px;
   font-weight: bold;
   height: 16px;
   left: 50%;
