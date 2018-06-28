@@ -698,7 +698,7 @@ if (
               {
                 enabled: true,
                 mime: 'image',
-                text: "A caption",
+                title: "A caption",
                 type: "ignore",
                 value: "https://picsum.photos/200/300?random",
               },
@@ -707,10 +707,30 @@ if (
                 value: `<iframe width="560" height="315" src="https://www.youtube.com/embed/XYGzRB4Pnq8" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`,
                 type: "explore",
                 mime: 'embed',
-                text: 'Display Text'
+                title: 'Display Text'
               }
             ],
             id: "edd0029a-9008-4a31-826e-2e5c81587b44",
+            role: "user"
+          },
+          {
+            content: [
+              {
+                enabled: true,
+                mime: 'image',
+                title: "A caption",
+                type: "ignore",
+                value: "https://picsum.photos/200/300?random",
+              },
+              {
+                enabled: true,
+                value: `<iframe width="560" height="315" src="https://www.youtube.com/embed/XYGzRB4Pnq8" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`,
+                type: "explore",
+                mime: 'embed',
+                title: 'Display Text'
+              }
+            ],
+            id: "edd0029da-9008-4a31-826e-2e5c81587b44",
             role: "user"
           },
           {
@@ -741,16 +761,38 @@ if (
             content: [
               {
                 enabled: true,
-                value: "Ignore2",
-                type: "ignore"
+                mime: 'link',
+                title: 'Display text',
+                type: "ignore",
+                value: "http://piotrf.pl",
               },
               {
                 enabled: true,
-                value: "Explore2",
-                type: "explore"
+                mime: 'text',
+                type: "explore",
+                value: "A primary tile action that is at least one hundred characters long and goes on several lines. this is actually 142 chars and should be enough.",
               }
             ],
             id: "81931eb1-872f-4d11-b853-9ec7753f6737",
+            role: "user"
+          },
+          {
+            content: [
+              {
+                enabled: true,
+                mime: 'link',
+                title: 'Display text',
+                type: "ignore",
+                value: "http://piotrf.pl",
+              },
+              {
+                enabled: true,
+                mime: 'text',
+                type: "explore",
+                value: "A primary tile action that is at least one hundred characters long and goes on several lines. this is actually 142 chars and should be enough.",
+              }
+            ],
+            id: "81931ebsdf1-872f-4d1s1-b853-9ec7753f6737",
             role: "user"
           },
           {
