@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { array, func, node, oneOfType, string } from "prop-types";
 
-import { color, font, radius, setSpace, setType, time } from "../../../utils";
+import { color, font, radius, setSpace, setType } from "../../../utils";
 
 const Tile = styled.button`
   ${setSpace("pam")};
@@ -10,7 +10,7 @@ const Tile = styled.button`
   align-items: center;
   background: none;
   border-radius: ${radius.l};
-  border: 1px solid ${color.greyHL};
+  border: none;
   color: ${({ paint }) => paint};
   cursor: pointer;
   display: flex !important;
@@ -21,12 +21,10 @@ const Tile = styled.button`
   outline: none;
   position: relative;
   text-align: center !important;
-  transition: border ${time.m};
   &:not(:first-child) {
     margin-left: -1px;
   }
   &:hover {
-    border-color: ${({ paint }) => paint};
     z-index: 5;
   }
   & > div {
