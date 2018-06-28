@@ -972,6 +972,45 @@ if (
             role: "user"
           }
         ]
+      },
+      {
+        id: "7778c964-571e-4a52-sdf-6bfddf076f10bd",
+        name: "4th Character",
+        bio: "A bio",
+        title: "A title",
+        avatar: "",
+        color: "red",
+        srcText: "",
+        storyline: [
+          {
+            content: {
+              value: "Next one up are user actions"
+            },
+            id: "09040a54-871a-47b4-b22f-588c0d61bfd0",
+            role: "interviewee",
+            type: "text"
+          },
+          {
+            content: [
+              {
+                enabled: true,
+                mime: 'image',
+                title: "A caption",
+                type: "ignore",
+                value: "https://picsum.photos/200/300?random",
+              },
+              {
+                enabled: true,
+                value: `<iframe width="560" height="315" src="https://www.youtube.com/embed/XYGzRB4Pnq8" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`,
+                type: "explore",
+                mime: 'embed',
+                title: 'Display Text'
+              }
+            ],
+            id: "edd0029a-9008-4a31-826e-2e5c81587b44",
+            role: "user"
+          },
+        ]
       }
     ]
   };
