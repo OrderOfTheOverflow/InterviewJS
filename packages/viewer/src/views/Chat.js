@@ -231,21 +231,59 @@ class ChatView extends Component {
     const LOCALE = story.locale ? story.locale : "en";
     const LANG = LOCALES[LOCALE];
 
+    const getAction = (action, i) => {
+      // console.log(action);
+      const { mime, type, value, title } = action;
+      if (mime === "image") {
+        return (
+          <TileAction
+            key={type}
+            onClick={() => this.updateHistory(type, i)}
+            primary
+          >
+            <span className="span">
+              <img className="img" src={value} alt="interviewjsasset" />
+            </span>
+          </TileAction>
+        );
+      } else if (mime === "link") {
+        return (
+          <TileAction
+            key={type}
+            onClick={() => this.updateHistory(type, i)}
+            primary
+          >
+            {title || value}
+          </TileAction>
+        );
+      } else if (mime === "embed" || mime === "media" || mime === "map") {
+        return (
+          <TileAction
+            key={type}
+            onClick={() => this.updateHistory(type, i)}
+            primary
+          >
+            <div
+              className="iframe"
+              dangerouslySetInnerHTML={{ __html: value }}
+            />
+          </TileAction>
+        );
+      }
+      return (
+        // assume mime === 'text' because legacy
+        <TileAction
+          key={type}
+          onClick={() => this.updateHistory(type, i)}
+          primary
+        >
+          {value}
+        </TileAction>
+      );
+    };
+
     const getActions = (arr) =>
-      arr.map((action, i) => {
-        if (action.enabled) {
-          return (
-            <TileAction
-              key={action.type}
-              onClick={() => this.updateHistory(action.type, i)}
-              primary
-            >
-              {action.value}
-            </TileAction>
-          );
-        }
-        return null;
-      });
+      arr.map((action, i) => (action.enabled ? getAction(action, i) : null));
 
     const renderActions = () => {
       const isActiveActionbarRunaway = this.state.actionbar === "runaway";

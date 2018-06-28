@@ -46,7 +46,9 @@ const TileAction = styled.button`
     return null;
   }};
 
-  span {
+  /* children */
+
+  .span {
     border-radius: ${radius.l};
     border: 1px solid ${color.white};
     display: flex;
@@ -68,9 +70,32 @@ const TileAction = styled.button`
       top: 0;
     }
   }
-  img,
-  iframe {
+  .img {
     width: 170px;
+  }
+  .iframe {
+    border-radius: ${radius.l};
+    height: 106px;
+    border: 1px solid ${color.white};
+    line-height: 0;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    &::before {
+      bottom: 0;
+      content: " ";
+      display: block;
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+    iframe,
+    object,
+    embed {
+      width: 100% !important;
+      height: 100px;
+    }
   }
 `;
 

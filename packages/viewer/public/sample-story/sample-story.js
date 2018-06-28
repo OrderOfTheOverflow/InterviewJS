@@ -697,13 +697,17 @@ if (
             content: [
               {
                 enabled: true,
-                value: "Ignore1",
-                type: "ignore"
+                mime: 'image',
+                text: "A caption",
+                type: "ignore",
+                value: "https://picsum.photos/200/300?random",
               },
               {
                 enabled: true,
-                value: "Explore1",
-                type: "explore"
+                value: `<iframe width="560" height="315" src="https://www.youtube.com/embed/XYGzRB4Pnq8" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`,
+                type: "explore",
+                mime: 'embed',
+                text: 'Display Text'
               }
             ],
             id: "edd0029a-9008-4a31-826e-2e5c81587b44",
