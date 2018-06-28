@@ -51,6 +51,7 @@ class ChatView extends Component {
     this.initHistory = this.initHistory.bind(this);
     this.onHistoryUpdate = this.onHistoryUpdate.bind(this);
     this.resetHistory = this.resetHistory.bind(this);
+    this.switchChat = this.switchChat.bind(this);
     this.toggleDropdown = this.toggleDropdown.bind(this);
     this.toggleToolbar = this.toggleToolbar.bind(this);
     this.updateHistory = this.updateHistory.bind(this);
@@ -168,6 +169,14 @@ class ChatView extends Component {
         type: "followup"
       };
       history.push(skip);
+    } else if (type === "switchTo") {
+      this.setState({ actionbar: "scripted" });
+      const switchTo = {
+        i: thisItem.i - 1,
+        role: "system",
+        type: "switchTo"
+      };
+      history.push(switchTo);
     } else if (type === "nvm") {
       this.setState({ actionbar: "scripted" });
       history.splice(-1, 1);
@@ -190,6 +199,20 @@ class ChatView extends Component {
 
     // update history to re-render storyline, then fire onHistoryUpdate
     this.setState({ history }, () => this.onHistoryUpdate());
+  }
+  switchChat(chatId) {
+    const { story } = this.props;
+    // get the other interviewee’s history saved in localStorage
+    const localHistory = JSON.parse(
+      localStorage.getItem(`history-${story.id}-${story.version}-${chatId}`)
+    );
+    this.setState({
+      actionbar: "scripted",
+      currentIntervieweeId: chatId,
+      // history: []
+      history: localHistory || []
+    });
+    this.props.router.push(`/${story.id}/chat/${chatId}`);
   }
   toggleToolbar(toolbar) {
     this.setState({ [toolbar]: !this.state[toolbar] });
@@ -308,6 +331,7 @@ class ChatView extends Component {
         const thisItemIndex = thisHistoryItem.i;
         const nextItem = storyline[thisItemIndex + 1];
 
+        const isLastBubbleSwitchTo = thisHistoryItem.type === "switchTo";
         const isTheVeryLastBubble =
           thisItemIndex === storyline.length - 1 ||
           thisHistoryItem.type === "quit";
@@ -315,6 +339,7 @@ class ChatView extends Component {
         if (isTheVeryLastBubble || isActiveActionbarRunaway) {
           return (
             <RunAwayActions
+              isSwitchPossible={interviewees.length > 1}
               navigateAway={this.props.router.push}
               updateHistory={this.updateHistory}
               story={this.props.story}
@@ -326,7 +351,9 @@ class ChatView extends Component {
         const isNextHistoryItemUser = nextItem
           ? nextItem.role === "user"
           : false;
-        if (isNextHistoryItemUser && isActiveActionbarScripted) {
+        if (isLastBubbleSwitchTo) {
+          return <NvmActions updateHistory={this.updateHistory} LANG={LANG} />;
+        } else if (isNextHistoryItemUser && isActiveActionbarScripted) {
           return getActions(nextItem.content);
         }
         return null;
@@ -335,6 +362,7 @@ class ChatView extends Component {
       } else if (userStarts && isActiveActionbarRunaway) {
         return (
           <RunAwayActions
+            isSwitchPossible={interviewees.length > 1}
             navigateAway={this.props.router.push}
             updateHistory={this.updateHistory}
             resetHistory={this.resetHistory}
@@ -361,6 +389,7 @@ class ChatView extends Component {
                 <DropdownContent>
                   <RunAwayActions
                     LANG={LANG}
+                    isSwitchPossible={interviewees.length > 1}
                     navigateAway={this.props.router.push}
                     resetHistory={this.resetHistory}
                     story={this.props.story}
@@ -403,14 +432,15 @@ class ChatView extends Component {
               history={this.state.history}
               initHistory={this.initHistory}
               interviewee={interviewee}
+              LANG={LANG}
               story={story}
               storyline={storyline}
+              switchChat={this.switchChat}
               updateHistory={this.updateHistory}
-              LANG={LANG}
             />
           ) : null}
         </PageBody>
-        <PageFoot limit="m" flex={[0, 0, `116px`]}>
+        <PageFoot limit="m" flex={[0, 0, `126px`]}>
           <ChatActions>{renderActions()}</ChatActions>
         </PageFoot>
       </Page>,

@@ -1,15 +1,17 @@
 /* eslint react/no-danger: 0 */
-import { arrayOf, string, object, shape } from "prop-types";
+import { arrayOf, func, string, object, shape } from "prop-types";
 import styled, { keyframes } from "styled-components";
 import React, { Component } from "react";
 import { withRouter } from "react-router";
 
 import {
+  Action,
   Avatar,
   Bubble,
   BubbleBlock,
-  Message,
   Container,
+  Icon,
+  Message,
   color,
   setSpace
 } from "interviewjs-styleguide";
@@ -42,6 +44,10 @@ const StorylineEl = styled(Container)`
   & > *:last-child {
     margin-bottom: 0;
   }
+`;
+
+const AvatarHolder = styled(Container)`
+  ${setSpace("prs")};
 `;
 
 const BubbleAvatar = styled(Container)`
@@ -104,7 +110,7 @@ class Storyline extends Component {
       : null;
   }
   render() {
-    const { storyline, history, interviewee, LANG } = this.props;
+    const { storyline, history, interviewee, story, LANG } = this.props;
     const { replayCachedHistory } = this.state;
 
     // const animateAndDelay = true;
@@ -248,9 +254,41 @@ class Storyline extends Component {
       );
     };
 
-    const renderSystemBubble = (item) => {
+    const renderSystemBubble = (item, index) => {
       const { type } = item;
-      if (type === "quit") {
+      if (type === "switchTo") {
+        return (
+          <BubbleBlock key={index}>
+            <Bubble persona="system" theme={{ font: "PT sans" }}>
+              {LANG.chatChooseAnother}
+            </Bubble>
+            {story.interviewees.map(
+              (character, i) =>
+                character.id !== this.props.currentIntervieweeId ? (
+                  <Bubble
+                    key={character.name}
+                    persona="system"
+                    onClick={() => this.props.switchChat(character.id)}
+                    theme={{ font: "PT sans" }}
+                  >
+                    <Container dir="row">
+                      <AvatarHolder flex={[1, 0, "auto"]}>
+                        <Avatar image={character.avatar} size="s" />
+                      </AvatarHolder>
+                      <Container flex={[1, 1, "100%"]}>
+                        <Action
+                          onClick={() => this.props.switchChat(character.id)}
+                        >
+                          {character.name}
+                        </Action>
+                      </Container>
+                    </Container>
+                  </Bubble>
+                ) : null
+            )}
+          </BubbleBlock>
+        );
+      } else if (type === "quit") {
         return (
           <Message delay={500}>
             {interviewee.name} {LANG.chatLeft}
@@ -290,6 +328,7 @@ class Storyline extends Component {
 Storyline.propTypes = {
   history: arrayOf(object),
   currentIntervieweeId: string.isRequired,
+  switchChat: func.isRequired,
   interviewee: shape({
     color: string.isRequired
   }).isRequired,
