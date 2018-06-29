@@ -9,9 +9,8 @@ import {
   Avatar,
   Bubble,
   BubbleBlock,
-  Message,
   Container,
-  Icon,
+  Message,
   color,
   setSpace
 } from "interviewjs-styleguide";
@@ -26,7 +25,7 @@ const fader = keyframes`
 `;
 
 const StorylineEl = styled(Container)`
-  ${setSpace("phl")};
+  ${setSpace("phm")};
   border-left: 1px solid ${color.greyHL};
   border-right: 1px solid ${color.greyHL};
   bottom: 0;
@@ -46,6 +45,10 @@ const StorylineEl = styled(Container)`
   }
 `;
 
+const AvatarHolder = styled(Container)`
+  ${setSpace("prs")};
+`;
+
 const BubbleAvatar = styled(Container)`
   opacity: 0;
   animation-delay: 350ms;
@@ -62,10 +65,6 @@ const Push = styled.div`
   height: calc(100% - 80px);
   margin: 0;
   padding: 0;
-`;
-
-const AvatarHolder = styled(Container)`
-  ${setSpace("prs")};
 `;
 
 class Storyline extends Component {
@@ -198,13 +197,46 @@ class Storyline extends Component {
           const { content } = storyline[i];
           const filterByType = () =>
             content.findIndex((contentEl) => contentEl.type === type);
-          return content[filterByType()].value;
-        } else if (type === "diss") {
-          return item.value;
-        } else if (type === "emoji") {
-          return <Icon name={item.value} />;
+
+          const bubble = content[filterByType()];
+          if (bubble.mime === "image") {
+            return [
+              <img src={bubble.value} alt={bubble.title} key="image" />,
+              bubble.title ? <p key="caption">{bubble.title}</p> : null
+            ];
+          } else if (
+            bubble.mime === "map" ||
+            bubble.mime === "embed" ||
+            bubble.mime === "media"
+          ) {
+            return <div dangerouslySetInnerHTML={{ __html: bubble.value }} />;
+          } else if (bubble.mime === "link") {
+            return (
+              <a href={bubble.value} target="_blank">
+                {bubble.title ? bubble.title : bubble.value}
+              </a>
+            );
+          }
+          return bubble.value; // assume 'text' because legacy
         }
         return null;
+      };
+
+      const getBubbleDisplayType = () => {
+        const { i } = item;
+        const { content } = storyline[i];
+        const filterByType = () =>
+          content.findIndex((contentEl) => contentEl.type === type);
+        const bubble = content[filterByType()];
+
+        const isEmbed = ["embed", "media", "map"].includes(bubble.mime);
+        const isImage = bubble.mime === "image";
+        if (isEmbed) {
+          return "embed";
+        } else if (isImage) {
+          return "rich";
+        }
+        return "plain";
       };
 
       return (
@@ -212,6 +244,7 @@ class Storyline extends Component {
           <Bubble
             persona="user"
             animated={animateAndDelay}
+            displayType={getBubbleDisplayType()}
             theme={{ font: "PT sans" }}
           >
             {getBubbleContent()}
@@ -264,6 +297,7 @@ class Storyline extends Component {
       return null;
     };
 
+    console.log("—— History: ", this.props.history);
     return (
       <StorylineEl limit="m">
         <Push />

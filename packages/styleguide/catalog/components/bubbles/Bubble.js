@@ -32,7 +32,9 @@ export default class Bubble extends Component {
       if (!rendering) {
         return (
           <UserBubble {...this.props}>
-            <BubbleHTMLWrapper>{children}</BubbleHTMLWrapper>
+            <BubbleHTMLWrapper displayType={displayType}>
+              {children}
+            </BubbleHTMLWrapper>
           </UserBubble>
         );
       }

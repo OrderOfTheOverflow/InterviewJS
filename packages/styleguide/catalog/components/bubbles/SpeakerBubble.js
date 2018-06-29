@@ -12,7 +12,7 @@ const calcColor = (thisColor, thatColor) => {
   return color.blueBlk;
 };
 
-const SystemBubble = css.div`
+const SpeakerBubble = css.div`
   ${bubbleBase};
   ${setSpace("mrm")};
   align-self: flex-start;
@@ -34,7 +34,6 @@ const SystemBubble = css.div`
         )} !important;
     }
   font-family: ${({ theme }) => (theme.font ? theme.font : skin.font)};
-  align-self: flex-start;
   text-align: left;
   &:not(:last-child),
   &:not(:first-child) {
@@ -49,7 +48,6 @@ const SystemBubble = css.div`
   &:only-child {
     border-radius: ${radius.h} ${radius.h} ${radius.h} ${radius.s};
   }
-
 
   ${({ onDragStart }) =>
     onDragStart
@@ -71,17 +69,6 @@ const SystemBubble = css.div`
          `
        : ``};
 
-   /* this is for internal use only to customise auth screen bubbles */
-   &,
-   & * {
-     ${({ theme }) =>
-       theme.color
-         ? `
-     color: ${theme.color} !important;
-     `
-         : ``}
-   }
-
    /* fill preloader based on the bubble colour */
 
    & .ivjs-preloader > div {
@@ -93,7 +80,7 @@ const SystemBubble = css.div`
    }
 `;
 
-SystemBubble.propTypes = {
+SpeakerBubble.propTypes = {
   theme: shape({
     backg: string,
     color: string,
@@ -101,7 +88,7 @@ SystemBubble.propTypes = {
   })
 };
 
-SystemBubble.defaultProps = {
+SpeakerBubble.defaultProps = {
   theme: {
     backg: skin.speakerBackg,
     color: skin.speakerColor,
@@ -109,4 +96,4 @@ SystemBubble.defaultProps = {
   }
 };
 
-export default SystemBubble;
+export default SpeakerBubble;

@@ -1,16 +1,15 @@
 import React from "react";
 import { func } from "prop-types";
-import { Action } from "interviewjs-styleguide";
+import { TileAction } from "interviewjs-styleguide";
 
 const NvmActions = (props) => [
-  <Action
-    fixed
+  <TileAction
     key="neverMind"
     onClick={() => props.updateHistory("nvm", "Nevermind")}
     primary
   >
     {props.LANG.chatNVM}
-  </Action>
+  </TileAction>
 ];
 
 NvmActions.propTypes = {

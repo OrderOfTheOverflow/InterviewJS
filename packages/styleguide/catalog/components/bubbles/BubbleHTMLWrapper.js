@@ -1,14 +1,15 @@
 import React from "react";
-import css from "styled-components";
+import styled from "styled-components";
 import { array, object, oneOfType, string } from "prop-types";
 
-import { color, radius, setType } from "../../../utils";
+import { color, radius, setSpace, setType } from "../../../utils";
 
 import ratioSpacer from "./ratioSpacer.png";
 
-const BubbleHTMLWrapperEl = css.div`
+const BubbleHTMLWrapperEl = styled.div`
   ${setType("x")};
   border-radius: ${radius.m};
+  width: 100%;
   & > img {
     height: 100%;
     width: 100%;
@@ -35,7 +36,16 @@ const BubbleHTMLWrapperEl = css.div`
       width: 100%;
     }
   }
-  ${({ displayType }) => (displayType === "embed" ? `line-height: 0;` : ``)};
+  ${({ displayType }) =>
+    displayType === "embed" || displayType === "rich"
+      ? `
+      line-height: 0;
+      & > p {
+        ${setSpace("mts")};
+        ${setType("x")};
+      }
+    `
+      : ``};
 `;
 
 const BubbleHTMLWrapper = (props) => (

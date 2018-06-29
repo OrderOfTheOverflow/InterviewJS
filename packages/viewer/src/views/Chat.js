@@ -4,7 +4,6 @@ import { object, shape, string } from "prop-types";
 import { withRouter } from "react-router";
 import React, { Component } from "react";
 import {
-  Actionbar,
   Action,
   Avatar,
   Container,
@@ -12,12 +11,13 @@ import {
   DropdownContent,
   Icon,
   Separator,
+  TileAction,
   Tip
 } from "interviewjs-styleguide";
 import { IntervieweeModal, StoryDetailsModal, Storyline } from "../partials/";
 import {
-  EmoActions,
   NvmActions,
+  ChatActions,
   Page,
   PageBody,
   PageFoot,
@@ -169,15 +169,6 @@ class ChatView extends Component {
         type: "followup"
       };
       history.push(skip);
-    } else if (type === "emoji") {
-      this.setState({ actionbar: "scripted" });
-      const emoji = {
-        i: thisItem.i,
-        role: "user",
-        type: "emoji",
-        value: payload
-      };
-      history.push(emoji);
     } else if (type === "switchTo") {
       this.setState({ actionbar: "scripted" });
       const switchTo = {
@@ -198,15 +189,13 @@ class ChatView extends Component {
     }
 
     // save updated history in localStorage unless in switch interviewee loop
-    if (type !== "nvm" && type !== "switchTo") {
-      const { story } = this.props;
-      const { interviewees } = story;
-      const interviewee = interviewees[this.findIntervieweeIndex()];
-      localStorage.setItem(
-        `history-${story.id}-${story.version}-${interviewee.id}`,
-        JSON.stringify(history)
-      );
-    }
+    const { story } = this.props;
+    const { interviewees } = story;
+    const interviewee = interviewees[this.findIntervieweeIndex()];
+    localStorage.setItem(
+      `history-${story.id}-${story.version}-${interviewee.id}`,
+      JSON.stringify(history)
+    );
 
     // update history to re-render storyline, then fire onHistoryUpdate
     this.setState({ history }, () => this.onHistoryUpdate());
@@ -278,51 +267,61 @@ class ChatView extends Component {
     const LOCALE = story.locale ? story.locale : "en";
     const LANG = LOCALES[LOCALE];
 
-    // if current bubble is the last one
-    const isLastBubble = () => {
-      if (hasHistory) {
-        const thisHistoryItem = history[history.length - 1];
-        const thisBubbleI = thisHistoryItem.i;
-        const lastBubbleI = storyline.length - 1;
-        return thisBubbleI === lastBubbleI || thisHistoryItem.type === "quit";
+    const getAction = (action, i) => {
+      // console.log(action);
+      const { mime, type, value, title } = action;
+      if (mime === "image") {
+        return (
+          <TileAction
+            key={type}
+            onClick={() => this.updateHistory(type, i)}
+            primary
+          >
+            <span className="span">
+              <img className="img" src={value} alt="interviewjsasset" />
+            </span>
+          </TileAction>
+        );
+      } else if (mime === "link") {
+        return (
+          <TileAction
+            key={type}
+            onClick={() => this.updateHistory(type, i)}
+            primary
+          >
+            {title || value}
+          </TileAction>
+        );
+      } else if (mime === "embed" || mime === "media" || mime === "map") {
+        return (
+          <TileAction
+            key={type}
+            onClick={() => this.updateHistory(type, i)}
+            primary
+          >
+            <div
+              className="iframe"
+              dangerouslySetInnerHTML={{ __html: value }}
+            />
+          </TileAction>
+        );
       }
-      return false;
+      return (
+        // assume mime === 'text' because legacy
+        <TileAction
+          key={type}
+          onClick={() => this.updateHistory(type, i)}
+          primary
+        >
+          {value}
+        </TileAction>
+      );
     };
 
-    // if current action should be `nevermind`
-    const isNvmBubble = () => {
-      if (hasHistory) {
-        const thisHistoryItem = history[history.length - 1];
-        return thisHistoryItem.type === "switchTo";
-      }
-      return false;
-    };
+    const getActions = (arr) =>
+      arr.map((action, i) => (action.enabled ? getAction(action, i) : null));
 
-    // should actionbar side toggles be hidden
-    const hideActionbarSatellites =
-      !isNvmBubble() && !isLastBubble() && hasHistory;
-
-    const getCurrentScriptActions = (arr) =>
-      arr.map((action, i) => {
-        if (action.enabled) {
-          return (
-            <Action
-              fixed
-              key={action.type}
-              onClick={() => this.updateHistory(action.type, i)}
-              primary={action.type === "explore"}
-              secondary={action.type === "ignore"}
-              theme={{ font: "PT sans" }}
-            >
-              {action.value}
-            </Action>
-          );
-        }
-        return null;
-      });
-
-    const renderUserActions = () => {
-      const isActiveActionbarEmot = this.state.actionbar === "emot";
+    const renderActions = () => {
       const isActiveActionbarRunaway = this.state.actionbar === "runaway";
       const isActiveActionbarScripted = this.state.actionbar === "scripted";
       const userStarts = !hasHistory && storyline[0].role === "user";
@@ -352,16 +351,14 @@ class ChatView extends Component {
         const isNextHistoryItemUser = nextItem
           ? nextItem.role === "user"
           : false;
-        if (isNextHistoryItemUser && isActiveActionbarEmot) {
-          return <EmoActions updateHistory={this.updateHistory} />;
-        } else if (isLastBubbleSwitchTo) {
+        if (isLastBubbleSwitchTo) {
           return <NvmActions updateHistory={this.updateHistory} LANG={LANG} />;
         } else if (isNextHistoryItemUser && isActiveActionbarScripted) {
-          return getCurrentScriptActions(nextItem.content);
+          return getActions(nextItem.content);
         }
         return null;
       } else if (userStarts && isActiveActionbarScripted) {
-        return getCurrentScriptActions(storyline[0].content);
+        return getActions(storyline[0].content);
       } else if (userStarts && isActiveActionbarRunaway) {
         return (
           <RunAwayActions
@@ -372,8 +369,6 @@ class ChatView extends Component {
             LANG={LANG}
           />
         );
-      } else if (userStarts && isActiveActionbarEmot) {
-        return <EmoActions updateHistory={this.updateHistory} />;
       }
       return null;
     };
@@ -393,8 +388,8 @@ class ChatView extends Component {
               html={
                 <DropdownContent>
                   <RunAwayActions
-                    isSwitchPossible={interviewees.length > 1}
                     LANG={LANG}
+                    isSwitchPossible={interviewees.length > 1}
                     navigateAway={this.props.router.push}
                     resetHistory={this.resetHistory}
                     story={this.props.story}
@@ -437,35 +432,16 @@ class ChatView extends Component {
               history={this.state.history}
               initHistory={this.initHistory}
               interviewee={interviewee}
+              LANG={LANG}
               story={story}
               storyline={storyline}
               switchChat={this.switchChat}
               updateHistory={this.updateHistory}
-              LANG={LANG}
             />
           ) : null}
         </PageBody>
-        <PageFoot limit="m" flex={[0, 0, `80px`]} padded>
-          <Actionbar satellite={hideActionbarSatellites ? "both" : null}>
-            {hideActionbarSatellites ? (
-              <Action
-                iconic
-                active={this.state.actionbar === "runaway"}
-                onClick={
-                  this.state.actionbar !== "runaway"
-                    ? () => this.setState({ actionbar: "runaway" })
-                    : () => this.setState({ actionbar: "scripted" })
-                }
-                secondary
-              >
-                <Icon
-                  name={this.state.actionbar === "runaway" ? `cross` : `vdots`}
-                />
-              </Action>
-            ) : null}
-            {renderUserActions()}
-            {hideActionbarSatellites ? <span /> : null}
-          </Actionbar>
+        <PageFoot limit="m" flex={[0, 0, `126px`]}>
+          <ChatActions>{renderActions()}</ChatActions>
         </PageFoot>
       </Page>,
       this.state.intervieweeModal ? (
