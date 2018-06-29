@@ -10,7 +10,6 @@ import {
   Bubble,
   BubbleBlock,
   Container,
-  Icon,
   Message,
   color,
   setSpace
