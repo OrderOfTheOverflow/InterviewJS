@@ -126,7 +126,7 @@ export default class StoryDetailsModal extends React.Component {
                           <a
                             href={story.authorLink}
                             target="_blank"
-                            rel="noopener noreferrer"
+                            rel="author external"
                           >
                             {story.author}
                           </a>
