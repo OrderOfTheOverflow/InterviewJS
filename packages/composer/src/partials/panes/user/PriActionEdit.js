@@ -1,4 +1,4 @@
-import {} from "prop-types";
+import { bool, func } from "prop-types";
 import React, { Component } from "react";
 import styled from "styled-components";
 
@@ -24,18 +24,21 @@ const ActionTeaser = styled.h2`
 export default class PriActionEdit extends Component {
   constructor(props) {
     super(props);
-    this.state = { locked: true };
-    this.toggleLock = this.toggleLock.bind(this);
+    this.state = {};
+    this.unlock = this.unlockAction.bind(this);
   }
-  toggleLock() {
-    this.setState({ locked: !this.state.locked });
+  unlockAction(e) {
+    const { isActive, toggleAction } = this.props;
+    if (e) e.preventDefault();
+    if (e) e.stopPropagation();
+    return !isActive ? toggleAction() : null;
   }
   render() {
-    const { locked } = this.state;
+    console.log("PriActionEdit: ", this.props);
     return (
-      <ActionEdit locked={locked} onClick={locked ? this.toggleLock : null}>
+      <ActionEdit {...this.props} onClick={(e) => this.unlockAction(e)}>
         <Container dir="column" style={{ height: "100%" }}>
-          <Action secondary fixed onClick={this.toggleLock}>
+          <Action secondary fixed onClick={(e) => this.unlockAction(e)}>
             Create an action
           </Action>
           <Separator silent size="s" />
@@ -48,6 +51,11 @@ export default class PriActionEdit extends Component {
   }
 }
 
-PriActionEdit.propTypes = {};
+PriActionEdit.propTypes = {
+  isActive: bool,
+  toggleAction: func.isRequired
+};
 
-PriActionEdit.defaultProps = {};
+PriActionEdit.defaultProps = {
+  isActive: false
+};

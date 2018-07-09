@@ -109,13 +109,15 @@ export default class UserPane extends React.Component {
     this.toggleAction = this.toggleAction.bind(this);
     this.updateStorylineItem = this.updateStorylineItem.bind(this);
   }
-  toggleAction(action, e) {
-    // this.setState({ enableExplore: e.target.checked });
-    const { enableExplore, enableIgnore } = this.state;
-    if (!enableExplore && !enableIgnore) {
-      this.setState({ enableContinue: true, enableExplore: e.target.checked });
+  toggleAction(action) {
+    const { enableExplore } = this.state;
+    if (enableExplore && action === "enableExplore") {
+      this.setState({ enableExplore: false });
+    } else if (!enableExplore && action === "enableExplore") {
+      this.setState({ enableExplore: true, enableContinue: true });
+    } else {
+      this.setState({ [action]: !this.state[action] });
     }
-    this.setState({ enableExplore: e.target.checked });
   }
   customiseActionLabel(action, e) {
     const { value } = e.target;
@@ -229,6 +231,8 @@ export default class UserPane extends React.Component {
     const {
       continueLibDict,
       continueVal,
+      customContinueVal,
+      customExploreVal,
       enableContinue,
       enableExplore,
       exploreLibDict,
@@ -266,14 +270,32 @@ export default class UserPane extends React.Component {
         >
           <UserActions>
             <Container>
-              <UserAction dir="row" active>
-                <PriActionEdit />
+              <UserAction dir="row">
+                <PriActionEdit
+                  activeTab={continueLibDict}
+                  customValue={customContinueVal}
+                  isActive={enableContinue}
+                  switchTab={(tab) => this.setState({ continueLibDict: tab })}
+                  selectAction={(el, i, evt) =>
+                    this.selectContinueAction(el, i, evt)
+                  }
+                  toggleAction={() => this.toggleAction("enableContinue")}
+                />
               </UserAction>
             </Container>
             <Separator silent size="s" />
             <Container>
-              <UserAction dir="row" active={enableExplore}>
-                <SecActionEdit />
+              <UserAction dir="row">
+                <SecActionEdit
+                  activeTab={exploreLibDict}
+                  customValue={customExploreVal}
+                  isActive={enableExplore}
+                  switchTab={(tab) => this.setState({ exploreLibDict: tab })}
+                  selectAction={(el, i, evt) =>
+                    this.selectExploreAction(el, i, evt)
+                  }
+                  toggleAction={() => this.toggleAction("enableExplore")}
+                />
               </UserAction>
             </Container>
           </UserActions>

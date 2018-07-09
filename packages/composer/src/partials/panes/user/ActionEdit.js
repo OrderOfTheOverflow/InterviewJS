@@ -1,4 +1,4 @@
-import { array, bool, oneOfType, node, string } from "prop-types";
+import { array, bool, func, oneOfType, node, string } from "prop-types";
 import React, { Component, Fragment } from "react";
 import styled from "styled-components";
 
@@ -11,8 +11,8 @@ const ActionEditEl = styled.div`
   overflow: hidden;
   width: 100%;
 
-  ${({ locked }) =>
-    locked
+  ${({ isActive }) =>
+    !isActive
       ? `
     cursor: pointer;
   `
@@ -35,26 +35,44 @@ export default class ActionEdit extends Component {
     this.state = {};
   }
   render() {
-    const { children, locked } = this.props;
+    const { children, isActive, activeTab, switchTab } = this.props;
     const getUnlockedContent = () => (
       <Fragment>
         <PaneTabs>
-          <PaneTab active>
+          <PaneTab
+            active={activeTab === "text"}
+            onClick={() => switchTab("text")}
+          >
             <Icon name="text" size="x" />
           </PaneTab>
-          <PaneTab>
+          <PaneTab
+            active={activeTab === "link"}
+            onClick={() => switchTab("link")}
+          >
             <Icon name="link" size="x" />
           </PaneTab>
-          <PaneTab>
+          <PaneTab
+            active={activeTab === "image"}
+            onClick={() => switchTab("image")}
+          >
             <Icon name="image" size="x" />
           </PaneTab>
-          <PaneTab>
+          <PaneTab
+            active={activeTab === "embed"}
+            onClick={() => switchTab("embed")}
+          >
             <Icon name="embed" size="x" />
           </PaneTab>
-          <PaneTab>
+          <PaneTab
+            active={activeTab === "map"}
+            onClick={() => switchTab("map")}
+          >
             <Icon name="map" size="x" />
           </PaneTab>
-          <PaneTab>
+          <PaneTab
+            active={activeTab === "media"}
+            onClick={() => switchTab("media")}
+          >
             <Icon name="media" size="x" />
           </PaneTab>
         </PaneTabs>
@@ -62,17 +80,22 @@ export default class ActionEdit extends Component {
     );
     return (
       <ActionEditEl {...this.props}>
-        {!locked ? children : getUnlockedContent() /* TODO: INVERT IF CLAUSE */}
+        {!isActive
+          ? children
+          : getUnlockedContent() /* TODO: INVERT IF CLAUSE */}
       </ActionEditEl>
     );
   }
 }
 
 ActionEdit.propTypes = {
+  activeTab: string,
   children: oneOfType([array, string, node]).isRequired,
-  locked: bool
+  isActive: bool,
+  switchTab: func.isRequired
 };
 
 ActionEdit.defaultProps = {
-  locked: true
+  activeTab: "text",
+  isActive: true
 };
