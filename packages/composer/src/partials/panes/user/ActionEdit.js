@@ -3,6 +3,7 @@ import React, { Component, Fragment } from "react";
 import styled from "styled-components";
 
 import { Icon, PaneTabs, PaneTab, radius } from "interviewjs-styleguide";
+import { Text, Link, Image, Media, Embed, Map } from "./tabs";
 
 import { GLOBALS, USER_ACTIONS } from "../../../options";
 
@@ -36,6 +37,24 @@ export default class ActionEdit extends Component {
   }
   render() {
     const { children, isActive, activeTab, switchTab } = this.props;
+    const renderTabs = () => {
+      switch (activeTab) {
+        case "link":
+          return <Link />;
+        case "image":
+          return <Image />;
+        case "media":
+          return <Media />;
+        case "embed":
+          return <Embed />;
+        case "map":
+          return <Map />;
+        default:
+        case "text":
+          return <Text />;
+      }
+    };
+
     const getUnlockedContent = () => (
       <Fragment>
         <PaneTabs>
@@ -76,6 +95,7 @@ export default class ActionEdit extends Component {
             <Icon name="media" size="x" />
           </PaneTab>
         </PaneTabs>
+        {renderTabs()}
       </Fragment>
     );
     return (
