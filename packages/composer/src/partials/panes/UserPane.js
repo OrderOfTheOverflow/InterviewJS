@@ -140,19 +140,19 @@ export default class UserPane extends React.Component {
     this.setState({
       continueLibDict: dict,
       continueLibItem: i,
-      continueVal: e.target.innerHTML,
-      customContinueVal: e.target.innerHTML,
+      continueVal: e,
+      customContinueVal: e,
       enableContinue: true
     });
   }
   selectExploreAction(dict, i, e) {
     this.setState({
-      customExploreVal: e.target.innerHTML,
+      customExploreVal: e,
       enableContinue: true,
       enableExplore: true,
       exploreLibDict: dict,
       exploreLibItem: i,
-      exploreVal: e.target.innerHTML
+      exploreVal: e
     });
   }
   addStorylineItem() {

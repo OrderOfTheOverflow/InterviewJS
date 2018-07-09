@@ -7,7 +7,6 @@ import { Text, Link, Image, Media, Embed, Map } from "./tabs";
 
 const ActionEditEl = styled.div`
   border-radius: ${radius.l} ${radius.l} ${radius.n} ${radius.n};
-  overflow: hidden;
   width: 100%;
 
   ${({ isActive }) =>
@@ -38,18 +37,18 @@ export default class ActionEdit extends Component {
     const renderTabs = () => {
       switch (activeTab) {
         case "link":
-          return <Link />;
+          return <Link {...this.props} />;
         case "image":
-          return <Image />;
+          return <Image {...this.props} />;
         case "media":
-          return <Media />;
+          return <Media {...this.props} />;
         case "embed":
-          return <Embed />;
+          return <Embed {...this.props} />;
         case "map":
-          return <Map />;
+          return <Map {...this.props} />;
         default:
         case "text":
-          return <Text />;
+          return <Text {...this.props} />;
       }
     };
 
