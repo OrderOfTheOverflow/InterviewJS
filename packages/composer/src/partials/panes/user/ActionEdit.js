@@ -5,8 +5,6 @@ import styled from "styled-components";
 import { Icon, PaneTabs, PaneTab, radius } from "interviewjs-styleguide";
 import { Text, Link, Image, Media, Embed, Map } from "./tabs";
 
-import { GLOBALS, USER_ACTIONS } from "../../../options";
-
 const ActionEditEl = styled.div`
   border-radius: ${radius.l} ${radius.l} ${radius.n} ${radius.n};
   overflow: hidden;
