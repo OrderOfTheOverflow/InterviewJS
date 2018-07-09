@@ -1,7 +1,7 @@
 import {} from "prop-types";
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 
-import {} from "interviewjs-styleguide";
+import { Container } from "interviewjs-styleguide";
 
 export default class EmbedTab extends Component {
   constructor(props) {
@@ -9,7 +9,7 @@ export default class EmbedTab extends Component {
     this.state = {};
   }
   render() {
-    return <Fragment>Hello Embed Tab</Fragment>;
+    return <Container padded>Hello Embed Tab</Container>;
   }
 }
 

@@ -1,8 +1,8 @@
 import {} from "prop-types";
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import Select from "react-select";
 
-import {} from "interviewjs-styleguide";
+import { Container } from "interviewjs-styleguide";
 import { GLOBALS, USER_ACTIONS } from "../../../../options";
 
 export default class TextTab extends Component {
@@ -12,10 +12,10 @@ export default class TextTab extends Component {
   }
   render() {
     return (
-      <Fragment>
+      <Container padded>
         Hello Text Tab
         <Select options={USER_ACTIONS} />
-      </Fragment>
+      </Container>
     );
   }
 }
