@@ -34,7 +34,6 @@ export default class PriActionEdit extends Component {
     return !isActive ? toggleAction() : null;
   }
   render() {
-    console.log("PriActionEdit: ", this.props);
     return (
       <ActionEdit {...this.props} onClick={(e) => this.unlockAction(e)}>
         <Container dir="column" style={{ height: "100%" }}>
