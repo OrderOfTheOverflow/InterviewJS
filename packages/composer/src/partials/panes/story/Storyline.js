@@ -241,7 +241,7 @@ export default class Storyline extends React.Component {
     const interviewee = this.props.story.interviewees[
       this.props.currentInterviewee
     ];
-    const renderUserBubble = data => {
+    const renderUserBubble = (data) => {
       const { content, role } = data;
       return (
         <Bubble
@@ -269,7 +269,7 @@ export default class Storyline extends React.Component {
         </Bubble>
       );
     };
-    const renderIntervieweeBubble = data => {
+    const renderIntervieweeBubble = (data) => {
       const { content, type, role } = data;
       if (type === "text") {
         return (
@@ -279,7 +279,9 @@ export default class Storyline extends React.Component {
             theme={{ backg: interviewee.color, font: "PT sans" }}
           >
             <div>
-              {content.value.split(/\r?\n/).map(line => <div>{line}</div>)}
+              {content.value
+                .split(/\r?\n/)
+                .map((line, i) => <div key={i}>{line}</div>)}
               {content.source ? <a href={content.source}>source</a> : null}
             </div>
           </Bubble>
@@ -354,7 +356,7 @@ export default class Storyline extends React.Component {
     };
 
     return (
-      <StorylineEl onDragOver={e => this.dragOver(e)}>
+      <StorylineEl onDragOver={(e) => this.dragOver(e)}>
         {Object.keys(storyline).map((storyItem, i) => {
           const { role } = storyline[storyItem];
           const item = storyline[storyItem];
@@ -366,8 +368,8 @@ export default class Storyline extends React.Component {
               editable={this.props.currentBubble === i}
               forceEdit={this.state.dropdown === i}
               key={storyItem}
-              onDragEnd={e => this.dragEnd(e)}
-              onDragStart={e => this.dragStart(e)}
+              onDragEnd={(e) => this.dragEnd(e)}
+              onDragStart={(e) => this.dragStart(e)}
               persona={role}
               fadeOut={
                 this.props.currentBubble !== null &&
@@ -419,7 +421,7 @@ export default class Storyline extends React.Component {
           );
         })}
         <div
-          ref={el => {
+          ref={(el) => {
             this.anchor = el;
           }}
         />

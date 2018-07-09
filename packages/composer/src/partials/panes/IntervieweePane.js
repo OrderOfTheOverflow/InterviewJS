@@ -329,7 +329,7 @@ IntervieweePane.propTypes = {
   showSavedIndicator: func.isRequired,
   currentBubble: object,
   currentInterviewee: number.isRequired,
-  currentBubbleIndex: number.isRequired,
+  currentBubbleIndex: number,
   story: object.isRequired /* eslint react/forbid-prop-types: 0 */,
   storyIndex: number.isRequired,
   updateInterviewee: func.isRequired,
@@ -338,5 +338,6 @@ IntervieweePane.propTypes = {
 };
 
 IntervieweePane.defaultProps = {
-  currentBubble: null
+  currentBubble: null,
+  currentBubbleIndex: null
 };
