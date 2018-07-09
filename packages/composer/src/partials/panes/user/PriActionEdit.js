@@ -14,6 +14,7 @@ import { ActionEdit } from ".";
 const ActionTeaser = styled.h2`
   ${setType("s")};
   color: ${color.greyBlk};
+  font-style: italic;
   margin-left: auto;
   margin-right: auto;
   max-width: 200px;

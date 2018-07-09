@@ -4,6 +4,8 @@ import styled from "styled-components";
 
 import {} from "interviewjs-styleguide";
 
+import { GLOBALS, USER_ACTIONS } from "../../../options";
+
 const ActionEditEl = styled.div`
   ${({ locked }) =>
     locked

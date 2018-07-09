@@ -13,6 +13,7 @@ import {
 
 import PaneFrame from "./PaneFrame";
 import PaneTitle from "./PaneTitle";
+
 import { PriActionEdit, SecActionEdit } from "./user";
 
 const PaneEl = styled(Container)`
