@@ -3,9 +3,9 @@ import styled from "styled-components";
 import React from "react";
 
 import {
-  Action,
   Container,
   Separator,
+  TileAction,
   color,
   radius,
   setSpace
@@ -251,19 +251,14 @@ export default class UserPane extends React.Component {
           draft={
             <Draft>
               {enableContinue ? (
-                <Action
-                  fixed
-                  primary={!enableExplore}
-                  secondary={!!enableExplore}
-                  theme={{ font: "PT sans" }}
-                >
+                <TileAction primary theme={{ font: "PT sans" }}>
                   {continueVal}
-                </Action>
+                </TileAction>
               ) : null}
               {enableExplore ? (
-                <Action fixed primary theme={{ font: "PT sans" }}>
+                <TileAction primary theme={{ font: "PT sans" }}>
                   {exploreVal}
-                </Action>
+                </TileAction>
               ) : null}
             </Draft>
           }
