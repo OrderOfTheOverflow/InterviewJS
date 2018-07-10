@@ -71,12 +71,12 @@ const customStyles = {
 
 const Select = (props) => (
   <CreatableSelect
-    {...props}
     blurInputOnSelect
     createOptionPosition="first"
     formatCreateLabel={(str) => `Create: ${str}`}
     isClearable={false}
     styles={customStyles}
+    {...props}
   />
 );
 

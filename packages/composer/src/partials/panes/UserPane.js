@@ -277,9 +277,8 @@ export default class UserPane extends React.Component {
                 <PriActionEdit
                   activeTab={continueLibDict}
                   isActive={enableContinue}
-                  label={customContinueVal}
-                  setLabel={(str) =>
-                    this.customiseActionLabel("customContinueVal", str)
+                  label={
+                    customContinueVal === "" ? undefined : customContinueVal
                   }
                   switchTab={(tab) => this.setState({ continueLibDict: tab })}
                   selectAction={(el, i, evt) =>
@@ -296,10 +295,7 @@ export default class UserPane extends React.Component {
                 <SecActionEdit
                   activeTab={exploreLibDict}
                   isActive={enableExplore}
-                  label={customExploreVal}
-                  setLabel={(str) =>
-                    this.customiseActionLabel("customExploreVal", str)
-                  }
+                  label={customExploreVal === "" ? undefined : customExploreVal}
                   switchTab={(tab) => this.setState({ exploreLibDict: tab })}
                   selectAction={(el, i, evt) =>
                     this.selectExploreAction(el, i, evt)

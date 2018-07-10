@@ -11,14 +11,37 @@ const createOption = (label: string) => ({
 });
 
 export default class TextTab extends Component {
+  static getDerivedStateFromProps(nextProps, nextState) {
+    if (nextProps.label) {
+      return {
+        ...nextState,
+        value: {
+          label: nextProps.label,
+          value: nextProps.value
+        }
+      };
+    }
+    return nextState;
+  }
   constructor(props) {
     super(props);
+
+    const getValue = () => {
+      const { value, label } = this.props;
+      if (value && label) {
+        return {
+          value,
+          label
+        };
+      }
+      return undefined;
+    };
+
     this.state = {
       isLoading: false,
       options: USER_ACTIONS,
-      value: undefined
+      value: getValue()
     };
-    // this.handleInputChange = this.handleInputChange.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleCreate = this.handleCreate.bind(this);
   }
@@ -67,6 +90,8 @@ export default class TextTab extends Component {
   };
   render() {
     const { isLoading, options, value } = this.state;
+    console.log("state: ", this.state);
+    console.log("props: ", this.props);
     return (
       <Container padded>
         <FormItem>
@@ -89,7 +114,6 @@ export default class TextTab extends Component {
 TextTab.propTypes = {
   label: string,
   selectAction: func.isRequired,
-  setLabel: func.isRequired,
   value: string
 };
 
