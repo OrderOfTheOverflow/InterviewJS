@@ -11,9 +11,14 @@ import {
   setSpace
 } from "interviewjs-styleguide";
 
+import { USER_ACTIONS } from "../../options";
+
 import PaneFrame from "./PaneFrame";
 import PaneTitle from "./PaneTitle";
 import { PriActionEdit, SecActionEdit } from "./user";
+
+const DEFAULT_ACTION1 = USER_ACTIONS[0].label;
+const DEFAULT_ACTION2 = USER_ACTIONS[1].label;
 
 const PaneEl = styled(Container)`
   height: 100%;
@@ -97,10 +102,12 @@ export default class UserPane extends React.Component {
       exploreLibDict: "text",
       exploreLibItem: null,
 
-      exploreVal: areWeEdtingHere ? currentBubble.content[0].value : "Carry on",
+      exploreVal: areWeEdtingHere
+        ? currentBubble.content[0].value
+        : DEFAULT_ACTION2,
       continueVal: areWeEdtingHere
         ? currentBubble.content[1].value
-        : "Omg, why?"
+        : DEFAULT_ACTION1
     };
     this.addStorylineItem = this.addStorylineItem.bind(this);
     this.customiseActionLabel = this.customiseActionLabel.bind(this);
@@ -325,6 +332,6 @@ UserPane.propTypes = {
 UserPane.defaultProps = {
   currentBubbleIndex: null,
   currentBubble: null,
-  exploreVal: "Omg why?",
-  continueVal: "Carry on"
+  exploreVal: DEFAULT_ACTION1,
+  continueVal: DEFAULT_ACTION2
 };
