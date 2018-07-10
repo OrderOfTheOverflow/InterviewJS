@@ -110,10 +110,10 @@ export default class UserPane extends React.Component {
     this.updateStorylineItem = this.updateStorylineItem.bind(this);
   }
   toggleAction(action) {
-    const { enableExplore } = this.state;
-    if (enableExplore && action === "enableExplore") {
-      this.setState({ enableExplore: false });
-    } else if (!enableExplore && action === "enableExplore") {
+    const { enableContinue } = this.state;
+    if (enableContinue && action === "enableContinue") {
+      this.setState({ enableContinue: false });
+    } else if (!enableContinue && action === "enableContinue") {
       this.setState({ enableExplore: true, enableContinue: true });
     } else {
       this.setState({ [action]: !this.state[action] });
@@ -230,12 +230,14 @@ export default class UserPane extends React.Component {
   render() {
     const {
       continueLibDict,
+      continueLibItem,
       continueVal,
       customContinueVal,
       customExploreVal,
       enableContinue,
       enableExplore,
       exploreLibDict,
+      exploreLibItem,
       exploreVal
     } = this.state;
     return (
@@ -267,14 +269,15 @@ export default class UserPane extends React.Component {
             <Container>
               <UserAction dir="row">
                 <PriActionEdit
-                  activeTab={continueLibDict}
-                  customValue={customContinueVal}
-                  isActive={enableContinue}
-                  switchTab={(tab) => this.setState({ continueLibDict: tab })}
+                  activeTab={exploreLibDict}
+                  customValue={customExploreVal}
+                  dictItem={exploreLibItem}
+                  isActive={enableExplore}
+                  switchTab={(tab) => this.setState({ exploreLibDict: tab })}
                   selectAction={(el, i, evt) =>
-                    this.selectContinueAction(el, i, evt)
+                    this.selectExploreAction(el, i, evt)
                   }
-                  toggleAction={() => this.toggleAction("enableContinue")}
+                  toggleAction={() => this.toggleAction("enableExplore")}
                 />
               </UserAction>
             </Container>
@@ -282,14 +285,15 @@ export default class UserPane extends React.Component {
             <Container>
               <UserAction dir="row">
                 <SecActionEdit
-                  activeTab={exploreLibDict}
-                  customValue={customExploreVal}
-                  isActive={enableExplore}
-                  switchTab={(tab) => this.setState({ exploreLibDict: tab })}
+                  activeTab={continueLibDict}
+                  customValue={customContinueVal}
+                  dictItem={continueLibItem}
+                  isActive={enableContinue}
+                  switchTab={(tab) => this.setState({ continueLibDict: tab })}
                   selectAction={(el, i, evt) =>
-                    this.selectExploreAction(el, i, evt)
+                    this.selectContinueAction(el, i, evt)
                   }
-                  toggleAction={() => this.toggleAction("enableExplore")}
+                  toggleAction={() => this.toggleAction("enableContinue")}
                 />
               </UserAction>
             </Container>
