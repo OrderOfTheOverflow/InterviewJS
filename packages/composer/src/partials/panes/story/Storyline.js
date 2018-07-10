@@ -252,11 +252,7 @@ export default class Storyline extends React.Component {
         >
           <UserButtons dir="row">
             {content[0].enabled ? (
-              <TileAction
-                primary={!content[1].enabled}
-                secondary={!!content[1].enabled}
-                theme={{ font: "PT sans" }}
-              >
+              <TileAction primary theme={{ font: "PT sans" }}>
                 {content[0].value}
               </TileAction>
             ) : null}
