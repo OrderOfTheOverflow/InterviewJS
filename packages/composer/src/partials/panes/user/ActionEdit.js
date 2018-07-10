@@ -24,6 +24,12 @@ const ActionEditEl = styled.div`
       background: transparent;
       flex-basis: ${100 / 6}%;
     }
+    & > *:first-child {
+      border-radius: ${radius.l} ${radius.n} ${radius.n};
+    }
+    & > *:last-child {
+      border-radius: ${radius.n} ${radius.l} ${radius.n} ${radius.n};
+    }
   }
 `;
 
