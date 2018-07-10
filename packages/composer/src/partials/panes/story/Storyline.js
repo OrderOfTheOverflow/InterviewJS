@@ -15,6 +15,7 @@ import {
   Dropdown,
   DropdownContent,
   Icon,
+  TileAction,
   color,
   radius,
   setSpace,
@@ -109,9 +110,9 @@ const BubbleEdit = styled.div`
   }
 `;
 const UserButtons = styled(Container)`
-  align-content: flex-end;
-  align-items: flex-end;
-  justify-content: flex-end;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   & > * {
     ${setSpace("mlx")};
@@ -251,19 +252,18 @@ export default class Storyline extends React.Component {
         >
           <UserButtons dir="row">
             {content[0].enabled ? (
-              <Action
+              <TileAction
                 primary={!content[1].enabled}
                 secondary={!!content[1].enabled}
                 theme={{ font: "PT sans" }}
-                fixed
               >
                 {content[0].value}
-              </Action>
+              </TileAction>
             ) : null}
             {content[1].enabled ? (
-              <Action primary fixed theme={{ font: "PT sans" }}>
+              <TileAction primary theme={{ font: "PT sans" }}>
                 {content[1].value}
-              </Action>
+              </TileAction>
             ) : null}
           </UserButtons>
         </Bubble>
