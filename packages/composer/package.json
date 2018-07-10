@@ -32,7 +32,6 @@
     "react-router-dom": "4.2.2",
     "react-router-redux": "4.0.8",
     "react-scripts": "1.1.1",
-    "react-select": "^2.0.0-beta.7",
     "recompose": "0.26.0",
     "redux": "3.7.2",
     "redux-actions": "2.3.0",
@@ -73,16 +72,14 @@
     "prettier": "prettier --print-width=120 --trailing-comma es5",
     "format": "npm run prettier -- --write '{,!(build|generators)/**/}*.js'",
     "precommit": "lint-staged",
-    "eslint-check": "eslint --print-config .eslintrc.js | eslint-config-prettier-check",
+    "eslint-check":
+      "eslint --print-config .eslintrc.js | eslint-config-prettier-check",
     "lint": "eslint **/*.js --quiet",
     "lint-fix": "eslint --fix",
     "generate": "plop --plopfile generators/index.js"
   },
   "lint-staged": {
-    "{,!(build|generators)/**/}*.js": [
-      "npm run prettier -- --write",
-      "git add"
-    ]
+    "{,!(build|generators)/**/}*.js": ["npm run prettier -- --write", "git add"]
   },
   "engines": {
     "npm": ">=4",

@@ -38,6 +38,7 @@ export { default as PageTitle } from "./texts/PageTitle";
 export { default as PaneTab } from "./tabs/PaneTab";
 export { default as PaneTabs } from "./tabs/PaneTabs";
 export { default as Preloader } from "./preloaders/Preloader";
+export { default as Select } from "./forms/Select";
 export { default as Separator } from "./separators/Separator";
 export { default as Tab } from "./tabs/Tab";
 export { default as Tabs } from "./tabs/Tabs";
