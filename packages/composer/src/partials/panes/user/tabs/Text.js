@@ -1,4 +1,4 @@
-import { func } from "prop-types";
+import { func, string } from "prop-types";
 import React, { Component } from "react";
 // import Select from "react-select";
 import CreatableSelect from "react-select/lib/Creatable";
@@ -12,7 +12,8 @@ import {
   time,
   radius
 } from "interviewjs-styleguide";
-import { GLOBALS, USER_ACTIONS } from "../../../../options";
+// import { GLOBALS, USER_ACTIONS } from "../../../../options";
+import { USER_ACTIONS } from "../../../../options";
 
 export default class TextTab extends Component {
   constructor(props) {
@@ -21,8 +22,8 @@ export default class TextTab extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
-  handleInputChange(evt) {
-    console.log("handleInputChange: ", evt);
+  handleInputChange(str) {
+    console.log(str);
   }
   handleChange(option) {
     if (option) {
@@ -32,6 +33,7 @@ export default class TextTab extends Component {
   }
   render() {
     console.log("TEXT PROPS: ", this.props);
+
     const customStyles = {
       option: (base, state) => ({
         ...base,
@@ -103,16 +105,17 @@ export default class TextTab extends Component {
         <FormItem>
           <Label>User action</Label>
           <CreatableSelect
+            // menuIsOpen
+            blurInputOnSelect
             createOptionPosition="first"
             hideSelectedOptionsboolean={false}
             isClearable
-            // menuIsOpen
-            blurInputOnSelect
             onChange={(evt) => this.handleChange(evt)}
-            onInputChange={(evt) => this.handleInputChange(evt)}
+            onInputChange={(str) => this.handleInputChange(str)}
             options={USER_ACTIONS}
             placeholder="Type in or choose a comment or question here…"
             styles={customStyles}
+            // value={dictItem}
           />
         </FormItem>
       </Container>
@@ -121,7 +124,10 @@ export default class TextTab extends Component {
 }
 
 TextTab.propTypes = {
-  selectAction: func.isRequired
+  selectAction: func.isRequired,
+  dictItem: string
 };
 
-TextTab.defaultProps = {};
+TextTab.defaultProps = {
+  dictItem: null
+};
