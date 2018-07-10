@@ -110,49 +110,48 @@ export default class UserPane extends React.Component {
     this.updateStorylineItem = this.updateStorylineItem.bind(this);
   }
   toggleAction(action) {
-    const { enableContinue } = this.state;
-    if (enableContinue && action === "enableContinue") {
-      this.setState({ enableContinue: false });
-    } else if (!enableContinue && action === "enableContinue") {
+    const { enableExplore } = this.state;
+    if (enableExplore && action === "enableExplore") {
+      this.setState({ enableExplore: false });
+    } else if (!enableExplore && action === "enableExplore") {
       this.setState({ enableExplore: true, enableContinue: true });
     } else {
       this.setState({ [action]: !this.state[action] });
     }
   }
-  customiseActionLabel(action, e) {
-    const { value } = e.target;
+  customiseActionLabel(action, str) {
     return action === "customExploreVal"
       ? this.setState({
-          [action]: value,
-          enableExplore: value.length > 0,
-          enableContinue: !this.state.enableContinue ? value.length > 0 : true,
+          [action]: str,
+          enableExplore: str.length > 0,
+          enableContinue: !this.state.enableContinue ? str.length > 0 : true,
           exploreLibItem: null,
-          exploreVal: value.length > 0 ? value : this.props.exploreVal
+          exploreVal: str.length > 0 ? str : this.props.exploreVal
         })
       : this.setState({
-          [action]: value,
-          enableContinue: value.length > 0,
+          [action]: str,
+          enableContinue: str.length > 0,
           continueLibItem: null,
-          continueVal: value.length > 0 ? value : this.props.continueVal
+          continueVal: str.length > 0 ? str : this.props.continueVal
         });
   }
-  selectContinueAction(dict, i, e) {
+  selectContinueAction(dict, value, label) {
     this.setState({
       continueLibDict: dict,
-      continueLibItem: i,
-      continueVal: e,
-      customContinueVal: e,
+      continueLibItem: value,
+      continueVal: label,
+      customContinueVal: label,
       enableContinue: true
     });
   }
-  selectExploreAction(dict, i, e) {
+  selectExploreAction(dict, value, label) {
     this.setState({
-      customExploreVal: e,
+      customExploreVal: label,
       enableContinue: true,
       enableExplore: true,
       exploreLibDict: dict,
-      exploreLibItem: i,
-      exploreVal: e
+      exploreLibItem: value,
+      exploreVal: label
     });
   }
   addStorylineItem() {
@@ -269,15 +268,18 @@ export default class UserPane extends React.Component {
             <Container>
               <UserAction dir="row">
                 <PriActionEdit
-                  activeTab={exploreLibDict}
-                  customValue={customExploreVal}
-                  dictItem={exploreLibItem}
-                  isActive={enableExplore}
-                  switchTab={(tab) => this.setState({ exploreLibDict: tab })}
-                  selectAction={(el, i, evt) =>
-                    this.selectExploreAction(el, i, evt)
+                  activeTab={continueLibDict}
+                  isActive={enableContinue}
+                  label={customContinueVal}
+                  setLabel={(str) =>
+                    this.customiseActionLabel("customContinueVal", str)
                   }
-                  toggleAction={() => this.toggleAction("enableExplore")}
+                  switchTab={(tab) => this.setState({ continueLibDict: tab })}
+                  selectAction={(el, i, evt) =>
+                    this.selectContinueAction(el, i, evt)
+                  }
+                  toggleAction={() => this.toggleAction("enableContinue")}
+                  value={continueLibItem}
                 />
               </UserAction>
             </Container>
@@ -285,15 +287,18 @@ export default class UserPane extends React.Component {
             <Container>
               <UserAction dir="row">
                 <SecActionEdit
-                  activeTab={continueLibDict}
-                  customValue={customContinueVal}
-                  dictItem={continueLibItem}
-                  isActive={enableContinue}
-                  switchTab={(tab) => this.setState({ continueLibDict: tab })}
-                  selectAction={(el, i, evt) =>
-                    this.selectContinueAction(el, i, evt)
+                  activeTab={exploreLibDict}
+                  isActive={enableExplore}
+                  label={customExploreVal}
+                  setLabel={(str) =>
+                    this.customiseActionLabel("customExploreVal", str)
                   }
-                  toggleAction={() => this.toggleAction("enableContinue")}
+                  switchTab={(tab) => this.setState({ exploreLibDict: tab })}
+                  selectAction={(el, i, evt) =>
+                    this.selectExploreAction(el, i, evt)
+                  }
+                  toggleAction={() => this.toggleAction("enableExplore")}
+                  value={exploreLibItem}
                 />
               </UserAction>
             </Container>
