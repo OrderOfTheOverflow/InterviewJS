@@ -24,9 +24,11 @@ export default class TextTab extends Component {
   handleInputChange(evt) {
     console.log("handleInputChange: ", evt);
   }
-  handleChange(evt) {
-    this.props.selectAction("text", evt.value, evt.label);
-    // console.log("handleChange: ", evt.value);
+  handleChange(option) {
+    if (option) {
+      return this.props.selectAction("text", option.value, option.label);
+    }
+    return this.props.selectAction("text", "text01", "Tell me more");
   }
   render() {
     console.log("TEXT PROPS: ", this.props);
