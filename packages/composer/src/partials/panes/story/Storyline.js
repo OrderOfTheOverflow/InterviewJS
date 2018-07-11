@@ -242,6 +242,43 @@ export default class Storyline extends React.Component {
     const interviewee = this.props.story.interviewees[
       this.props.currentInterviewee
     ];
+
+    const renderUserAction = (action) => {
+      const { mime } = action;
+      if (mime === "image") {
+        return (
+          <TileAction primary>
+            <span className="span">
+              <img className="img" src={action.value} alt="interviewjsasset" />
+            </span>
+          </TileAction>
+        );
+      } else if (mime === "link") {
+        return <TileAction primary>{action.title || action.value}</TileAction>;
+      } else if (mime === "embed" || mime === "media" || mime === "map") {
+        return (
+          <TileAction primary>
+            <div
+              className="iframe"
+              dangerouslySetInnerHTML={{ __html: action.value }}
+            />
+          </TileAction>
+        );
+      }
+      return (
+        // assume mime === 'text' because legacy
+        <TileAction primary>{action.value}</TileAction>
+      );
+    };
+
+    const renderUserActions = (content) =>
+      content.map((action) => {
+        if (action.enabled) {
+          return renderUserAction(action);
+        }
+        return null;
+      });
+
     const renderUserBubble = (data) => {
       const { content, role } = data;
       return (
@@ -251,18 +288,7 @@ export default class Storyline extends React.Component {
           style={{ paddingLeft: "0", paddingRight: "0" }}
           theme={{ backg: skin.speakerBackg, font: "PT sans" }}
         >
-          <UserButtons dir="row">
-            {content[0].enabled ? (
-              <TileAction primary theme={{ font: "PT sans" }}>
-                {content[0].value}
-              </TileAction>
-            ) : null}
-            {content[1].enabled ? (
-              <TileAction primary theme={{ font: "PT sans" }}>
-                {content[1].value}
-              </TileAction>
-            ) : null}
-          </UserButtons>
+          <UserButtons dir="row">{renderUserActions(content)}</UserButtons>
         </Bubble>
       );
     };
