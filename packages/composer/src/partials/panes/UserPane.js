@@ -20,6 +20,29 @@ import { PriActionEdit, SecActionEdit } from "./user";
 const DEFAULT_ACTION1 = USER_ACTIONS[0].label;
 const DEFAULT_ACTION2 = USER_ACTIONS[1].label;
 
+const EMPTY_DRAFT = {
+  continue: {
+    isActive: false,
+    mime: "text",
+    embed: { value: "" },
+    image: { value: "", title: "", filename: "" },
+    link: { value: "", title: "" },
+    map: { value: "" },
+    media: { value: "" },
+    text: { value: "", option: null }
+  },
+  explore: {
+    isActive: false,
+    mime: "text",
+    embed: { value: "" },
+    image: { value: "", title: "", filename: "" },
+    link: { value: "", title: "" },
+    map: { value: "" },
+    media: { value: "" },
+    text: { value: "", option: null }
+  }
+};
+
 const PaneEl = styled(Container)`
   height: 100%;
   width: 100%;
@@ -101,28 +124,7 @@ export default class UserPane extends React.Component {
         : DEFAULT_ACTION1,
 
       // NEW LOGIC
-      draft: {
-        continue: {
-          isActive: false,
-          mime: "text",
-          embed: { value: "" },
-          image: { value: "", title: "", filename: "" },
-          link: { value: "", title: "" },
-          map: { value: "" },
-          media: { value: "" },
-          text: { value: "", option: null }
-        },
-        explore: {
-          isActive: false,
-          mime: "text",
-          embed: { value: "" },
-          image: { value: "", title: "", filename: "" },
-          link: { value: "", title: "" },
-          map: { value: "" },
-          media: { value: "" },
-          text: { value: "", option: null }
-        }
-      }
+      draft: EMPTY_DRAFT
     };
     this.addStorylineItem = this.addStorylineItem.bind(this);
     this.updateStorylineItem = this.updateStorylineItem.bind(this);
@@ -133,9 +135,6 @@ export default class UserPane extends React.Component {
     this.updateDraft = this.updateDraft.bind(this);
   }
   toggleAction(action) {
-    // console.group("toggleAction()");
-    // console.log({ action });
-    // console.groupEnd();
     const isExploreActive = this.state.draft.explore.isActive;
     if (isExploreActive && action === "explore") {
       this.setState({
@@ -173,10 +172,6 @@ export default class UserPane extends React.Component {
     }
   }
   switchMIME(action, mime) {
-    // console.group("switchMIME()");
-    // console.log({ action });
-    // console.log({ mime });
-    // console.groupEnd();
     this.setState({
       draft: {
         ...this.state.draft,
@@ -211,35 +206,31 @@ export default class UserPane extends React.Component {
     console.log({ draft });
     console.groupEnd();
 
-    // const {
-    //   enableContinue,
-    //   enableExplore,
-    //   continueVal,
-    //   exploreVal
-    // } = this.state;
-    // const newUserBubble = {
-    //   content: [
-    //     {
-    //       enabled: enableContinue,
-    //       value: continueVal,
-    //       type: enableExplore ? "ignore" : "explore"
-    //     },
-    //     { enabled: enableExplore, value: exploreVal, type: "explore" }
-    //   ],
-    //   role: "user"
-    // };
-    // this.props.addStorylineItem(storyIndex, currentInterviewee, newUserBubble);
-    // this.setState({
-    //   customContinueVal: "",
-    //   customExploreVal: "",
-    //   enableContinue: false,
-    //   enableExplore: false,
-    //   continueLibItem: null,
-    //   continueVal: this.props.continueVal,
-    //   exploreLibItem: null,
-    //   exploreVal: this.props.exploreVal
-    // });
-    // this.props.showSavedIndicator();
+    const continueMIME = this.state.draft.continue.mime;
+    const exploreMIME = this.state.draft.explore.mime;
+
+    const newUserBubble = {
+      content: [
+        {
+          ...draft.continue[continueMIME],
+          enabled: draft.continue.isActive,
+          type: draft.explore.isActive ? "ignore" : "explore"
+        },
+        {
+          ...draft.continue[exploreMIME],
+          enabled: draft.explore.isActive,
+          type: "explore"
+        }
+      ],
+      role: "user"
+    };
+    this.props.addStorylineItem(storyIndex, currentInterviewee, newUserBubble);
+
+    this.setState({
+      draft: EMPTY_DRAFT
+    });
+
+    this.props.showSavedIndicator();
   }
   updateStorylineItem() {
     const { storyIndex, currentInterviewee, currentBubbleIndex } = this.props;
