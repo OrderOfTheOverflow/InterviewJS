@@ -16,8 +16,6 @@ import {
   TextInput
 } from "interviewjs-styleguide";
 
-import { filterIframe } from "../../../../util/IframeSanitizer";
-
 const fileToKey = (data, storyId) => {
   const { name, type } = data;
   // console.log(name, type);
@@ -123,14 +121,13 @@ export default class ImageTab extends Component {
   }
 
   render() {
-    const { state, props } = this;
-
+    // const { state, props } = this;
     // console.group("IMAGE PROPS:");
     // console.log({ state });
     // console.log({ props });
     // console.groupEnd();
 
-    const { value, title } = this.props.draft;
+    const { title } = this.props.draft;
     return (
       <Container padded>
         <FormItem>
