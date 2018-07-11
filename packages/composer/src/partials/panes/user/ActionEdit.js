@@ -42,18 +42,18 @@ export default class ActionEdit extends Component {
     // console.log(this.props);
 
     const { children, isActive, activeMIME, switchMIME } = this.props;
-    const renderTabs = () => {
+    const renderContent = () => {
       switch (activeMIME) {
         case "link":
           return <Link {...this.props} draft={this.props.draft.link} />;
         case "image":
-          return <Image {...this.props} />;
+          return <Image {...this.props} draft={this.props.draft.image} />;
         case "media":
-          return <Media {...this.props} />;
+          return <Media {...this.props} draft={this.props.draft.media} />;
         case "embed":
-          return <Embed {...this.props} />;
+          return <Embed {...this.props} draft={this.props.draft.embed} />;
         case "map":
-          return <Map {...this.props} />;
+          return <Map {...this.props} draft={this.props.draft.map} />;
         default:
         case "text":
           return <Text {...this.props} draft={this.props.draft.text} />;
@@ -100,7 +100,7 @@ export default class ActionEdit extends Component {
             <Icon name="media" size="x" />
           </PaneTab>
         </PaneTabs>
-        {renderTabs()}
+        {renderContent()}
       </Fragment>
     );
     return (
