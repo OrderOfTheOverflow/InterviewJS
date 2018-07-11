@@ -242,12 +242,14 @@ export default class UserPane extends React.Component {
         {
           ...draft.continue[continueMIME],
           enabled: draft.continue.isActive,
-          type: draft.explore.isActive ? "ignore" : "explore"
+          type: draft.explore.isActive ? "ignore" : "explore",
+          mime: continueMIME
         },
         {
           ...draft.continue[exploreMIME],
           enabled: draft.explore.isActive,
-          type: "explore"
+          type: "explore",
+          mime: exploreMIME
         }
       ],
       role: "user"
@@ -272,12 +274,14 @@ export default class UserPane extends React.Component {
         {
           ...draft.continue[continueMIME],
           enabled: draft.continue.isActive,
-          type: draft.explore.isActive ? "ignore" : "explore"
+          type: draft.explore.isActive ? "ignore" : "explore",
+          mime: continueMIME
         },
         {
           ...draft.continue[exploreMIME],
           enabled: draft.explore.isActive,
-          type: "explore"
+          type: "explore",
+          mime: exploreMIME
         }
       ],
       role: "user"
@@ -298,6 +302,10 @@ export default class UserPane extends React.Component {
     this.props.showSavedIndicator();
   }
   render() {
+    // console.group("UserPane State:");
+    // console.log(this.state.draft);
+    // console.groupEnd(this.state);
+
     return (
       <PaneEl fill="white" rounded shift dir="column">
         <PaneTitle>End-reader</PaneTitle>
