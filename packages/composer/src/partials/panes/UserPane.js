@@ -29,7 +29,7 @@ const EMPTY_DRAFT = {
     link: { value: "", title: "" },
     map: { value: "" },
     media: { value: "" },
-    text: { value: "", option: null }
+    text: { value: DEFAULT_ACTION1, option: USER_ACTIONS[0].value }
   },
   explore: {
     isActive: false,
@@ -39,7 +39,7 @@ const EMPTY_DRAFT = {
     link: { value: "", title: "" },
     map: { value: "" },
     media: { value: "" },
-    text: { value: "", option: null }
+    text: { value: DEFAULT_ACTION2, option: USER_ACTIONS[1].value }
   }
 };
 
@@ -87,21 +87,49 @@ const Draft = styled.div`
 `;
 
 export default class UserPane extends React.Component {
-  static getDerivedStateFromProps(nextProps) {
+  static getDerivedStateFromProps(nextProps, nextState) {
     if (
       !nextProps.currentBubble ||
       nextProps.currentBubble.role === "interviewee"
     )
       return null;
+
     const { content } = nextProps.currentBubble;
     const isBinary = content[0].enabled && content[1].enabled;
+
+    const getDraft = () => {
+      const isContinueActive = isBinary ? true : content[0].enabled;
+      const isExploreActive = isBinary ? true : content[1].enabled;
+      const continueMIME = content[0].mime ? content[0].mime : "text";
+      const exploreMIME = content[0].mime ? content[1].mime : "text";
+
+      return {
+        continue: {
+          ...nextState.draft.continue,
+          isActive: isContinueActive,
+          [continueMIME]: {
+            filename: content[0].filename ? content[0].filename : "",
+            option: content[0].option ? content[0].option : null,
+            title: content[0].title ? content[0].title : "",
+            value: content[0].value ? content[0].value : DEFAULT_ACTION1
+          }
+        },
+        explore: {
+          ...nextState.draft.explore,
+          isActive: isExploreActive,
+          [exploreMIME]: {
+            filename: content[1].filename ? content[1].filename : "",
+            option: content[1].option ? content[1].option : null,
+            title: content[1].title ? content[1].title : "",
+            value: content[1].value ? content[1].value : DEFAULT_ACTION2
+          }
+        }
+      };
+    };
+
     return {
-      enableContinue: isBinary ? true : content[0].enabled,
-      enableExplore: isBinary ? true : content[1].enabled,
-      customContinueVal: content[0].value,
-      customExploreVal: content[1].value,
-      continueVal: content[0].value,
-      exploreVal: content[1].value
+      ...nextState,
+      draft: getDraft()
     };
   }
   constructor(props) {
@@ -234,34 +262,36 @@ export default class UserPane extends React.Component {
   }
   updateStorylineItem() {
     const { storyIndex, currentInterviewee, currentBubbleIndex } = this.props;
-    const {
-      enableContinue,
-      enableExplore,
-      continueVal,
-      exploreVal
-    } = this.state;
+    const { draft } = this.state;
+
+    const continueMIME = this.state.draft.continue.mime;
+    const exploreMIME = this.state.draft.explore.mime;
+
     const editedUserBubble = {
       content: [
         {
-          enabled: enableContinue,
-          value: continueVal,
-          type: enableExplore ? "ignore" : "explore"
+          ...draft.continue[continueMIME],
+          enabled: draft.continue.isActive,
+          type: draft.explore.isActive ? "ignore" : "explore"
         },
-        { enabled: enableExplore, value: exploreVal, type: "explore" }
+        {
+          ...draft.continue[exploreMIME],
+          enabled: draft.explore.isActive,
+          type: "explore"
+        }
       ],
       role: "user"
     };
+
     this.props.updateStorylineItem(
       storyIndex,
       currentInterviewee,
       currentBubbleIndex,
       editedUserBubble
     );
+
     this.setState({
-      enableContinue: false,
-      enableExplore: false,
-      continueVal: this.props.continueVal,
-      exploreVal: this.props.exploreVal
+      draft: EMPTY_DRAFT
     });
 
     this.props.setCurrentBubbleNone();
