@@ -46,10 +46,6 @@ export default class TextTab extends Component {
     this.handleCreate = this.handleCreate.bind(this);
   }
   handleChange = (newValue: any, actionMeta: any) => {
-    console.group("Value Changed");
-    console.log(newValue);
-    console.log(`action: ${actionMeta.action}`);
-    console.groupEnd();
     if (actionMeta.action === "clear") {
       const defVal = USER_ACTIONS[0].value;
       const defLab = USER_ACTIONS[0].label;
@@ -60,38 +56,39 @@ export default class TextTab extends Component {
             label: defLab
           }
         },
-        () => this.props.selectAction("text", defVal, defLab)
+        () => this.props.updateDraft("text", { option: defVal, value: defLab })
       );
     } else {
       this.setState({ value: newValue }, () =>
-        this.props.selectAction("text", newValue.value, newValue.label)
+        this.props.updateDraft("text", {
+          option: newValue.value,
+          value: newValue.label
+        })
       );
     }
     return null;
   };
   handleCreate = (inputValue: any) => {
     this.setState({ isLoading: true });
-    console.group("Option created");
-    console.log("Wait a moment...");
     setTimeout(() => {
       const { options } = this.state;
       const newOption = createOption(inputValue);
-      console.log(newOption);
-      console.groupEnd();
       this.setState(
         {
           isLoading: false,
           options: [...options, newOption],
           value: newOption
         },
-        () => this.props.selectAction("text", newOption.value, newOption.label)
+        () =>
+          this.props.updateDraft("text", {
+            option: newOption.value,
+            value: newOption.label
+          })
       );
     }, 1000);
   };
   render() {
     const { isLoading, options, value } = this.state;
-    console.log("state: ", this.state);
-    console.log("props: ", this.props);
     return (
       <Container padded>
         <FormItem>
@@ -113,7 +110,7 @@ export default class TextTab extends Component {
 
 TextTab.propTypes = {
   label: string,
-  selectAction: func.isRequired,
+  updateDraft: func.isRequired,
   value: string
 };
 

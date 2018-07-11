@@ -93,106 +93,153 @@ export default class UserPane extends React.Component {
         : false,
       enableExplore: areWeEdtingHere ? currentBubble.content[1].enabled : false,
 
-      customContinueVal: "",
-      customExploreVal: "",
-
-      continueLibDict: "text",
-      continueLibItem: null,
-
-      exploreLibDict: "text",
-      exploreLibItem: null,
-
       exploreVal: areWeEdtingHere
         ? currentBubble.content[0].value
         : DEFAULT_ACTION2,
       continueVal: areWeEdtingHere
         ? currentBubble.content[1].value
-        : DEFAULT_ACTION1
+        : DEFAULT_ACTION1,
+
+      // NEW LOGIC
+      draft: {
+        continue: {
+          isActive: false,
+          mime: "text",
+          embed: { value: "" },
+          image: { value: "", title: "", filename: "" },
+          link: { value: "", title: "" },
+          map: { value: "" },
+          media: { value: "" },
+          text: { value: "", option: null }
+        },
+        explore: {
+          isActive: false,
+          mime: "text",
+          embed: { value: "" },
+          image: { value: "", title: "", filename: "" },
+          link: { value: "", title: "" },
+          map: { value: "" },
+          media: { value: "" },
+          text: { value: "", option: null }
+        }
+      }
     };
     this.addStorylineItem = this.addStorylineItem.bind(this);
-    this.customiseActionLabel = this.customiseActionLabel.bind(this);
-    this.selectContinueAction = this.selectContinueAction.bind(this);
-    this.selectExploreAction = this.selectExploreAction.bind(this);
-    this.toggleAction = this.toggleAction.bind(this);
     this.updateStorylineItem = this.updateStorylineItem.bind(this);
+
+    // NEW LOGIC
+    this.switchMIME = this.switchMIME.bind(this);
+    this.toggleAction = this.toggleAction.bind(this);
+    this.updateDraft = this.updateDraft.bind(this);
   }
   toggleAction(action) {
-    const { enableExplore } = this.state;
-    if (enableExplore && action === "enableExplore") {
-      this.setState({ enableExplore: false });
-    } else if (!enableExplore && action === "enableExplore") {
-      this.setState({ enableExplore: true, enableContinue: true });
+    // console.group("toggleAction()");
+    // console.log({ action });
+    // console.groupEnd();
+    const isExploreActive = this.state.draft.explore.isActive;
+    if (isExploreActive && action === "explore") {
+      this.setState({
+        draft: {
+          ...this.state.draft,
+          explore: {
+            ...this.state.draft.explore,
+            isActive: false
+          }
+        }
+      });
+    } else if (!isExploreActive && action === "explore") {
+      this.setState({
+        draft: {
+          continue: {
+            ...this.state.draft.continue,
+            isActive: true
+          },
+          explore: {
+            ...this.state.draft.explore,
+            isActive: true
+          }
+        }
+      });
     } else {
-      this.setState({ [action]: !this.state[action] });
+      this.setState({
+        draft: {
+          ...this.state.draft,
+          [action]: {
+            ...this.state.draft[action],
+            isActive: !this.state.draft[action].isActive
+          }
+        }
+      });
     }
   }
-  customiseActionLabel(action, str) {
-    return action === "customExploreVal"
-      ? this.setState({
-          [action]: str,
-          enableExplore: str.length > 0,
-          enableContinue: !this.state.enableContinue ? str.length > 0 : true,
-          exploreLibItem: null,
-          exploreVal: str.length > 0 ? str : this.props.exploreVal
-        })
-      : this.setState({
-          [action]: str,
-          enableContinue: str.length > 0,
-          continueLibItem: null,
-          continueVal: str.length > 0 ? str : this.props.continueVal
-        });
-  }
-  selectContinueAction(dict, value, label) {
+  switchMIME(action, mime) {
+    // console.group("switchMIME()");
+    // console.log({ action });
+    // console.log({ mime });
+    // console.groupEnd();
     this.setState({
-      continueLibDict: dict,
-      continueLibItem: value,
-      continueVal: label,
-      customContinueVal: label,
-      enableContinue: true
+      draft: {
+        ...this.state.draft,
+        [action]: { ...this.state.draft[action], mime }
+      }
     });
   }
-  selectExploreAction(dict, value, label) {
+  updateDraft(action, mime, draft) {
+    // console.group("updateDraft(…)");
+    // console.log({ action });
+    // console.log({ mime });
+    // console.log({ draft });
+    // console.log(this.state);
+    // console.groupEnd();
     this.setState({
-      customExploreVal: label,
-      enableContinue: true,
-      enableExplore: true,
-      exploreLibDict: dict,
-      exploreLibItem: value,
-      exploreVal: label
+      draft: {
+        ...this.state.draft,
+        [action]: {
+          ...this.state.draft[action],
+          [mime]: draft
+        }
+      }
     });
   }
+
   addStorylineItem() {
     const { storyIndex, currentInterviewee } = this.props;
-    const {
-      enableContinue,
-      enableExplore,
-      continueVal,
-      exploreVal
-    } = this.state;
-    const newUserBubble = {
-      content: [
-        {
-          enabled: enableContinue,
-          value: continueVal,
-          type: enableExplore ? "ignore" : "explore"
-        },
-        { enabled: enableExplore, value: exploreVal, type: "explore" }
-      ],
-      role: "user"
-    };
-    this.props.addStorylineItem(storyIndex, currentInterviewee, newUserBubble);
-    this.setState({
-      customContinueVal: "",
-      customExploreVal: "",
-      enableContinue: false,
-      enableExplore: false,
-      continueLibItem: null,
-      continueVal: this.props.continueVal,
-      exploreLibItem: null,
-      exploreVal: this.props.exploreVal
-    });
+    const { draft } = this.state;
+    console.group("addStorylineItem():");
+    console.log({ storyIndex });
+    console.log({ currentInterviewee });
+    console.log({ draft });
+    console.groupEnd();
 
-    this.props.showSavedIndicator();
+    // const {
+    //   enableContinue,
+    //   enableExplore,
+    //   continueVal,
+    //   exploreVal
+    // } = this.state;
+    // const newUserBubble = {
+    //   content: [
+    //     {
+    //       enabled: enableContinue,
+    //       value: continueVal,
+    //       type: enableExplore ? "ignore" : "explore"
+    //     },
+    //     { enabled: enableExplore, value: exploreVal, type: "explore" }
+    //   ],
+    //   role: "user"
+    // };
+    // this.props.addStorylineItem(storyIndex, currentInterviewee, newUserBubble);
+    // this.setState({
+    //   customContinueVal: "",
+    //   customExploreVal: "",
+    //   enableContinue: false,
+    //   enableExplore: false,
+    //   continueLibItem: null,
+    //   continueVal: this.props.continueVal,
+    //   exploreLibItem: null,
+    //   exploreVal: this.props.exploreVal
+    // });
+    // this.props.showSavedIndicator();
   }
   updateStorylineItem() {
     const { storyIndex, currentInterviewee, currentBubbleIndex } = this.props;
@@ -220,13 +267,9 @@ export default class UserPane extends React.Component {
       editedUserBubble
     );
     this.setState({
-      customContinueVal: "",
-      customExploreVal: "",
       enableContinue: false,
       enableExplore: false,
-      continueLibItem: null,
       continueVal: this.props.continueVal,
-      exploreLibItem: null,
       exploreVal: this.props.exploreVal
     });
 
@@ -234,18 +277,6 @@ export default class UserPane extends React.Component {
     this.props.showSavedIndicator();
   }
   render() {
-    const {
-      continueLibDict,
-      continueLibItem,
-      continueVal,
-      customContinueVal,
-      customExploreVal,
-      enableContinue,
-      enableExplore,
-      exploreLibDict,
-      exploreLibItem,
-      exploreVal
-    } = this.state;
     return (
       <PaneEl fill="white" rounded shift dir="column">
         <PaneTitle>End-reader</PaneTitle>
@@ -253,21 +284,60 @@ export default class UserPane extends React.Component {
           {...this.props}
           active
           addStorylineItem={this.addStorylineItem}
-          hasDraft={enableContinue || enableExplore}
+          hasDraft={
+            this.state.draft.continue.isActive ||
+            this.state.draft.explore.isActive
+          }
           side="right"
           updateStorylineItem={this.updateStorylineItem}
           draft={
             <Draft>
-              {enableContinue ? (
-                <TileAction primary theme={{ font: "PT sans" }}>
-                  {continueVal}
-                </TileAction>
-              ) : null}
-              {enableExplore ? (
-                <TileAction primary theme={{ font: "PT sans" }}>
-                  {exploreVal}
-                </TileAction>
-              ) : null}
+              {["continue", "explore"].map((action) => {
+                if (this.state.draft[action].isActive) {
+                  const { mime } = this.state.draft[action];
+                  if (mime === "link") {
+                    return (
+                      <TileAction primary>
+                        {this.state.draft[action].link.title ||
+                          this.state.draft[action].link.value}
+                      </TileAction>
+                    );
+                  } else if (mime === "image") {
+                    return (
+                      <TileAction primary>
+                        <span className="span">
+                          <img
+                            className="img"
+                            src={this.state.draft[action].image.value}
+                            alt="interviewjsasset"
+                          />
+                        </span>
+                      </TileAction>
+                    );
+                  } else if (
+                    mime === "embed" ||
+                    mime === "media" ||
+                    mime === "map"
+                  ) {
+                    return (
+                      <TileAction primary>
+                        <div
+                          className="iframe"
+                          dangerouslySetInnerHTML={{
+                            __html: this.state.draft[action][mime].value
+                          }}
+                        />
+                      </TileAction>
+                    );
+                  }
+                  return (
+                    <TileAction primary>
+                      {this.state.draft[action].text.value}
+                    </TileAction>
+                  );
+                }
+                return null;
+              })}
             </Draft>
           }
         >
@@ -275,17 +345,14 @@ export default class UserPane extends React.Component {
             <Container>
               <UserAction dir="row">
                 <PriActionEdit
-                  activeTab={continueLibDict}
-                  isActive={enableContinue}
-                  label={
-                    customContinueVal === "" ? undefined : customContinueVal
+                  activeMIME={this.state.draft.continue.mime}
+                  draft={this.state.draft.continue}
+                  isActive={this.state.draft.continue.isActive}
+                  switchMIME={(mime) => this.switchMIME("continue", mime)}
+                  toggleAction={() => this.toggleAction("continue")}
+                  updateDraft={(mime, draft) =>
+                    this.updateDraft("continue", mime, draft)
                   }
-                  switchTab={(tab) => this.setState({ continueLibDict: tab })}
-                  selectAction={(el, i, evt) =>
-                    this.selectContinueAction(el, i, evt)
-                  }
-                  toggleAction={() => this.toggleAction("enableContinue")}
-                  value={continueLibItem}
                 />
               </UserAction>
             </Container>
@@ -293,15 +360,14 @@ export default class UserPane extends React.Component {
             <Container>
               <UserAction dir="row">
                 <SecActionEdit
-                  activeTab={exploreLibDict}
-                  isActive={enableExplore}
-                  label={customExploreVal === "" ? undefined : customExploreVal}
-                  switchTab={(tab) => this.setState({ exploreLibDict: tab })}
-                  selectAction={(el, i, evt) =>
-                    this.selectExploreAction(el, i, evt)
+                  activeMIME={this.state.draft.explore.mime}
+                  draft={this.state.draft.explore}
+                  isActive={this.state.draft.explore.isActive}
+                  switchMIME={(mime) => this.switchMIME("explore", mime)}
+                  toggleAction={() => this.toggleAction("explore")}
+                  updateDraft={(mime, draft) =>
+                    this.updateDraft("explore", mime, draft)
                   }
-                  toggleAction={() => this.toggleAction("enableExplore")}
-                  value={exploreLibItem}
                 />
               </UserAction>
             </Container>

@@ -39,11 +39,13 @@ export default class ActionEdit extends Component {
     this.state = {};
   }
   render() {
-    const { children, isActive, activeTab, switchTab } = this.props;
+    // console.log(this.props);
+
+    const { children, isActive, activeMIME, switchMIME } = this.props;
     const renderTabs = () => {
-      switch (activeTab) {
+      switch (activeMIME) {
         case "link":
-          return <Link {...this.props} />;
+          return <Link {...this.props} draft={this.props.draft.link} />;
         case "image":
           return <Image {...this.props} />;
         case "media":
@@ -54,7 +56,7 @@ export default class ActionEdit extends Component {
           return <Map {...this.props} />;
         default:
         case "text":
-          return <Text {...this.props} />;
+          return <Text {...this.props} draft={this.props.draft.text} />;
       }
     };
 
@@ -62,38 +64,38 @@ export default class ActionEdit extends Component {
       <Fragment>
         <PaneTabs>
           <PaneTab
-            active={activeTab === "text"}
-            onClick={() => switchTab("text")}
+            active={activeMIME === "text"}
+            onClick={() => switchMIME("text")}
           >
             <Icon name="text" size="x" />
           </PaneTab>
           <PaneTab
-            active={activeTab === "link"}
-            onClick={() => switchTab("link")}
+            active={activeMIME === "link"}
+            onClick={() => switchMIME("link")}
           >
             <Icon name="link" size="x" />
           </PaneTab>
           <PaneTab
-            active={activeTab === "image"}
-            onClick={() => switchTab("image")}
+            active={activeMIME === "image"}
+            onClick={() => switchMIME("image")}
           >
             <Icon name="image" size="x" />
           </PaneTab>
           <PaneTab
-            active={activeTab === "embed"}
-            onClick={() => switchTab("embed")}
+            active={activeMIME === "embed"}
+            onClick={() => switchMIME("embed")}
           >
             <Icon name="embed" size="x" />
           </PaneTab>
           <PaneTab
-            active={activeTab === "map"}
-            onClick={() => switchTab("map")}
+            active={activeMIME === "map"}
+            onClick={() => switchMIME("map")}
           >
             <Icon name="map" size="x" />
           </PaneTab>
           <PaneTab
-            active={activeTab === "media"}
-            onClick={() => switchTab("media")}
+            active={activeMIME === "media"}
+            onClick={() => switchMIME("media")}
           >
             <Icon name="media" size="x" />
           </PaneTab>
@@ -112,13 +114,12 @@ export default class ActionEdit extends Component {
 }
 
 ActionEdit.propTypes = {
-  activeTab: string,
+  activeMIME: string.isRequired,
   children: oneOfType([array, string, node]).isRequired,
   isActive: bool,
-  switchTab: func.isRequired
+  switchMIME: func.isRequired
 };
 
 ActionEdit.defaultProps = {
-  activeTab: "text",
   isActive: true
 };
