@@ -139,20 +139,12 @@ export default class UserPane extends React.Component {
     const areWeEdtingHere = currentBubble !== null;
 
     this.state = {
-      enableContinue: areWeEdtingHere
-        ? currentBubble.content[0].enabled
-        : false,
-      enableExplore: areWeEdtingHere ? currentBubble.content[1].enabled : false,
-
-      exploreVal: areWeEdtingHere
-        ? currentBubble.content[0].value
-        : DEFAULT_ACTION2,
-      continueVal: areWeEdtingHere
-        ? currentBubble.content[1].value
-        : DEFAULT_ACTION1,
-
       // NEW LOGIC
-      draft: EMPTY_DRAFT
+      draft: areWeEdtingHere
+        ? {
+            // shit will happen here now
+          }
+        : EMPTY_DRAFT
     };
     this.addStorylineItem = this.addStorylineItem.bind(this);
     this.updateStorylineItem = this.updateStorylineItem.bind(this);
@@ -338,7 +330,7 @@ export default class UserPane extends React.Component {
                           <img
                             className="img"
                             src={this.state.draft[action].image.value}
-                            alt="interviewjsasset"
+                            alt={this.state.draft[action].image.title}
                           />
                         </span>
                       </TileAction>
@@ -382,6 +374,8 @@ export default class UserPane extends React.Component {
                   updateDraft={(mime, draft) =>
                     this.updateDraft("continue", mime, draft)
                   }
+                  story={this.props.story}
+                  user={this.props.user}
                 />
               </UserAction>
             </Container>
@@ -397,6 +391,8 @@ export default class UserPane extends React.Component {
                   updateDraft={(mime, draft) =>
                     this.updateDraft("explore", mime, draft)
                   }
+                  story={this.props.story}
+                  user={this.props.user}
                 />
               </UserAction>
             </Container>
