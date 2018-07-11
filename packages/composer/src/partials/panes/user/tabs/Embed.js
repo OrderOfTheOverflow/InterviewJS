@@ -1,4 +1,4 @@
-import { func, shape, string } from "prop-types";
+import { func } from "prop-types";
 import React, { Component } from "react";
 
 import {
@@ -10,7 +10,6 @@ import {
 } from "interviewjs-styleguide";
 
 import { filterIframe } from "../../../../util/IframeSanitizer";
-// import { GLOBALS, USER_ACTIONS } from "../../../../options";
 
 export default class EmbedTab extends Component {
   constructor(props) {
