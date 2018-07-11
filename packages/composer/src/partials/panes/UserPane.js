@@ -246,7 +246,7 @@ export default class UserPane extends React.Component {
           mime: continueMIME
         },
         {
-          ...draft.continue[exploreMIME],
+          ...draft.explore[exploreMIME],
           enabled: draft.explore.isActive,
           type: "explore",
           mime: exploreMIME
@@ -278,7 +278,7 @@ export default class UserPane extends React.Component {
           mime: continueMIME
         },
         {
-          ...draft.continue[exploreMIME],
+          ...draft.explore[exploreMIME],
           enabled: draft.explore.isActive,
           type: "explore",
           mime: exploreMIME
