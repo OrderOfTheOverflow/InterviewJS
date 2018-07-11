@@ -3,30 +3,45 @@ import styled from "styled-components";
 import React from "react";
 
 import {
-  Action,
-  Checkbox,
   Container,
-  FormItem,
-  Icon,
-  Legend,
-  PageSubtitle,
-  PaneTab,
-  PaneTabs,
   Separator,
-  TextInput,
-  Tip,
+  TileAction,
   color,
-  font,
   radius,
-  setSpace,
-  setType,
-  time
+  setSpace
 } from "interviewjs-styleguide";
+
+import { USER_ACTIONS } from "../../options";
 
 import PaneFrame from "./PaneFrame";
 import PaneTitle from "./PaneTitle";
+import { PriActionEdit, SecActionEdit } from "./user";
 
-import { GLOBALS, USER_ACTIONS } from "../../options";
+const DEFAULT_ACTION1 = USER_ACTIONS[0].label;
+const DEFAULT_ACTION2 = USER_ACTIONS[1].label;
+
+const EMPTY_DRAFT = {
+  continue: {
+    isActive: false,
+    mime: "text",
+    embed: { value: "" },
+    image: { value: "", title: "", filename: "" },
+    link: { value: "", title: "" },
+    map: { value: "" },
+    media: { value: "" },
+    text: { value: DEFAULT_ACTION1, option: USER_ACTIONS[0].value }
+  },
+  explore: {
+    isActive: false,
+    mime: "text",
+    embed: { value: "" },
+    image: { value: "", title: "", filename: "" },
+    link: { value: "", title: "" },
+    map: { value: "" },
+    media: { value: "" },
+    text: { value: DEFAULT_ACTION2, option: USER_ACTIONS[1].value }
+  }
+};
 
 const PaneEl = styled(Container)`
   height: 100%;
@@ -55,115 +70,6 @@ const UserAction = styled(Container)`
   right: 0;
   bottom: 0;
   width: 100%;
-  & > div {
-    border-radius: 0 ${radius.l} ${radius.l} 0;
-  }
-  & > div:last-child {
-    border-left: 1px solid ${color.greyHL};
-  }
-  & label {
-    align-content: center;
-    align-items: center;
-    bottom: 0;
-    display: flex;
-    flex-direction: row;
-    font-weight: bold;
-    justify-content: center;
-    left: 0;
-    padding: 0;
-    position: absolute;
-    top: 0;
-    width: 140px;
-    with: 100%;
-    &:before {
-      content: "";
-      border-width: 1px 0 1px 1px;
-      border-radius: ${radius.s} 0 0 ${radius.s};
-      border-style: solid;
-      border-color: ${color.greyHL};
-      background: ${color.white};
-      height: 48px;
-      width: 30px;
-      position: absolute;
-      left: -31px;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 0;
-    }
-  }
-  & label > span {
-    left: -19px;
-  }
-  ${PaneTabs} {
-    width: 100%;
-    position: relative;
-    & li {
-      display: inline-block;
-    }
-    & button {
-      ${setSpace("phn")};
-      ${setSpace("pvx")};
-    }
-  }
-  ${PageSubtitle} {
-    color: ${({ active }) => (active ? color.blueBlk : color.greyBlk)};
-  }
-`;
-
-const ActionLibHolder = styled(Container)`
-  overflow-y: auto;
-  width: 100%;
-  height: 100%;
-`;
-
-const ActionLibList = styled.ul`
-  display: block;
-  text-align: center;
-`;
-const ActionLibItem = styled.li`
-  ${setSpace("phs")};
-  ${setSpace("mvx")};
-`;
-const ActionLibAction = styled.button`
-  ${setSpace("phs")};
-  ${setSpace("pvx")};
-  ${setType("x")};
-  background: none;
-  border-radius: ${radius.h};
-  border: 1px solid transparent;
-  box-shadow: none;
-  color: ${color.greyBlk};
-  display: inline-block;
-  font-family: ${font.serif};
-  transition: color ${time.m}, border ${time.m}, text-decoration ${time.m};
-  &:focus {
-    outline: none;
-  }
-  ${({ active, interactive }) =>
-    interactive && active
-      ? `
-    border-color: ${color.blueBlk};
-    color: ${color.blueBlk};
-  `
-      : ``} ${({ interactive }) =>
-    interactive
-      ? `
-    cursor: pointer;
-    &:hover {
-      color: ${color.blueBlk};
-    }
-  `
-      : ``};
-`;
-
-const CustomActionHolder = styled(Container)`
-  ${setSpace("phs")};
-  width: 100%;
-  input {
-    ${setSpace("pvn")};
-    ${setSpace("phx")};
-    height: 34px;
-  }
 `;
 
 const Draft = styled.div`
@@ -181,21 +87,49 @@ const Draft = styled.div`
 `;
 
 export default class UserPane extends React.Component {
-  static getDerivedStateFromProps(nextProps) {
+  static getDerivedStateFromProps(nextProps, nextState) {
     if (
       !nextProps.currentBubble ||
       nextProps.currentBubble.role === "interviewee"
     )
       return null;
+
     const { content } = nextProps.currentBubble;
     const isBinary = content[0].enabled && content[1].enabled;
+
+    const getDraft = () => {
+      const isContinueActive = isBinary ? true : content[0].enabled;
+      const isExploreActive = isBinary ? true : content[1].enabled;
+      const continueMIME = content[0].mime ? content[0].mime : "text";
+      const exploreMIME = content[0].mime ? content[1].mime : "text";
+
+      return {
+        continue: {
+          ...nextState.draft.continue,
+          isActive: isContinueActive,
+          [continueMIME]: {
+            filename: content[0].filename ? content[0].filename : "",
+            option: content[0].option ? content[0].option : null,
+            title: content[0].title ? content[0].title : "",
+            value: content[0].value ? content[0].value : DEFAULT_ACTION1
+          }
+        },
+        explore: {
+          ...nextState.draft.explore,
+          isActive: isExploreActive,
+          [exploreMIME]: {
+            filename: content[1].filename ? content[1].filename : "",
+            option: content[1].option ? content[1].option : null,
+            title: content[1].title ? content[1].title : "",
+            value: content[1].value ? content[1].value : DEFAULT_ACTION2
+          }
+        }
+      };
+    };
+
     return {
-      enableContinue: isBinary ? true : content[0].enabled,
-      enableExplore: isBinary ? true : content[1].enabled,
-      customContinueVal: content[0].value,
-      customExploreVal: content[1].value,
-      continueVal: content[0].value,
-      exploreVal: content[1].value
+      ...nextState,
+      draft: getDraft()
     };
   }
   constructor(props) {
@@ -205,157 +139,165 @@ export default class UserPane extends React.Component {
     const areWeEdtingHere = currentBubble !== null;
 
     this.state = {
-      enableContinue: areWeEdtingHere
-        ? currentBubble.content[0].enabled
-        : false,
-      enableExplore: areWeEdtingHere ? currentBubble.content[1].enabled : false,
-
-      customContinueVal: "",
-      customExploreVal: "",
-
-      continueLibDict: "text",
-      continueLibItem: null,
-
-      exploreLibDict: "text",
-      exploreLibItem: null,
-
-      exploreVal: areWeEdtingHere ? currentBubble.content[0].value : "Carry on",
-      continueVal: areWeEdtingHere
-        ? currentBubble.content[1].value
-        : "Omg, why?"
+      // NEW LOGIC
+      draft: areWeEdtingHere
+        ? {
+            // shit will happen here now
+          }
+        : EMPTY_DRAFT
     };
     this.addStorylineItem = this.addStorylineItem.bind(this);
-    this.customiseActionLabel = this.customiseActionLabel.bind(this);
-    this.selectContinueAction = this.selectContinueAction.bind(this);
-    this.selectExploreAction = this.selectExploreAction.bind(this);
-    this.toggleAction = this.toggleAction.bind(this);
     this.updateStorylineItem = this.updateStorylineItem.bind(this);
+
+    // NEW LOGIC
+    this.switchMIME = this.switchMIME.bind(this);
+    this.toggleAction = this.toggleAction.bind(this);
+    this.updateDraft = this.updateDraft.bind(this);
   }
-  toggleAction(action, e) {
-    // this.setState({ enableExplore: e.target.checked });
-    const { enableExplore, enableIgnore } = this.state;
-    if (!enableExplore && !enableIgnore) {
-      this.setState({ enableContinue: true, enableExplore: e.target.checked });
+  toggleAction(action) {
+    const isExploreActive = this.state.draft.explore.isActive;
+    if (isExploreActive && action === "explore") {
+      this.setState({
+        draft: {
+          ...this.state.draft,
+          explore: {
+            ...this.state.draft.explore,
+            isActive: false
+          }
+        }
+      });
+    } else if (!isExploreActive && action === "explore") {
+      this.setState({
+        draft: {
+          continue: {
+            ...this.state.draft.continue,
+            isActive: true
+          },
+          explore: {
+            ...this.state.draft.explore,
+            isActive: true
+          }
+        }
+      });
+    } else {
+      this.setState({
+        draft: {
+          ...this.state.draft,
+          [action]: {
+            ...this.state.draft[action],
+            isActive: !this.state.draft[action].isActive
+          }
+        }
+      });
     }
-    this.setState({ enableExplore: e.target.checked });
   }
-  customiseActionLabel(action, e) {
-    const { value } = e.target;
-    return action === "customExploreVal"
-      ? this.setState({
-          [action]: value,
-          enableExplore: value.length > 0,
-          enableContinue: !this.state.enableContinue ? value.length > 0 : true,
-          exploreLibItem: null,
-          exploreVal: value.length > 0 ? value : this.props.exploreVal
-        })
-      : this.setState({
-          [action]: value,
-          enableContinue: value.length > 0,
-          continueLibItem: null,
-          continueVal: value.length > 0 ? value : this.props.continueVal
-        });
-  }
-  selectContinueAction(dict, i, e) {
+  switchMIME(action, mime) {
     this.setState({
-      continueLibDict: dict,
-      continueLibItem: i,
-      continueVal: e.target.innerHTML,
-      customContinueVal: e.target.innerHTML,
-      enableContinue: true
+      draft: {
+        ...this.state.draft,
+        [action]: { ...this.state.draft[action], mime }
+      }
     });
   }
-  selectExploreAction(dict, i, e) {
+  updateDraft(action, mime, draft) {
+    // console.group("updateDraft(…)");
+    // console.log({ action });
+    // console.log({ mime });
+    // console.log({ draft });
+    // console.log(this.state);
+    // console.groupEnd();
     this.setState({
-      customExploreVal: e.target.innerHTML,
-      enableContinue: true,
-      enableExplore: true,
-      exploreLibDict: dict,
-      exploreLibItem: i,
-      exploreVal: e.target.innerHTML
+      draft: {
+        ...this.state.draft,
+        [action]: {
+          ...this.state.draft[action],
+          [mime]: draft
+        }
+      }
     });
   }
+
   addStorylineItem() {
     const { storyIndex, currentInterviewee } = this.props;
-    const {
-      enableContinue,
-      enableExplore,
-      continueVal,
-      exploreVal
-    } = this.state;
+    const { draft } = this.state;
+    console.group("addStorylineItem():");
+    console.log({ storyIndex });
+    console.log({ currentInterviewee });
+    console.log({ draft });
+    console.groupEnd();
+
+    const continueMIME = this.state.draft.continue.mime;
+    const exploreMIME = this.state.draft.explore.mime;
+
     const newUserBubble = {
       content: [
         {
-          enabled: enableContinue,
-          value: continueVal,
-          type: enableExplore ? "ignore" : "explore"
+          ...draft.continue[continueMIME],
+          enabled: draft.continue.isActive,
+          type: draft.explore.isActive ? "ignore" : "explore",
+          mime: continueMIME
         },
-        { enabled: enableExplore, value: exploreVal, type: "explore" }
+        {
+          ...draft.explore[exploreMIME],
+          enabled: draft.explore.isActive,
+          type: "explore",
+          mime: exploreMIME
+        }
       ],
       role: "user"
     };
     this.props.addStorylineItem(storyIndex, currentInterviewee, newUserBubble);
+
     this.setState({
-      customContinueVal: "",
-      customExploreVal: "",
-      enableContinue: false,
-      enableExplore: false,
-      continueLibItem: null,
-      continueVal: this.props.continueVal,
-      exploreLibItem: null,
-      exploreVal: this.props.exploreVal
+      draft: EMPTY_DRAFT
     });
 
     this.props.showSavedIndicator();
   }
   updateStorylineItem() {
     const { storyIndex, currentInterviewee, currentBubbleIndex } = this.props;
-    const {
-      enableContinue,
-      enableExplore,
-      continueVal,
-      exploreVal
-    } = this.state;
+    const { draft } = this.state;
+
+    const continueMIME = this.state.draft.continue.mime;
+    const exploreMIME = this.state.draft.explore.mime;
+
     const editedUserBubble = {
       content: [
         {
-          enabled: enableContinue,
-          value: continueVal,
-          type: enableExplore ? "ignore" : "explore"
+          ...draft.continue[continueMIME],
+          enabled: draft.continue.isActive,
+          type: draft.explore.isActive ? "ignore" : "explore",
+          mime: continueMIME
         },
-        { enabled: enableExplore, value: exploreVal, type: "explore" }
+        {
+          ...draft.explore[exploreMIME],
+          enabled: draft.explore.isActive,
+          type: "explore",
+          mime: exploreMIME
+        }
       ],
       role: "user"
     };
+
     this.props.updateStorylineItem(
       storyIndex,
       currentInterviewee,
       currentBubbleIndex,
       editedUserBubble
     );
+
     this.setState({
-      customContinueVal: "",
-      customExploreVal: "",
-      enableContinue: false,
-      enableExplore: false,
-      continueLibItem: null,
-      continueVal: this.props.continueVal,
-      exploreLibItem: null,
-      exploreVal: this.props.exploreVal
+      draft: EMPTY_DRAFT
     });
 
     this.props.setCurrentBubbleNone();
     this.props.showSavedIndicator();
   }
   render() {
-    const {
-      continueLibDict,
-      continueVal,
-      enableContinue,
-      enableExplore,
-      exploreLibDict,
-      exploreVal
-    } = this.state;
+    // console.group("UserPane State:");
+    // console.log(this.state.draft);
+    // console.groupEnd(this.state);
+
     return (
       <PaneEl fill="white" rounded shift dir="column">
         <PaneTitle>End-reader</PaneTitle>
@@ -363,274 +305,95 @@ export default class UserPane extends React.Component {
           {...this.props}
           active
           addStorylineItem={this.addStorylineItem}
-          hasDraft={enableContinue || enableExplore}
+          hasDraft={
+            this.state.draft.continue.isActive ||
+            this.state.draft.explore.isActive
+          }
           side="right"
           updateStorylineItem={this.updateStorylineItem}
           draft={
             <Draft>
-              {enableContinue ? (
-                <Action
-                  fixed
-                  primary={!enableExplore}
-                  secondary={!!enableExplore}
-                  theme={{ font: "PT sans" }}
-                >
-                  {continueVal}
-                </Action>
-              ) : null}
-              {enableExplore ? (
-                <Action fixed primary theme={{ font: "PT sans" }}>
-                  {exploreVal}
-                </Action>
-              ) : null}
+              {["continue", "explore"].map((action) => {
+                if (this.state.draft[action].isActive) {
+                  const { mime } = this.state.draft[action];
+                  if (mime === "link") {
+                    return (
+                      <TileAction primary>
+                        {this.state.draft[action].link.title ||
+                          this.state.draft[action].link.value}
+                      </TileAction>
+                    );
+                  } else if (mime === "image") {
+                    return (
+                      <TileAction primary>
+                        <span className="span">
+                          <img
+                            className="img"
+                            src={this.state.draft[action].image.value}
+                            alt={this.state.draft[action].image.title}
+                          />
+                        </span>
+                      </TileAction>
+                    );
+                  } else if (
+                    mime === "embed" ||
+                    mime === "media" ||
+                    mime === "map"
+                  ) {
+                    return (
+                      <TileAction primary>
+                        <div
+                          className="iframe"
+                          dangerouslySetInnerHTML={{
+                            __html: this.state.draft[action][mime].value
+                          }}
+                        />
+                      </TileAction>
+                    );
+                  }
+                  return (
+                    <TileAction primary>
+                      {this.state.draft[action].text.value}
+                    </TileAction>
+                  );
+                }
+                return null;
+              })}
             </Draft>
           }
         >
           <UserActions>
             <Container>
-              <UserAction dir="row" active>
-                <Container
-                  align="center"
-                  dir="column"
-                  flex={[0, 0, "140px"]}
-                  style={{ padding: "0 5px" }}
-                >
-                  <PageSubtitle typo="p4">
-                    Create an interaction
-                    <br />
-                    <Tip
-                      position="bottom"
-                      title="Create user interactions that lead into your interview quote.  Select text options, type your own text or question, or choose a multimedia request via the tabs. It has to bein  the user’s voice."
-                    >
-                      <Icon
-                        name="info2"
-                        style={{
-                          color: color.greyBlk,
-                          marginLeft: "5px",
-                          position: "relative",
-                          top: "2px"
-                        }}
-                      />
-                    </Tip>
-                  </PageSubtitle>
-                </Container>
-                <Container flex={[2, 2, "auto"]} fill="grey" dir="column">
-                  <CustomActionHolder flex={[0, 0, "50px"]} dir="column">
-                    <FormItem fullWidth>
-                      <TextInput
-                        type="text"
-                        placeholder="Type a comment or question here ..."
-                        maxLength={GLOBALS.fixedButtonCharLimit}
-                        value={this.state.customContinueVal}
-                        onChange={(e) =>
-                          this.customiseActionLabel("customContinueVal", e)
-                        }
-                        style={{ paddingRight: "40px" }}
-                      />
-                      <Legend
-                        tip="Type your own user interaction here - a comment or a question to lead into your the interview text in the preview panel."
-                        style={{ top: "16px" }}
-                      >
-                        i
-                      </Legend>
-                    </FormItem>
-                  </CustomActionHolder>
-                  <Container flex={[1, 0, "auto"]} style={{ width: "100%" }}>
-                    <PaneTabs>
-                      <PaneTab
-                        active={continueLibDict === "text"}
-                        onClick={() =>
-                          this.setState({ continueLibDict: "text" })
-                        }
-                      >
-                        <Icon name="text" size="x" />
-                      </PaneTab>
-                      <PaneTab
-                        active={continueLibDict === "link"}
-                        onClick={() =>
-                          this.setState({ continueLibDict: "link" })
-                        }
-                      >
-                        <Icon name="link" size="x" />
-                      </PaneTab>
-                      <PaneTab
-                        active={continueLibDict === "image"}
-                        onClick={() =>
-                          this.setState({ continueLibDict: "image" })
-                        }
-                      >
-                        <Icon name="image" size="x" />
-                      </PaneTab>
-                      <PaneTab
-                        active={continueLibDict === "embed"}
-                        onClick={() =>
-                          this.setState({ continueLibDict: "embed" })
-                        }
-                      >
-                        <Icon name="embed" size="x" />
-                      </PaneTab>
-                      <PaneTab
-                        active={continueLibDict === "map"}
-                        onClick={() =>
-                          this.setState({ continueLibDict: "map" })
-                        }
-                      >
-                        <Icon name="map" size="x" />
-                      </PaneTab>
-                      <PaneTab
-                        active={continueLibDict === "media"}
-                        onClick={() =>
-                          this.setState({ continueLibDict: "media" })
-                        }
-                      >
-                        <Icon name="media" size="x" />
-                      </PaneTab>
-                    </PaneTabs>
-                  </Container>
-                  <ActionLibHolder flex={[1, 1, "auto"]}>
-                    <ActionLibList>
-                      {USER_ACTIONS.continue[continueLibDict].map(
-                        (action, i) => (
-                          <ActionLibItem key={i}>
-                            <ActionLibAction
-                              interactive
-                              active={i === this.state.continueLibItem}
-                              onClick={(e) =>
-                                this.selectContinueAction(continueLibDict, i, e)
-                              }
-                            >
-                              {action}
-                            </ActionLibAction>
-                          </ActionLibItem>
-                        )
-                      )}
-                    </ActionLibList>
-                  </ActionLibHolder>
-                </Container>
+              <UserAction dir="row">
+                <PriActionEdit
+                  activeMIME={this.state.draft.continue.mime}
+                  draft={this.state.draft.continue}
+                  isActive={this.state.draft.continue.isActive}
+                  switchMIME={(mime) => this.switchMIME("continue", mime)}
+                  toggleAction={() => this.toggleAction("continue")}
+                  updateDraft={(mime, draft) =>
+                    this.updateDraft("continue", mime, draft)
+                  }
+                  story={this.props.story}
+                  user={this.props.user}
+                />
               </UserAction>
             </Container>
             <Separator silent size="s" />
             <Container>
-              <UserAction dir="row" active={enableExplore}>
-                <Container
-                  align="center"
-                  dir="column"
-                  flex={[0, 0, "140px"]}
-                  style={{ padding: "0 5px" }}
-                >
-                  <Checkbox
-                    checked={enableExplore}
-                    onChange={(e) => this.toggleAction("enableExplore", e)}
-                  >
-                    <PageSubtitle typo="p4">
-                      Add Second Interaction
-                      <br />
-                      <Tip
-                        position="bottom"
-                        title="Select to add a second interaction. Together with the first question or user interaction it gives the user choice. Multimedia requests works well - explore all tabs!"
-                      >
-                        <Icon
-                          name="info2"
-                          style={{
-                            color: color.greyBlk,
-                            marginLeft: "5px",
-                            position: "relative",
-                            top: "2px"
-                          }}
-                        />
-                      </Tip>
-                    </PageSubtitle>
-                  </Checkbox>
-                </Container>
-                <Container flex={[2, 2, "auto"]} fill="grey" dir="column">
-                  <CustomActionHolder flex={[0, 0, "50px"]} dir="column">
-                    <FormItem fullWidth>
-                      <TextInput
-                        type="text"
-                        placeholder="Type a second comment or question here"
-                        maxLength={GLOBALS.fixedButtonCharLimit}
-                        value={this.state.customExploreVal}
-                        onChange={(e) =>
-                          this.customiseActionLabel("customExploreVal", e)
-                        }
-                        style={{ paddingRight: "40px" }}
-                      />
-                      <Legend
-                        tip="Use this box to script the second user interaction or question."
-                        style={{ top: "16px" }}
-                      >
-                        i
-                      </Legend>
-                    </FormItem>
-                  </CustomActionHolder>
-                  <Container flex={[1, 0, "auto"]} style={{ width: "100%" }}>
-                    <PaneTabs>
-                      <PaneTab
-                        active={exploreLibDict === "text"}
-                        onClick={() =>
-                          this.setState({ exploreLibDict: "text" })
-                        }
-                      >
-                        <Icon name="text" size="x" />
-                      </PaneTab>
-                      <PaneTab
-                        active={exploreLibDict === "link"}
-                        onClick={() =>
-                          this.setState({ exploreLibDict: "link" })
-                        }
-                      >
-                        <Icon name="link" size="x" />
-                      </PaneTab>
-                      <PaneTab
-                        active={exploreLibDict === "image"}
-                        onClick={() =>
-                          this.setState({ exploreLibDict: "image" })
-                        }
-                      >
-                        <Icon name="image" size="x" />
-                      </PaneTab>
-                      <PaneTab
-                        active={exploreLibDict === "embed"}
-                        onClick={() =>
-                          this.setState({ exploreLibDict: "embed" })
-                        }
-                      >
-                        <Icon name="embed" size="x" />
-                      </PaneTab>
-                      <PaneTab
-                        active={exploreLibDict === "map"}
-                        onClick={() => this.setState({ exploreLibDict: "map" })}
-                      >
-                        <Icon name="map" size="x" />
-                      </PaneTab>
-                      <PaneTab
-                        active={exploreLibDict === "media"}
-                        onClick={() =>
-                          this.setState({ exploreLibDict: "media" })
-                        }
-                      >
-                        <Icon name="media" size="x" />
-                      </PaneTab>
-                    </PaneTabs>
-                  </Container>
-                  <ActionLibHolder flex={[1, 1, "auto"]}>
-                    <ActionLibList>
-                      {USER_ACTIONS.explore[exploreLibDict].map((action, i) => (
-                        <ActionLibItem key={i}>
-                          <ActionLibAction
-                            active={i === this.state.exploreLibItem}
-                            interactive
-                            onClick={(e) =>
-                              this.selectExploreAction(exploreLibDict, i, e)
-                            }
-                          >
-                            {action}
-                          </ActionLibAction>
-                        </ActionLibItem>
-                      ))}
-                    </ActionLibList>
-                  </ActionLibHolder>
-                </Container>
+              <UserAction dir="row">
+                <SecActionEdit
+                  activeMIME={this.state.draft.explore.mime}
+                  draft={this.state.draft.explore}
+                  isActive={this.state.draft.explore.isActive}
+                  switchMIME={(mime) => this.switchMIME("explore", mime)}
+                  toggleAction={() => this.toggleAction("explore")}
+                  updateDraft={(mime, draft) =>
+                    this.updateDraft("explore", mime, draft)
+                  }
+                  story={this.props.story}
+                  user={this.props.user}
+                />
               </UserAction>
             </Container>
           </UserActions>
@@ -656,6 +419,6 @@ UserPane.propTypes = {
 UserPane.defaultProps = {
   currentBubbleIndex: null,
   currentBubble: null,
-  exploreVal: "Omg why?",
-  continueVal: "Carry on"
+  exploreVal: DEFAULT_ACTION1,
+  continueVal: DEFAULT_ACTION2
 };

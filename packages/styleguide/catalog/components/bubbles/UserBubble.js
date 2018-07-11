@@ -19,10 +19,8 @@ const UserBubble = css.div`
   align-self: flex-end;
   background-color: ${({ theme }) =>
     theme.backg ? theme.backg : skin.userBackg};
-  &,
-  & * {
-    color: ${({ theme }) =>
-      theme.color ? theme.color : skin.userColor} !important;
+  & {
+    color: ${({ theme }) => (theme.color ? theme.color : skin.userColor)};
   }
   flex-direction: row;
   font-family: ${({ theme }) => (theme.font ? theme.font : skin.font)};
