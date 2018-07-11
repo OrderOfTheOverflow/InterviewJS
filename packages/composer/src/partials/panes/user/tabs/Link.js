@@ -1,4 +1,4 @@
-import { func, shape, string } from "prop-types";
+import { func } from "prop-types";
 import React, { Component } from "react";
 
 import {
@@ -9,7 +9,6 @@ import {
   Separator,
   TextInput
 } from "interviewjs-styleguide";
-// import { GLOBALS, USER_ACTIONS } from "../../../../options";
 
 export default class LinkTab extends Component {
   constructor(props) {
