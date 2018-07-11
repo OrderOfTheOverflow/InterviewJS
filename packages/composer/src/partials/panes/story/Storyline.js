@@ -248,6 +248,7 @@ export default class Storyline extends React.Component {
         <Bubble
           persona={role}
           plain
+          style={{ paddingLeft: "0", paddingRight: "0" }}
           theme={{ backg: skin.speakerBackg, font: "PT sans" }}
         >
           <UserButtons dir="row">

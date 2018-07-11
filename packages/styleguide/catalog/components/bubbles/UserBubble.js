@@ -6,7 +6,6 @@ import bubbleBase from "./bubbleBase";
 
 const UserBubble = css.div`
   ${bubbleBase};
-  ${setSpace("phn")};
   ${setSpace("mlm")};
   ${({ animated }) =>
     !animated
