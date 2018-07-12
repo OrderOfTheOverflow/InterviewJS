@@ -1,7 +1,13 @@
-import { func, string } from "prop-types";
+import { func } from "prop-types";
 import React, { Component } from "react";
 
-import { Container, FormItem, Select, Label } from "interviewjs-styleguide";
+import {
+  Container,
+  FormItem,
+  Label,
+  Legend,
+  Select
+} from "interviewjs-styleguide";
 // import { GLOBALS, USER_ACTIONS } from "../../../../options";
 import { USER_ACTIONS } from "../../../../options";
 
@@ -119,6 +125,9 @@ export default class TextTab extends Component {
             }
             value={draft.value}
           />
+          <Legend tip="Use this box to script the second user interaction or question.">
+            i
+          </Legend>
         </FormItem>
       </Container>
     );
