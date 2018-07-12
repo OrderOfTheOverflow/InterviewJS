@@ -387,15 +387,17 @@ class ChatView extends Component {
             <Separator dir="v" size="m" />
             <Dropdown
               html={
-                <DropdownContent>
-                  <RunAwayActions
-                    LANG={LANG}
-                    isSwitchPossible={interviewees.length > 1}
-                    navigateAway={this.props.router.push}
-                    resetHistory={this.resetHistory}
-                    story={this.props.story}
-                    updateHistory={this.updateHistory}
-                  />
+                <DropdownContent unlimited>
+                  <div>
+                    <RunAwayActions
+                      LANG={LANG}
+                      isSwitchPossible={interviewees.length > 1}
+                      navigateAway={this.props.router.push}
+                      resetHistory={this.resetHistory}
+                      story={this.props.story}
+                      updateHistory={this.updateHistory}
+                    />
+                  </div>
                 </DropdownContent>
               }
               onRequestClose={() => this.toggleDropdown("runawayDropdown")}

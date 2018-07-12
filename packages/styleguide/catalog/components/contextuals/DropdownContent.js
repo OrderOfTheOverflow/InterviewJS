@@ -25,6 +25,16 @@ const DropdownContent = css.div`
   & p {
     color: ${color.greyBlk};
   }
+
+  ${({ unlimited }) =>
+    unlimited
+      ? ``
+      : `
+  max-width: 200px;
+
+    
+  `}
+  
 `;
 
 export default DropdownContent;

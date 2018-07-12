@@ -6,7 +6,6 @@
 }
 .tippy-popper {
   -webkit-perspective: 800px;
-  max-width: 200px;
   outline: 0;
   perspective: 800px;
   pointer-events: none;
