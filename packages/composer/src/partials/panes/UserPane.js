@@ -300,13 +300,17 @@ export default class UserPane extends React.Component {
                   } else if (mime === "image") {
                     return (
                       <TileAction primary>
-                        <span className="span">
-                          <img
-                            className="img"
-                            src={this.state.draft[action].image.value}
-                            alt={this.state.draft[action].image.title}
-                          />
-                        </span>
+                        {this.state.draft[action].image.value ? (
+                          <span className="span">
+                            <img
+                              className="img"
+                              src={this.state.draft[action].image.value}
+                              alt={this.state.draft[action].image.title}
+                            />
+                          </span>
+                        ) : (
+                          this.state.draft[action].image.title
+                        )}
                       </TileAction>
                     );
                   } else if (
@@ -316,12 +320,14 @@ export default class UserPane extends React.Component {
                   ) {
                     return (
                       <TileAction primary>
-                        <div
-                          className="iframe"
-                          dangerouslySetInnerHTML={{
-                            __html: this.state.draft[action][mime].value
-                          }}
-                        />
+                        {this.state.draft[action][mime].value ? (
+                          <div
+                            className="iframe"
+                            dangerouslySetInnerHTML={{
+                              __html: this.state.draft[action][mime].value
+                            }}
+                          />
+                        ) : null}
                       </TileAction>
                     );
                   }
