@@ -134,7 +134,11 @@ class Storyline extends Component {
             ];
           case "link":
             return (
-              <a href={content.value} target="_blank">
+              <a
+                href={content.value}
+                target="_blank"
+                style={{ color: "white" }}
+              >
                 {content.title ? content.title : content.value}
               </a>
             );
