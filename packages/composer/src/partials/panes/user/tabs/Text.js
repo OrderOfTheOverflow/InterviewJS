@@ -5,10 +5,15 @@ import { Container, FormItem, Select, Label } from "interviewjs-styleguide";
 // import { GLOBALS, USER_ACTIONS } from "../../../../options";
 import { USER_ACTIONS } from "../../../../options";
 
-const createOption = (label: string) => ({
-  label,
-  value: label.toLowerCase().replace(/\W/g, "")
-});
+const createOption = (label: string) => {
+  console.log({ label });
+  const trimmedLabel = label.trim().substr(0, 120);
+  console.log({ trimmedLabel });
+  return {
+    label: trimmedLabel,
+    value: trimmedLabel.toLowerCase().replace(/\W/g, "")
+  };
+};
 
 export default class TextTab extends Component {
   static getDerivedStateFromProps(nextProps, nextState) {
