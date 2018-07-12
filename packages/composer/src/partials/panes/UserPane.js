@@ -94,74 +94,51 @@ export default class UserPane extends React.Component {
     )
       return null;
 
-    const { content } = nextProps.currentBubble;
-    const isBinary = content[0].enabled && content[1].enabled;
-
     const { currentBubble } = nextProps;
-    const areWeEditingHere = currentBubble !== null;
+    const { content } = currentBubble;
 
-    const getEditDraft = () => {
-      console.log(currentBubble);
+    const isBinary = content[0].enabled && content[1].enabled;
+    const isContinueActive = isBinary ? true : content[0].enabled;
+    const isExploreActive = isBinary ? true : content[1].enabled;
+    const continueMIME = content[0].mime ? content[0].mime : "text";
+    const exploreMIME = content[0].mime ? content[1].mime : "text";
 
-      const continueMIME = content[0].mime ? content[0].mime : "text";
-      const exploreMIME = content[1].mime ? content[1].mime : "text";
+    console.group("User Pane PRE:");
+    console.log({ nextProps });
+    console.log({ nextState });
+    console.log({ isBinary });
+    console.log({ currentBubble });
+    console.log({ content });
+    console.log({ isContinueActive });
+    console.log({ isExploreActive });
+    console.log({ continueMIME });
+    console.log({ exploreMIME });
+    console.groupEnd();
 
-      return {
-        ...nextState,
-        continue: {
-          ...nextState.continue,
-          isActive: content[0].enabled,
-          mime: continueMIME,
-          [continueMIME]: {
-            value: content[0].value ? content[0].value : null,
-            title: content[0].title ? content[0].title : null
-          }
-        },
-        explore: {
-          ...nextState.explore,
-          isActive: content[1].enabled,
-          mime: exploreMIME,
-          [exploreMIME]: {
-            value: content[1].value ? content[1].value : null,
-            title: content[1].title ? content[1].title : null
-          }
-        }
-      };
-    };
-
-    const getDraft = () => {
-      const isContinueActive = isBinary ? true : content[0].enabled;
-      const isExploreActive = isBinary ? true : content[1].enabled;
-      const continueMIME = content[0].mime ? content[0].mime : "text";
-      const exploreMIME = content[0].mime ? content[1].mime : "text";
-
-      return {
+    return {
+      ...nextState,
+      draft: {
         continue: {
           ...nextState.draft.continue,
           isActive: isContinueActive,
+          mime: continueMIME,
           [continueMIME]: {
-            filename: content[0].filename ? content[0].filename : "",
-            option: content[0].option ? content[0].option : null,
-            title: content[0].title ? content[0].title : "",
-            value: content[0].value ? content[0].value : DEFAULT_ACTION1
+            value: content[0].value ? content[0].value : "",
+            option: content[0].option ? content[0].option : "",
+            title: content[0].title ? content[0].title : ""
           }
         },
         explore: {
           ...nextState.draft.explore,
           isActive: isExploreActive,
+          mime: exploreMIME,
           [exploreMIME]: {
-            filename: content[1].filename ? content[1].filename : "",
-            option: content[1].option ? content[1].option : null,
-            title: content[1].title ? content[1].title : "",
-            value: content[1].value ? content[1].value : DEFAULT_ACTION2
+            value: content[1].value ? content[1].value : "",
+            option: content[1].option ? content[1].option : "",
+            title: content[1].title ? content[1].title : ""
           }
         }
-      };
-    };
-
-    return {
-      ...nextState,
-      draft: areWeEditingHere ? getEditDraft() : getDraft()
+      }
     };
   }
   constructor(props) {
@@ -258,12 +235,14 @@ export default class UserPane extends React.Component {
           ...draft.continue[continueMIME],
           enabled: draft.continue.isActive,
           type: draft.explore.isActive ? "ignore" : "explore",
+          title: draft.continue[continueMIME].title,
           mime: continueMIME
         },
         {
           ...draft.explore[exploreMIME],
           enabled: draft.explore.isActive,
           type: "explore",
+          title: draft.explore[exploreMIME].title,
           mime: exploreMIME
         }
       ],
@@ -317,11 +296,9 @@ export default class UserPane extends React.Component {
     this.props.showSavedIndicator();
   }
   render() {
-    // console.group("UserPane State:");
-    // console.log(this.state.draft);
-    // console.groupEnd(this.state);
-
-    console.log(this.props.currentBubble);
+    console.group("UserPane:");
+    console.log(this.state);
+    console.groupEnd();
 
     return (
       <PaneEl fill="white" rounded shift dir="column">

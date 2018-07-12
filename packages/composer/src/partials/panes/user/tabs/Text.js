@@ -18,9 +18,9 @@ export default class TextTab extends Component {
     if (nextProps.label) {
       return {
         ...nextState,
-        value: {
-          label: nextProps.label,
-          value: nextProps.value
+        draft: {
+          label: nextProps.draft.value,
+          value: nextProps.draft.option
         }
       };
     }
@@ -30,11 +30,13 @@ export default class TextTab extends Component {
     super(props);
 
     const getValue = () => {
-      const { value, label } = this.props;
-      if (value && label) {
+      const { value, option } = this.props.draft;
+      if (value && option) {
         return {
-          value,
-          label
+          value: option,
+          label: value
+          // value: "",
+          // label: ""
         };
       }
       return undefined;
@@ -43,7 +45,7 @@ export default class TextTab extends Component {
     this.state = {
       isLoading: false,
       options: USER_ACTIONS,
-      value: getValue()
+      draft: getValue()
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleCreate = this.handleCreate.bind(this);
@@ -54,7 +56,7 @@ export default class TextTab extends Component {
       const defLab = USER_ACTIONS[0].label;
       this.setState(
         {
-          value: {
+          draft: {
             value: defVal,
             label: defLab
           }
@@ -62,7 +64,7 @@ export default class TextTab extends Component {
         () => this.props.updateDraft("text", { option: defVal, value: defLab })
       );
     } else {
-      this.setState({ value: newValue }, () =>
+      this.setState({ draft: newValue }, () =>
         this.props.updateDraft("text", {
           option: newValue.value,
           value: newValue.label
@@ -71,6 +73,7 @@ export default class TextTab extends Component {
     }
     return null;
   };
+
   handleCreate = (inputValue: any) => {
     this.setState({ isLoading: true });
     setTimeout(() => {
@@ -80,7 +83,7 @@ export default class TextTab extends Component {
         {
           isLoading: false,
           options: [...options, newOption],
-          value: newOption
+          draft: newOption
         },
         () =>
           this.props.updateDraft("text", {
@@ -91,7 +94,14 @@ export default class TextTab extends Component {
     }, 1000);
   };
   render() {
-    const { isLoading, options, value } = this.state;
+    const { isLoading, options, draft } = this.state;
+
+    console.group("Text.js");
+    console.log("props: ", this.props);
+    console.log("state: ", this.state);
+    // console.log({ draft });
+    console.groupEnd();
+
     return (
       <Container padded>
         <FormItem>
@@ -102,8 +112,12 @@ export default class TextTab extends Component {
             onChange={this.handleChange}
             onCreateOption={this.handleCreate}
             options={options}
-            placeholder="Type in or choose a comment or question here…"
-            value={value}
+            placeholder={
+              draft && draft.label
+                ? draft.label
+                : "Type in or choose a comment or question here…"
+            }
+            value={draft.value}
           />
         </FormItem>
       </Container>
@@ -112,12 +126,12 @@ export default class TextTab extends Component {
 }
 
 TextTab.propTypes = {
-  label: string,
-  updateDraft: func.isRequired,
-  value: string
+  updateDraft: func.isRequired
 };
 
 TextTab.defaultProps = {
-  label: null,
-  value: null
+  draft: {
+    value: "",
+    option: ""
+  }
 };

@@ -68,7 +68,8 @@ export default class ImageTab extends Component {
               value: `https://story.interviewjs.io/files/${
                 this.props.user.id
               }/${this.props.story.id}/${key}`,
-              filename: name
+              filename: name,
+              title: this.props.draft.title
             },
             filename: name,
             uploading: false
