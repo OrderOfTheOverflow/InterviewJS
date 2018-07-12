@@ -97,6 +97,38 @@ export default class UserPane extends React.Component {
     const { content } = nextProps.currentBubble;
     const isBinary = content[0].enabled && content[1].enabled;
 
+    const { currentBubble } = nextProps;
+    const areWeEditingHere = currentBubble !== null;
+
+    const getEditDraft = () => {
+      console.log(currentBubble);
+
+      const continueMIME = content[0].mime ? content[0].mime : "text";
+      const exploreMIME = content[1].mime ? content[1].mime : "text";
+
+      return {
+        ...nextState,
+        continue: {
+          ...nextState.continue,
+          isActive: content[0].enabled,
+          mime: continueMIME,
+          [continueMIME]: {
+            value: content[0].value ? content[0].value : null,
+            title: content[0].title ? content[0].title : null
+          }
+        },
+        explore: {
+          ...nextState.explore,
+          isActive: content[1].enabled,
+          mime: exploreMIME,
+          [exploreMIME]: {
+            value: content[1].value ? content[1].value : null,
+            title: content[1].title ? content[1].title : null
+          }
+        }
+      };
+    };
+
     const getDraft = () => {
       const isContinueActive = isBinary ? true : content[0].enabled;
       const isExploreActive = isBinary ? true : content[1].enabled;
@@ -129,22 +161,13 @@ export default class UserPane extends React.Component {
 
     return {
       ...nextState,
-      draft: getDraft()
+      draft: areWeEditingHere ? getEditDraft() : getDraft()
     };
   }
   constructor(props) {
     super(props);
-
-    const { currentBubble } = this.props;
-    const areWeEdtingHere = currentBubble !== null;
-
     this.state = {
-      // NEW LOGIC
-      draft: areWeEdtingHere
-        ? {
-            // shit will happen here now
-          }
-        : EMPTY_DRAFT
+      draft: EMPTY_DRAFT
     };
     this.addStorylineItem = this.addStorylineItem.bind(this);
     this.updateStorylineItem = this.updateStorylineItem.bind(this);
@@ -297,6 +320,8 @@ export default class UserPane extends React.Component {
     // console.group("UserPane State:");
     // console.log(this.state.draft);
     // console.groupEnd(this.state);
+
+    console.log(this.props.currentBubble);
 
     return (
       <PaneEl fill="white" rounded shift dir="column">
