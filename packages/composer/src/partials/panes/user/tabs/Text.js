@@ -6,9 +6,7 @@ import { Container, FormItem, Select, Label } from "interviewjs-styleguide";
 import { USER_ACTIONS } from "../../../../options";
 
 const createOption = (label: string) => {
-  console.log({ label });
   const trimmedLabel = label.trim().substr(0, 120);
-  console.log({ trimmedLabel });
   return {
     label: trimmedLabel,
     value: trimmedLabel.toLowerCase().replace(/\W/g, "")
