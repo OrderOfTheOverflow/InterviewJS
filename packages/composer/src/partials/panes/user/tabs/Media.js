@@ -32,7 +32,6 @@ export default class MediaTab extends Component {
       clean.toLowerCase().includes("youtube.com/embed/") &&
       clean.toLowerCase().endsWith("></iframe>")
     ) {
-      console.log("passed validation");
       this.props.updateDraft("media", draft);
     }
     return console.log("code not valid");

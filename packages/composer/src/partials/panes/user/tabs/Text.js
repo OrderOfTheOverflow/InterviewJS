@@ -102,12 +102,6 @@ export default class TextTab extends Component {
   render() {
     const { isLoading, options, draft } = this.state;
 
-    console.group("Text.js");
-    console.log("props: ", this.props);
-    console.log("state: ", this.state);
-    // console.log({ draft });
-    console.groupEnd();
-
     return (
       <Container padded>
         <FormItem>

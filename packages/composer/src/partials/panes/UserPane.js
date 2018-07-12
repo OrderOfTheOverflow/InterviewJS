@@ -103,18 +103,6 @@ export default class UserPane extends React.Component {
     const continueMIME = content[0].mime ? content[0].mime : "text";
     const exploreMIME = content[0].mime ? content[1].mime : "text";
 
-    console.group("User Pane PRE:");
-    console.log({ nextProps });
-    console.log({ nextState });
-    console.log({ isBinary });
-    console.log({ currentBubble });
-    console.log({ content });
-    console.log({ isContinueActive });
-    console.log({ isExploreActive });
-    console.log({ continueMIME });
-    console.log({ exploreMIME });
-    console.groupEnd();
-
     return {
       ...nextState,
       draft: {
@@ -200,12 +188,6 @@ export default class UserPane extends React.Component {
     });
   }
   updateDraft(action, mime, draft) {
-    // console.group("updateDraft(…)");
-    // console.log({ action });
-    // console.log({ mime });
-    // console.log({ draft });
-    // console.log(this.state);
-    // console.groupEnd();
     this.setState({
       draft: {
         ...this.state.draft,
@@ -220,12 +202,6 @@ export default class UserPane extends React.Component {
   addStorylineItem() {
     const { storyIndex, currentInterviewee } = this.props;
     const { draft } = this.state;
-    console.group("addStorylineItem():");
-    console.log({ storyIndex });
-    console.log({ currentInterviewee });
-    console.log({ draft });
-    console.groupEnd();
-
     const continueMIME = this.state.draft.continue.mime;
     const exploreMIME = this.state.draft.explore.mime;
 
@@ -296,10 +272,6 @@ export default class UserPane extends React.Component {
     this.props.showSavedIndicator();
   }
   render() {
-    console.group("UserPane:");
-    console.log(this.state);
-    console.groupEnd();
-
     return (
       <PaneEl fill="white" rounded shift dir="column">
         <PaneTitle>End-reader</PaneTitle>

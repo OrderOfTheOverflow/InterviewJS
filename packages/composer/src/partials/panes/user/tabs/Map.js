@@ -32,7 +32,6 @@ export default class MapTab extends Component {
       clean.toLowerCase().includes("google.com/maps") &&
       clean.toLowerCase().endsWith("></iframe>")
     ) {
-      console.log("passed validation");
       this.props.updateDraft("map", draft);
     }
     return console.log("code not valid");
