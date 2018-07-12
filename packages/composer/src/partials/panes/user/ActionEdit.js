@@ -39,8 +39,6 @@ export default class ActionEdit extends Component {
     this.state = {};
   }
   render() {
-    // console.log(this.props);
-
     const { children, isActive, activeMIME, switchMIME } = this.props;
     const renderContent = () => {
       switch (activeMIME) {

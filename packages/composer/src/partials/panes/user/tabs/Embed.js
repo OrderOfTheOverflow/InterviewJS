@@ -31,7 +31,6 @@ export default class EmbedTab extends Component {
       clean.toLowerCase().includes("src=") &&
       clean.toLowerCase().endsWith("></iframe>")
     ) {
-      console.log("passed validation");
       this.props.updateDraft("embed", draft);
     }
     return console.log("code not valid");

@@ -1,23 +1,32 @@
-import { func, string } from "prop-types";
+import { func } from "prop-types";
 import React, { Component } from "react";
 
-import { Container, FormItem, Select, Label } from "interviewjs-styleguide";
+import {
+  Container,
+  FormItem,
+  Label,
+  Legend,
+  Select
+} from "interviewjs-styleguide";
 // import { GLOBALS, USER_ACTIONS } from "../../../../options";
 import { USER_ACTIONS } from "../../../../options";
 
-const createOption = (label: string) => ({
-  label,
-  value: label.toLowerCase().replace(/\W/g, "")
-});
+const createOption = (label: string) => {
+  const trimmedLabel = label.trim().substr(0, 120);
+  return {
+    label: trimmedLabel,
+    value: trimmedLabel.toLowerCase().replace(/\W/g, "")
+  };
+};
 
 export default class TextTab extends Component {
   static getDerivedStateFromProps(nextProps, nextState) {
     if (nextProps.label) {
       return {
         ...nextState,
-        value: {
-          label: nextProps.label,
-          value: nextProps.value
+        draft: {
+          label: nextProps.draft.value,
+          value: nextProps.draft.option
         }
       };
     }
@@ -27,11 +36,13 @@ export default class TextTab extends Component {
     super(props);
 
     const getValue = () => {
-      const { value, label } = this.props;
-      if (value && label) {
+      const { value, option } = this.props.draft;
+      if (value && option) {
         return {
-          value,
-          label
+          value: option,
+          label: value
+          // value: "",
+          // label: ""
         };
       }
       return undefined;
@@ -40,7 +51,7 @@ export default class TextTab extends Component {
     this.state = {
       isLoading: false,
       options: USER_ACTIONS,
-      value: getValue()
+      draft: getValue()
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleCreate = this.handleCreate.bind(this);
@@ -51,7 +62,7 @@ export default class TextTab extends Component {
       const defLab = USER_ACTIONS[0].label;
       this.setState(
         {
-          value: {
+          draft: {
             value: defVal,
             label: defLab
           }
@@ -59,7 +70,7 @@ export default class TextTab extends Component {
         () => this.props.updateDraft("text", { option: defVal, value: defLab })
       );
     } else {
-      this.setState({ value: newValue }, () =>
+      this.setState({ draft: newValue }, () =>
         this.props.updateDraft("text", {
           option: newValue.value,
           value: newValue.label
@@ -68,6 +79,7 @@ export default class TextTab extends Component {
     }
     return null;
   };
+
   handleCreate = (inputValue: any) => {
     this.setState({ isLoading: true });
     setTimeout(() => {
@@ -77,7 +89,7 @@ export default class TextTab extends Component {
         {
           isLoading: false,
           options: [...options, newOption],
-          value: newOption
+          draft: newOption
         },
         () =>
           this.props.updateDraft("text", {
@@ -88,7 +100,8 @@ export default class TextTab extends Component {
     }, 1000);
   };
   render() {
-    const { isLoading, options, value } = this.state;
+    const { isLoading, options, draft } = this.state;
+
     return (
       <Container padded>
         <FormItem>
@@ -99,9 +112,16 @@ export default class TextTab extends Component {
             onChange={this.handleChange}
             onCreateOption={this.handleCreate}
             options={options}
-            placeholder="Type in or choose a comment or question here…"
-            value={value}
+            placeholder={
+              draft && draft.label
+                ? draft.label
+                : "Type in or choose a comment or question here…"
+            }
+            value={draft.value}
           />
+          <Legend tip="Use this box to script the second user interaction or question.">
+            i
+          </Legend>
         </FormItem>
       </Container>
     );
@@ -109,12 +129,12 @@ export default class TextTab extends Component {
 }
 
 TextTab.propTypes = {
-  label: string,
-  updateDraft: func.isRequired,
-  value: string
+  updateDraft: func.isRequired
 };
 
 TextTab.defaultProps = {
-  label: null,
-  value: null
+  draft: {
+    value: "",
+    option: ""
+  }
 };
