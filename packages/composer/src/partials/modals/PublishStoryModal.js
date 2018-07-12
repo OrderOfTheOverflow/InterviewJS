@@ -114,18 +114,13 @@ export default class PublishStoryModal extends Component {
       default:
         storyBase = "https://story.interviewjs.io/"; // production
     }
-    const { story } =  this.props;
-    // check the local storage if the user published story before to jump to step 3
-    const isPublishShortcut = localStorage.getItem(
-      `publishShortcut-${story.id}`
-    );
+    // const { story } = this.props;
 
     this.state = {
-      step: isPublishShortcut ? 3 : 0,
+      step: 0,
       storyKey: null,
       storyBase,
-      embedModal: false,
-      publishShortcut: isPublishShortcut
+      embedModal: false
     };
 
     this.handleStep0 = this.handleStep0.bind(this);
@@ -136,9 +131,8 @@ export default class PublishStoryModal extends Component {
   }
 
   componentDidMount() {
-    const { publishShortcut }  = this.state;
-    if(publishShortcut)
-      this.handleStep2();
+    const { publishShortcut } = this.state;
+    if (publishShortcut) this.handleStep2();
   }
 
   componentDidUpdate() {
@@ -169,7 +163,7 @@ export default class PublishStoryModal extends Component {
     if (story.ignore) {
       this.setState({
         step: this.state.publishShortcut ? 3 : this.state.step + 1,
-        storyKey: null,
+        storyKey: null
       });
 
       return;
@@ -192,7 +186,7 @@ export default class PublishStoryModal extends Component {
         console.log(result);
         this.setState({
           step: this.state.publishShortcut ? 3 : this.state.step + 1,
-          storyKey: computeId(this.props.user.id, this.props.story.id),
+          storyKey: computeId(this.props.user.id, this.props.story.id)
         });
         localStorage.setItem(`publishShortcut-${story.id}`, true);
       })
@@ -200,13 +194,13 @@ export default class PublishStoryModal extends Component {
   }
 
   handleStep3() {
-    this.props.router.push('/stories')
+    this.props.router.push("/stories");
   }
 
   toggleEmbedModal() {
     this.setState({
-      embedModal: !this.state.embedModal,
-    })
+      embedModal: !this.state.embedModal
+    });
   }
 
   render() {
@@ -250,9 +244,9 @@ export default class PublishStoryModal extends Component {
         return (
           <Container limit="s" align="center">
             <PageSubtitle typo="h3">
-              Engage your readers by asking them to have their say. 
-              Create questions based on the content of your story with a clear choice. 
-              You need at least one question. 
+              Engage your readers by asking them to have their say. Create
+              questions based on the content of your story with a clear choice.
+              You need at least one question.
             </PageSubtitle>
             <Separator size="m" silent />
             <Poll
@@ -274,17 +268,21 @@ export default class PublishStoryModal extends Component {
               Grab the link and share on social:
             </PageSubtitle>
             <Separator size="s" silent />
-            {this.state.storyKey ? 
+            {this.state.storyKey ? (
               <Action target="_blank" href={`${iframeViewer}/`}>
                 {`${iframeViewer}/`}
-              </Action> : ''
-            }
+              </Action>
+            ) : (
+              ""
+            )}
             <Separator size="m" silent />
             <PreviewWrapper>
               <LoaderContainer>
                 <Preloader />
                 <Separator size="s" silent />
-                <Text>Please wait. Your InterviewJS story is being created.</Text>
+                <Text>
+                  Please wait. Your InterviewJS story is being created.
+                </Text>
                 <Separator size="m" silent />
               </LoaderContainer>
               <img src={iframeRatioSpacer} alt="" />
@@ -300,27 +298,19 @@ export default class PublishStoryModal extends Component {
             </PreviewWrapper>
             <Separator size="m" silent />
             <PageSubtitle typo="h4">
-              You can edit your story any time.
-              The link will stay the same. 
+              You can edit your story any time. The link will stay the same.
             </PageSubtitle>
             <Separator size="m" silent />
             <Actionbar>
               <Action fixed secondary onClick={this.handleStep3}>
                 My story library
               </Action>
-              <Action 
-                fixed 
-                primary 
-                onClick={this.toggleEmbedModal}
-              >
+              <Action fixed primary onClick={this.toggleEmbedModal}>
                 Embed
               </Action>
             </Actionbar>
-            <ReactModal 
-              isOpen={this.state.embedModal}
-              ariaHideApp={false}
-            >
-              <Modal handleClose={this.toggleEmbedModal} >
+            <ReactModal isOpen={this.state.embedModal} ariaHideApp={false}>
+              <Modal handleClose={this.toggleEmbedModal}>
                 <ModalHead fill="grey">
                   <PageTitle typo="h2">Embed Code</PageTitle>
                   <Separator size="s" silent />
