@@ -1,7 +1,23 @@
-import React from "react";
 import CreatableSelect from "react-select/lib/Creatable";
+import React from "react";
+import styled from "styled-components";
 
 import { color, font, time, radius } from "interviewjs-styleguide";
+
+const InputEl = styled.input`
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  color: #29336e;
+  font-family: "PT Serif", serif;
+  font-size: 15px;
+  line-height: 1.5em;
+  outline: none;
+  padding-right: 35px;
+  width: 100%;
+`;
+
+const Input = (props) => <InputEl {...props} />;
 
 const customStyles = {
   option: (base, state) => ({
@@ -71,6 +87,7 @@ const customStyles = {
 
 const Select = (props) => (
   <CreatableSelect
+    components={{ Input }}
     blurInputOnSelect
     createOptionPosition="first"
     formatCreateLabel={(str) => `Create: ${str}`}
