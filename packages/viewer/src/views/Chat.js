@@ -254,7 +254,8 @@ class ChatView extends Component {
     localStorage.removeItem(
       `history-${story.id}-${story.version}-${interviewee.id}`
     );
-    window.location.reload();
+    this.setState({ history: [], actionbar: "scripted" });
+    this.initHistory();
   }
   render() {
     const { history } = this.state;
