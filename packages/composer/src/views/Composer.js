@@ -1,7 +1,6 @@
 import React from "react";
 import css from "styled-components";
 import { arrayOf, func, object, shape, string } from "prop-types";
-import Joyride from "react-joyride";
 
 import {
   Action,
@@ -19,14 +18,15 @@ import {
 import "./joyride.css";
 
 import {
-  DetailsModal,
+  ComposerHelp,
   ComposerWelcomeModal,
+  DetailsModal,
+  ErrorBoundary,
   IntervieweePane,
   MobileRedirect,
   PublishStoryModal,
   StoryPane,
-  UserPane,
-  ErrorBoundary
+  UserPane
 } from "../partials";
 
 const Page = css.div`
@@ -96,7 +96,6 @@ export default class ComposerView extends React.Component {
       welcomeModal: false
     };
     this.deleteInterviewee = this.deleteInterviewee.bind(this);
-    this.joyrideCallback = this.joyrideCallback.bind(this);
     this.setCurrentBubbleNone = this.setCurrentBubbleNone.bind(this);
     this.showSavedIndicator = this.showSavedIndicator.bind(this);
     this.switchInterviewee = this.switchInterviewee.bind(this);
@@ -157,13 +156,6 @@ export default class ComposerView extends React.Component {
     setTimeout(() => this.setState({ savedLabel: null }), 5000);
   }
 
-  joyrideCallback = (data) => {
-    // const { action, index, type } = data;
-    console.group("Joyride bitch!");
-    console.log(data);
-    console.groupEnd();
-  };
-
   render() {
     const { storyId } = this.props.params;
     const storyIndex = this.props.stories.findIndex(
@@ -174,15 +166,6 @@ export default class ComposerView extends React.Component {
       this.props.router.push(`/`);
       return null;
     }
-
-    const runJoyride = localStorage.getItem("joyride") !== "false";
-    const joyrideSteps = [
-      {
-        target: ".my-first-step",
-        content: "This if my awesome feature!",
-        placement: "bottom"
-      }
-    ];
 
     const { storyline } = story.interviewees[this.state.currentInterviewee];
 
@@ -316,32 +299,7 @@ export default class ComposerView extends React.Component {
           key="ComposerWelcomeModal"
         />
       ) : null,
-      <Joyride
-        callback={this.joyrideCallback}
-        key="Joyride"
-        run={runJoyride}
-        steps={joyrideSteps}
-        continuous={false}
-        debug
-        disableCloseonEsc={false}
-        disableOverlay={false}
-        disableOverlayClose
-        hideBackButton={false}
-        locale={{
-          back: "back",
-          close: "close",
-          last: "last",
-          next: "next"
-        }}
-        scrollOffset={20}
-        scrollToFirstStep={false}
-        showProgress={false}
-        showSkipButton={false}
-        spotlightClicks
-        spotlightPadding={20}
-        stepIndex={0}
-        styles={{}}
-      />
+      <ComposerHelp />
     ];
   }
 }
