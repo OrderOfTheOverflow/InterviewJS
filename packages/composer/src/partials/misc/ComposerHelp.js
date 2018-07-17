@@ -1,6 +1,7 @@
 import {} from "prop-types";
-import Joyride from "react-joyride";
 import React, { Component } from "react";
+
+import { Tour } from "interviewjs-styleguide";
 
 export default class ReactiveHelp extends Component {
   constructor(props) {
@@ -36,7 +37,7 @@ export default class ReactiveHelp extends Component {
     console.groupEnd();
 
     return (
-      <Joyride
+      <Tour
         callback={this.callback}
         continuous={false}
         debug
