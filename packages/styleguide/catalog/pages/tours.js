@@ -5,7 +5,29 @@ import { Tour } from "../components";
 
 export default () => markdown`
 
-  ## Tours
+  ## Tour w/ beacons
+
+  ${(
+    <ReactSpecimen>
+      <Fragment>
+        <span className="step2">Element</span>
+        <Tour
+          run
+          steps={[
+            {
+              title: "A title",
+              content: "This if my awesome feature!",
+              target: ".step2",
+              placement: "right"
+            }
+          ]}
+          debug
+        />
+      </Fragment>
+    </ReactSpecimen>
+  )}
+
+  ## Tour w/o beacons
 
   ${(
     <ReactSpecimen>
@@ -15,7 +37,7 @@ export default () => markdown`
           run
           steps={[
             {
-              title: "title",
+              title: "A title",
               content: "This if my awesome feature!",
               target: ".step1",
               placement: "right",

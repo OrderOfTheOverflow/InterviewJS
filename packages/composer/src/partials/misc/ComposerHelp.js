@@ -10,7 +10,7 @@ export default class ReactiveHelp extends Component {
       run: localStorage.getItem("joyride") !== "false",
       steps: [
         {
-          title: "title",
+          title: "A title",
           content: "This if my awesome feature!",
           target: ".jr-step-01",
           placement: "right",
@@ -46,10 +46,10 @@ export default class ReactiveHelp extends Component {
         disableOverlayClose
         hideBackButton={false}
         locale={{
-          back: "back",
-          close: "close",
+          back: "Go back",
+          close: "Thanks!",
           last: "last",
-          next: "next"
+          next: "Done!"
         }}
         run={run}
         steps={steps}
@@ -58,9 +58,7 @@ export default class ReactiveHelp extends Component {
         showProgress={false}
         showSkipButton={false}
         spotlightClicks
-        spotlightPadding={20}
         stepIndex={0}
-        styles={{}}
       />
     );
   }
