@@ -49,3 +49,4 @@ export { default as Tile } from "./tiles/Tile";
 export { default as TileAction } from "./actions/TileAction";
 export { default as Tiles } from "./tiles/Tiles";
 export { default as Tip } from "./contextuals/Tip";
+export { default as Tour } from "./tours/Tour";

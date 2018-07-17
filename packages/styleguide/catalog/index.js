@@ -183,6 +183,11 @@ const pages = [
         content: require("./pages/text-extends.js")
       }
     ]
+  },
+  {
+    content: require("./pages/tours.js"),
+    path: "/tours",
+    title: "Tours"
   }
 ];
 
