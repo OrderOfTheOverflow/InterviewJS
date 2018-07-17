@@ -1,6 +1,8 @@
 import React from "react";
 import css from "styled-components";
 import { arrayOf, func, object, shape, string } from "prop-types";
+import Joyride from "react-joyride";
+
 import {
   Action,
   Container,
@@ -13,6 +15,8 @@ import {
   color,
   setSpace
 } from "interviewjs-styleguide";
+
+import "./joyride.css";
 
 import {
   DetailsModal,
@@ -92,6 +96,7 @@ export default class ComposerView extends React.Component {
       welcomeModal: false
     };
     this.deleteInterviewee = this.deleteInterviewee.bind(this);
+    this.joyrideCallback = this.joyrideCallback.bind(this);
     this.setCurrentBubbleNone = this.setCurrentBubbleNone.bind(this);
     this.showSavedIndicator = this.showSavedIndicator.bind(this);
     this.switchInterviewee = this.switchInterviewee.bind(this);
@@ -152,6 +157,13 @@ export default class ComposerView extends React.Component {
     setTimeout(() => this.setState({ savedLabel: null }), 5000);
   }
 
+  joyrideCallback = (data) => {
+    // const { action, index, type } = data;
+    console.group("Joyride bitch!");
+    console.log(data);
+    console.groupEnd();
+  };
+
   render() {
     const { storyId } = this.props.params;
     const storyIndex = this.props.stories.findIndex(
@@ -162,6 +174,15 @@ export default class ComposerView extends React.Component {
       this.props.router.push(`/`);
       return null;
     }
+
+    const runJoyride = localStorage.getItem("joyride") !== "false";
+    const joyrideSteps = [
+      {
+        target: ".my-first-step",
+        content: "This if my awesome feature!",
+        placement: "bottom"
+      }
+    ];
 
     const { storyline } = story.interviewees[this.state.currentInterviewee];
 
@@ -188,10 +209,7 @@ export default class ComposerView extends React.Component {
                 <Icon name="arrow-left" size="x" /> My story library
               </Action>
               <Separator dir="v" size="m" />
-              <Action
-                onClick={() => this.toggleDetailsModal("meta")}
-                className="jr-step7"
-              >
+              <Action onClick={() => this.toggleDetailsModal("meta")}>
                 Story elements
               </Action>
             </Container>
@@ -204,17 +222,13 @@ export default class ComposerView extends React.Component {
                 Help
               </Action>
               <Separator dir="v" size="m" />
-              <Action
-                primary
-                onClick={this.togglePublishModal}
-                className="jr-step8"
-              >
+              <Action primary onClick={this.togglePublishModal}>
                 Review story
               </Action>
             </Container>
           </PageHead>
           <PageBody>
-            <Container flex={[1, 1, `${100 / 3}%`]} className="jr-step2">
+            <Container flex={[1, 1, `${100 / 3}%`]} className="my-first-step">
               <IntervieweePane
                 {...this.props}
                 currentBubble={storyline[this.state.currentBubble]}
@@ -232,7 +246,7 @@ export default class ComposerView extends React.Component {
                 }
               />
             </Container>
-            <Container flex={[0, 1, `400px`]} className="jr-step1">
+            <Container flex={[0, 1, `400px`]}>
               <StoryPane
                 {...this.props}
                 currentBubble={this.state.currentBubble}
@@ -246,7 +260,7 @@ export default class ComposerView extends React.Component {
                 }
               />
             </Container>
-            <Container flex={[1, 1, `${100 / 3}%`]} className="jr-step4">
+            <Container flex={[1, 1, `${100 / 3}%`]}>
               <UserPane
                 {...this.props}
                 currentBubble={storyline[this.state.currentBubble]}
@@ -301,7 +315,33 @@ export default class ComposerView extends React.Component {
           isOpen
           key="ComposerWelcomeModal"
         />
-      ) : null
+      ) : null,
+      <Joyride
+        callback={this.joyrideCallback}
+        key="Joyride"
+        run={runJoyride}
+        steps={joyrideSteps}
+        continuous={false}
+        debug
+        disableCloseonEsc={false}
+        disableOverlay={false}
+        disableOverlayClose
+        hideBackButton={false}
+        locale={{
+          back: "back",
+          close: "close",
+          last: "last",
+          next: "next"
+        }}
+        scrollOffset={20}
+        scrollToFirstStep={false}
+        showProgress={false}
+        showSkipButton={false}
+        spotlightClicks
+        spotlightPadding={20}
+        stepIndex={0}
+        styles={{}}
+      />
     ];
   }
 }
