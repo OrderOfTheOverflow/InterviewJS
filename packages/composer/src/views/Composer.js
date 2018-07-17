@@ -155,6 +155,8 @@ export default class ComposerView extends React.Component {
   }
 
   render() {
+    const { props, state } = this;
+
     const { storyId } = this.props.params;
     const storyIndex = this.props.stories.findIndex(
       (story) => story.id === storyId
@@ -180,6 +182,25 @@ export default class ComposerView extends React.Component {
       }
       return null;
     };
+
+    // START TOUR CONDITIONS
+
+    const transcript = story.interviewees[state.currentInterviewee].srcText;
+
+    const hasTranscript = transcript.length > 0;
+
+    const conditions = {
+      hasTranscript
+    };
+
+    console.group("It’s The Composer, bitch");
+    console.log({ props });
+    console.log({ story });
+    console.log({ storyline });
+    console.log({ hasTranscript });
+    console.groupEnd();
+
+    // END TOUR CONDITION
 
     return [
       <Page key="Page">
@@ -297,14 +318,7 @@ export default class ComposerView extends React.Component {
           key="ComposerWelcomeModal"
         />
       ) : null,
-      <ComposerHelp
-        key="ComposerHelp"
-        conditions={{
-          hasTranscript: false,
-          hasIntervieweeBubble: false,
-          hasUserBubble: false
-        }}
-      />
+      <ComposerHelp key="ComposerHelp" conditions={conditions} />
     ];
   }
 }

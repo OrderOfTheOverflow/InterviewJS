@@ -28,8 +28,8 @@ const Tour = (props) => {
 
   const styles = {
     options: {
-      arrowColor: color.white,
-      backgroundColor: color.white,
+      arrowColor: color.greyWt,
+      backgroundColor: color.greyWt,
       beaconSize: 36
     },
     beacon: {},
@@ -74,10 +74,15 @@ const Tour = (props) => {
       ...buttonStyle,
       ...secButtonStyle
     },
-    overlay: {},
-    overlayLegacy: {},
+    overlay: { background: color.flareM },
+    overlayLegacy: { background: color.flareM },
     spotlight: {
-      borderRadius: "10px"
+      borderRadius: "10px",
+      boxShadow: `
+        0px 2px 5px ${color.shadowHL},
+        0px -2px 5px ${color.shadowHL}
+      `,
+      border: `3px solid ${color.blueBlk}`
     },
     spotlightLegacy: {},
     floater: {
@@ -92,7 +97,7 @@ const Tour = (props) => {
       styles={styles}
       locale={{
         back: "Back",
-        close: "Next",
+        close: "Close",
         last: "Last",
         next: "Next"
       }}
