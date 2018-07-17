@@ -35,9 +35,6 @@ export default class ReactiveHelp extends Component {
     return (
       <Joyride
         callback={this.callback}
-        key="Joyride"
-        run={run}
-        steps={steps}
         continuous={false}
         debug
         disableCloseonEsc={false}
@@ -50,6 +47,8 @@ export default class ReactiveHelp extends Component {
           last: "last",
           next: "next"
         }}
+        run={run}
+        steps={steps}
         scrollOffset={20}
         scrollToFirstStep={false}
         showProgress={false}

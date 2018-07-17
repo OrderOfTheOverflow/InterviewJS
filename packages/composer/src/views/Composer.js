@@ -299,7 +299,7 @@ export default class ComposerView extends React.Component {
           key="ComposerWelcomeModal"
         />
       ) : null,
-      <ComposerHelp />
+      <ComposerHelp key="ComposerHelp" />
     ];
   }
 }
