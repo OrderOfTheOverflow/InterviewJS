@@ -10,14 +10,23 @@ export default () => markdown`
   ${(
     <ReactSpecimen>
       <Fragment>
-        <span className="step2">Element</span>
+        <span className="step11" style={{ marginRight: "20px" }}>
+          Element
+        </span>
+        <span className="step12">Element</span>
         <Tour
           run
           steps={[
             {
               title: "A title",
               content: "This if my awesome feature!",
-              target: ".step2",
+              target: ".step11",
+              placement: "right"
+            },
+            {
+              title: "A title",
+              content: "This if my awesome feature!",
+              target: ".step12",
               placement: "right"
             }
           ]}
@@ -32,14 +41,24 @@ export default () => markdown`
   ${(
     <ReactSpecimen>
       <Fragment>
-        <span className="step1">Element</span>
+        <span className="step21" style={{ marginRight: "20px" }}>
+          Element
+        </span>
+        <span className="step22">Element</span>
         <Tour
           run
           steps={[
             {
               title: "A title",
               content: "This if my awesome feature!",
-              target: ".step1",
+              target: ".step21",
+              placement: "right",
+              disableBeacon: true
+            },
+            {
+              title: "A title",
+              content: "This if my awesome feature!",
+              target: ".step22",
               placement: "right",
               disableBeacon: true
             }
