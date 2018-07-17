@@ -5,7 +5,18 @@ import React, { Component } from "react";
 export default class ReactiveHelp extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      run: localStorage.getItem("joyride") !== "false",
+      steps: [
+        {
+          title: "title",
+          content: "This if my awesome feature!",
+          target: ".jr-step-01",
+          placement: "right",
+          disableBeacon: true
+        }
+      ]
+    };
     this.callback = this.callback.bind(this);
   }
 
@@ -18,19 +29,11 @@ export default class ReactiveHelp extends Component {
 
   render() {
     const { state, props } = this;
+    const { steps, run } = state;
     console.group("Joyride Bitch");
     console.log(state);
     console.log(props);
     console.groupEnd();
-
-    const run = localStorage.getItem("joyride") !== "false";
-    const steps = [
-      {
-        target: ".my-first-step",
-        content: "This if my awesome feature!",
-        placement: "bottom"
-      }
-    ];
 
     return (
       <Joyride

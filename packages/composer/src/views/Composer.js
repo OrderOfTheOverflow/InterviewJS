@@ -211,7 +211,7 @@ export default class ComposerView extends React.Component {
             </Container>
           </PageHead>
           <PageBody>
-            <Container flex={[1, 1, `${100 / 3}%`]} className="my-first-step">
+            <Container flex={[1, 1, `${100 / 3}%`]}>
               <IntervieweePane
                 {...this.props}
                 currentBubble={storyline[this.state.currentBubble]}

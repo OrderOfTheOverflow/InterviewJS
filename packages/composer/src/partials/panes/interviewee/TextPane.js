@@ -2,7 +2,13 @@ import { func, shape, string } from "prop-types";
 import css from "styled-components";
 import React, { Component } from "react";
 
-import { color, font, setSpace, setType, TextInput } from "interviewjs-styleguide";
+import {
+  color,
+  font,
+  setSpace,
+  setType,
+  TextInput
+} from "interviewjs-styleguide";
 import PaneFrame from "../PaneFrame";
 
 const SrcText = css.textarea`
@@ -80,7 +86,7 @@ export default class TextPane extends Component {
       this.setState({ srcText });
     } else if (draft !== this.props.draft) {
       this.setState({ draft, source: draft.source });
-    } 
+    }
     return null;
   }
   onBlur() {
@@ -90,7 +96,7 @@ export default class TextPane extends Component {
     this.setState({ srcText: e.target.value });
   }
   onSourceChange(e) {
-    this.setState({source: e.target.value})
+    this.setState({ source: e.target.value });
     const draft = { value: this.state.draft.value, source: e.target.value };
     this.props.updateDraft(draft);
   }
@@ -114,23 +120,31 @@ export default class TextPane extends Component {
     return (
       <PaneFrame
         {...this.props}
-        draft={<Draft onChange={this.onDraftEdit} value={this.state.draft.value} />}
+        draft={
+          <Draft onChange={this.onDraftEdit} value={this.state.draft.value} />
+        }
         hasDraft={this.props.draft.value !== ""}
         side="left"
       >
-        <SrcText onBlur={this.onBlur} onChange={this.onChange} onSelect={this.onSelect} value={this.state.srcText} />
+        <SrcText
+          className="jr-step-01"
+          onBlur={this.onBlur}
+          onChange={this.onChange}
+          onSelect={this.onSelect}
+          value={this.state.srcText}
+        />
         <SourceText
-            input
-            onChange={this.onSourceChange}
-            placeholder="Add a source to your bubble here (Optional)"
-            required
-            type="url"
-            value={this.state.source}
-          />
+          input
+          onChange={this.onSourceChange}
+          placeholder="Add a source to your bubble here (Optional)"
+          required
+          type="url"
+          value={this.state.source}
+        />
         {this.state.srcText.length === 0 ? (
           <SrcPlaceholder>
-            Here’s where you can type your interview notes or copy and paste existing transcripts to convert into chat
-            bubbles
+            Here’s where you can type your interview notes or copy and paste
+            existing transcripts to convert into chat bubbles
           </SrcPlaceholder>
         ) : null}
       </PaneFrame>
@@ -140,16 +154,16 @@ export default class TextPane extends Component {
 
 TextPane.propTypes = {
   draft: shape({
-    value: string,
+    value: string
   }),
   srcText: string,
   updateDraft: func.isRequired,
-  updateSrcText: func.isRequired,
+  updateSrcText: func.isRequired
 };
 
 TextPane.defaultProps = {
   draft: {
-    value: "",
+    value: ""
   },
-  srcText: "",
+  srcText: ""
 };
