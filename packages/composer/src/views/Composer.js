@@ -15,8 +15,6 @@ import {
   setSpace
 } from "interviewjs-styleguide";
 
-import "./joyride.css";
-
 import {
   ComposerHelp,
   ComposerWelcomeModal,
