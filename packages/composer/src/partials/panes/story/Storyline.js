@@ -381,7 +381,7 @@ export default class Storyline extends React.Component {
     };
 
     return (
-      <StorylineEl onDragOver={(e) => this.dragOver(e)}>
+      <StorylineEl onDragOver={(e) => this.dragOver(e)} className="jr-step-07">
         {Object.keys(storyline).map((storyItem, i) => {
           const { role } = storyline[storyItem];
           const item = storyline[storyItem];

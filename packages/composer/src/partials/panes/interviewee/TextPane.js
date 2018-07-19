@@ -121,13 +121,17 @@ export default class TextPane extends Component {
       <PaneFrame
         {...this.props}
         draft={
-          <Draft onChange={this.onDraftEdit} value={this.state.draft.value} />
+          <Draft
+            onChange={this.onDraftEdit}
+            value={this.state.draft.value}
+            className="jr-step-02"
+          />
         }
         hasDraft={this.props.draft.value !== ""}
         side="left"
       >
         <SrcText
-          className="jr-step-01"
+          className="jr-step-00 jr-step-01"
           onBlur={this.onBlur}
           onChange={this.onChange}
           onSelect={this.onSelect}

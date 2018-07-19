@@ -104,18 +104,7 @@ const Tour = (props) => {
       tooltip: {}
     }
   };
-  return (
-    <Joyride
-      styles={styles}
-      locale={{
-        back: "Back",
-        close: "Close",
-        last: "Last",
-        next: "Next"
-      }}
-      {...props}
-    />
-  );
+  return <Joyride styles={styles} {...props} />;
 };
 
 Tour.propTypes = {};

@@ -92,6 +92,20 @@ export default class ComposerView extends React.Component {
       publishModal: false,
       savedLabel: null,
       welcomeModal: false
+      // conditions: {
+      //   // has transcript
+      //   hasTranscript: false,
+      //   isTranscriptLongEnough: false,
+      //   // has bubbles
+      //   hasIntervieweeBubble: false,
+      //   hasUserBubble: false,
+      //   // has drafts
+      //   hasUserDraft: false,
+      //   hasIntervieweeDraft: false,
+      //   // what are the last bubbles
+      //   isLastBubbleInterviewees: false,
+      //   isLastBubbleUsers: false
+      // }
     };
     this.deleteInterviewee = this.deleteInterviewee.bind(this);
     this.setCurrentBubbleNone = this.setCurrentBubbleNone.bind(this);
@@ -101,7 +115,57 @@ export default class ComposerView extends React.Component {
     this.toggleDetailsModal = this.toggleDetailsModal.bind(this);
     this.togglePublishModal = this.togglePublishModal.bind(this);
     this.updateStory = this.updateStory.bind(this);
+    // tour bits
+    // this.setCondition = this.setCondition.bind(this);
   }
+
+  // componentDidMount() {
+  //   const detectConditions = () => {
+  //     console.log("detecting conditions");
+  //
+  //     // name necessary vars
+  //
+  //     const { props, state } = this;
+  //     const { storyId } = props.params;
+  //     const storyIndex = props.stories.findIndex(
+  //       (story) => story.id === storyId
+  //     );
+  //     const story = props.stories[storyIndex];
+  //     const { srcText, storyline } = story.interviewees[
+  //       state.currentInterviewee
+  //     ];
+  //
+  //     // name conditions
+  //     const shouldTourRun = localStorage.getItem("skipComposerTour") !== "true";
+  //     const hasTranscript = srcText.length > 0;
+  //     const storylineEmpty = storyline.length === 0;
+  //     const isLastBubbleInterviewees =
+  //       storyline[storyline.length - 1].role === "interviewee";
+  //     const isLastBubbleUsers = storyline[storyline.length - 1].role === "user";
+  //
+  //     // create ruleset
+  //     const conditions = {
+  //       shouldTourRun,
+  //       hasTranscript,
+  //       storylineEmpty,
+  //       isLastBubbleInterviewees,
+  //       isLastBubbleUsers
+  //     };
+  //
+  //     // set conditions
+  //     this.setState({ conditions });
+  //   };
+  //   setTimeout(detectConditions, 1000); // increase
+  // }
+  //
+  // setCondition(condition, val) {
+  //   this.setState({
+  //     conditions: {
+  //       ...this.state.conditions,
+  //       [condition]: val
+  //     }
+  //   });
+  // }
 
   setCurrentBubbleNone() {
     this.setState({ currentBubble: null });
@@ -157,22 +221,20 @@ export default class ComposerView extends React.Component {
   render() {
     const { props, state } = this;
 
-    const { storyId } = this.props.params;
-    const storyIndex = this.props.stories.findIndex(
-      (story) => story.id === storyId
-    );
-    const story = this.props.stories[storyIndex];
+    const { storyId } = props.params;
+    const storyIndex = props.stories.findIndex((story) => story.id === storyId);
+    const story = props.stories[storyIndex];
     if (!story) {
-      this.props.router.push(`/`);
+      props.router.push(`/`);
       return null;
     }
 
-    const { storyline } = story.interviewees[this.state.currentInterviewee];
+    const { storyline } = story.interviewees[state.currentInterviewee];
 
     const renderSaveIndicator = () => {
-      if (this.state.savedLabel === false) {
+      if (state.savedLabel === false) {
         return [<Preloader />, <Separator dir="v" size="m" />];
-      } else if (this.state.savedLabel === true) {
+      } else if (state.savedLabel === true) {
         return [
           <SaveIndicator typo="p5">
             <Icon name="checkmark" /> Saved
@@ -183,31 +245,12 @@ export default class ComposerView extends React.Component {
       return null;
     };
 
-    // START TOUR CONDITIONS
-
-    const transcript = story.interviewees[state.currentInterviewee].srcText;
-
-    const hasTranscript = transcript.length > 0;
-
-    const conditions = {
-      hasTranscript
-    };
-
-    console.group("It’s The Composer, bitch");
-    console.log({ props });
-    console.log({ story });
-    console.log({ storyline });
-    console.log({ hasTranscript });
-    console.groupEnd();
-
-    // END TOUR CONDITION
-
     return [
       <Page key="Page">
         <ErrorBoundary>
           <PageHead>
             <Container flex={[1, 1, `${100 / 3}%`]} padded>
-              <Action onClick={() => this.props.router.push(`/stories`)}>
+              <Action onClick={() => props.router.push(`/stories`)}>
                 <Icon name="arrow-left" size="x" /> My story library
               </Action>
               <Separator dir="v" size="m" />
@@ -229,10 +272,10 @@ export default class ComposerView extends React.Component {
               </Action>
             </Container>
           </PageHead>
-          <PageBody>
+          <PageBody className="jr-step-08">
             <Container flex={[1, 1, `${100 / 3}%`]}>
               <IntervieweePane
-                {...this.props}
+                {...props}
                 currentBubble={storyline[this.state.currentBubble]}
                 currentBubbleIndex={this.state.currentBubble}
                 currentInterviewee={this.state.currentInterviewee}
@@ -246,11 +289,12 @@ export default class ComposerView extends React.Component {
                     storyline[this.state.currentBubble].role === "interviewee"
                   )
                 }
+                setCondition={this.setCondition}
               />
             </Container>
             <Container flex={[0, 1, `400px`]}>
               <StoryPane
-                {...this.props}
+                {...props}
                 currentBubble={this.state.currentBubble}
                 currentInterviewee={this.state.currentInterviewee}
                 story={story}
@@ -264,7 +308,7 @@ export default class ComposerView extends React.Component {
             </Container>
             <Container flex={[1, 1, `${100 / 3}%`]}>
               <UserPane
-                {...this.props}
+                {...props}
                 currentBubble={storyline[this.state.currentBubble]}
                 currentBubbleIndex={this.state.currentBubble}
                 currentInterviewee={this.state.currentInterviewee}
@@ -278,6 +322,7 @@ export default class ComposerView extends React.Component {
                     storyline[this.state.currentBubble].role === "user"
                   )
                 }
+                setCondition={this.setCondition}
               />
             </Container>
           </PageBody>
@@ -318,7 +363,10 @@ export default class ComposerView extends React.Component {
           key="ComposerWelcomeModal"
         />
       ) : null,
-      <ComposerHelp key="ComposerHelp" conditions={conditions} />
+      // this.state.conditions.shouldTourRun ? (
+      // <ComposerHelp key="ComposerHelp" conditions={this.state.conditions} />
+      <ComposerHelp key="ComposerHelp" />
+      // ) : null
     ];
   }
 }
