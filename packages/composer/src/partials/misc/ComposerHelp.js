@@ -45,9 +45,9 @@ export default class ReactiveHelp extends Component {
 
   callback = (data) => {
     const { action, index, type } = data;
-    console.group("Joyride bitch!");
-    console.log(data);
-    console.groupEnd();
+    // console.group("Joyride bitch!");
+    // console.log(data);
+    // console.groupEnd();
 
     if (action === "close") {
       this.setState({ run: false });
@@ -58,16 +58,15 @@ export default class ReactiveHelp extends Component {
     const { state, props } = this;
     const { stepIndex, steps, run } = state;
 
-    console.group("It’s Teh Joyride, bitch");
-    console.log(state);
-    console.log(props);
-    console.groupEnd();
+    // console.group("It’s Teh Joyride, bitch");
+    // console.log(state);
+    // console.log(props);
+    // console.groupEnd();
 
     return (
       <Tour
         callback={this.callback}
         continuous={false}
-        debug
         disableOverlay={false}
         hideBackButton={false}
         locale={{

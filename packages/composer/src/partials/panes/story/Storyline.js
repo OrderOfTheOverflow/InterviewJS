@@ -247,7 +247,7 @@ export default class Storyline extends React.Component {
       const { mime } = action;
       if (mime === "image") {
         return (
-          <TileAction primary>
+          <TileAction primary key={action.value}>
             <span className="span">
               <img className="img" src={action.value} alt="interviewjsasset" />
             </span>
@@ -257,7 +257,7 @@ export default class Storyline extends React.Component {
         return <TileAction primary>{action.title || action.value}</TileAction>;
       } else if (mime === "embed" || mime === "media" || mime === "map") {
         return (
-          <TileAction primary>
+          <TileAction primary key={action.value}>
             <div
               className="iframe"
               dangerouslySetInnerHTML={{ __html: action.value }}
@@ -267,7 +267,9 @@ export default class Storyline extends React.Component {
       }
       return (
         // assume mime === 'text' because legacy
-        <TileAction primary>{action.value}</TileAction>
+        <TileAction primary key={action.value}>
+          {action.value}
+        </TileAction>
       );
     };
 
