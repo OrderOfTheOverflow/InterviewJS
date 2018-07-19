@@ -121,11 +121,7 @@ export default class TextPane extends Component {
       <PaneFrame
         {...this.props}
         draft={
-          <Draft
-            className="jr-step-02"
-            onChange={this.onDraftEdit}
-            value={this.state.draft.value}
-          />
+          <Draft onChange={this.onDraftEdit} value={this.state.draft.value} />
         }
         hasDraft={this.props.draft.value !== ""}
         side="left"

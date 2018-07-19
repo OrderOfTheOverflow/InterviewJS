@@ -20,15 +20,19 @@ export default class ReactiveHelp extends Component {
       run: localStorage.getItem("joyride") !== "false",
       steps: [
         {
-          title: "A title",
-          content: "This if my awesome feature!",
+          title: "Paste in your source transcript here",
           target: ".jr-step-01",
           placement: "right",
-          disableBeacon: true
+          disableBeacon: true,
+          locale: {
+            back: "Go back",
+            close: "Done",
+            last: "Last",
+            next: "Done!"
+          }
         },
         {
           title: "A title",
-          content: "This if my awesome feature!",
           target: ".jr-step-02",
           placement: "top",
           disableBeacon: true
