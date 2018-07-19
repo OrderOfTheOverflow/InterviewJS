@@ -117,45 +117,18 @@ export default class ComposerView extends React.Component {
     this.togglePublishModal = this.togglePublishModal.bind(this);
     this.updateStory = this.updateStory.bind(this);
     // tour bits
+    this.detectConditions = this.detectConditions.bind(this);
     // this.setCondition = this.setCondition.bind(this);
   }
 
   componentDidMount() {
-    const detectConditions = () => {
-      // // name necessary vars
-      //
-      // const { props, state } = this;
-      // const { storyId } = props.params;
-      // const storyIndex = props.stories.findIndex(
-      //   (story) => story.id === storyId
-      // );
-      // const story = props.stories[storyIndex];
-      // const { srcText, storyline } = story.interviewees[
-      //   state.currentInterviewee
-      // ];
-
-      // name conditions
-      const shouldTourRun = localStorage.getItem("skipComposerTour") !== "true";
-      // const hasTranscript = srcText.length > 0;
-      // const storylineEmpty = storyline.length === 0;
-      // const isLastBubbleInterviewees =
-      //   storyline[storyline.length - 1].role === "interviewee";
-      // const isLastBubbleUsers = storyline[storyline.length - 1].role === "user";
-
-      // create ruleset
-      const conditions = {
-        shouldTourRun
-        // hasTranscript,
-        // storylineEmpty,
-        // isLastBubbleInterviewees,
-        // isLastBubbleUsers
-      };
-
-      // set conditions
-      this.setState({ conditions });
-    };
-    setTimeout(detectConditions, 5000); // increase
+    setTimeout(this.detectConditions, 1000);
   }
+
+  componentDidUpdate() {
+    setTimeout(this.detectConditions, 1000);
+  }
+
   //
   // setCondition(condition, val) {
   //   this.setState({
@@ -168,6 +141,39 @@ export default class ComposerView extends React.Component {
 
   setCurrentBubbleNone() {
     this.setState({ currentBubble: null });
+  }
+
+  detectConditions() {
+    // name necessary vars
+    const { props, state } = this;
+    const { storyId } = props.params;
+    const storyIndex = props.stories.findIndex((story) => story.id === storyId);
+    const story = props.stories[storyIndex];
+    const { srcText, storyline } = story.interviewees[state.currentInterviewee];
+    const lastBubble = storyline[storyline.length - 1];
+
+    // name conditions
+    const shouldTourRun =
+      localStorage.getItem("skipComposerTour") !== "true" &&
+      !state.welcomeModal;
+    const hasTranscript = srcText.length > 0;
+    const storylineEmpty = storyline.length === 0;
+    const isLastBubbleInterviewees = lastBubble
+      ? lastBubble.role === "interviewee"
+      : false;
+    const isLastBubbleUsers = lastBubble ? lastBubble.role === "user" : false;
+
+    // create ruleset
+    const conditions = {
+      shouldTourRun,
+      hasTranscript,
+      storylineEmpty,
+      isLastBubbleInterviewees,
+      isLastBubbleUsers
+    };
+
+    // set conditions
+    this.setState({ conditions });
   }
 
   switchInterviewee(interviewee) {
