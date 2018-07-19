@@ -2,7 +2,7 @@ import {} from "prop-types";
 import Joyride from "react-joyride";
 import React from "react";
 
-import { color, font } from "../../../utils";
+import { color, font, radius } from "../../../utils";
 import "./tour.css";
 
 const Tour = (props) => {
@@ -43,7 +43,7 @@ const Tour = (props) => {
     },
     tooltip: {
       animation: "pulsate-fwd 1.5s ease-in-out infinite both",
-      borderRadius: "10px",
+      borderRadius: radius.s,
       padding: "15px",
       width: "240px"
     },
@@ -85,7 +85,6 @@ const Tour = (props) => {
     overlay: { background: color.flareM, cursor: "default" },
     overlayLegacy: { background: color.flareM },
     spotlight: {
-      animation: "blink 1.5s ease-in-out infinite both",
       borderRadius: "10px",
       boxShadow: `
         0px 2px 5px ${color.shadowHL},
@@ -95,12 +94,7 @@ const Tour = (props) => {
     },
     spotlightLegacy: {},
     floater: {
-      arrow: {
-        width: "12px !important",
-        height: "24px !important",
-        length: 16,
-        spread: 32
-      },
+      arrow: {},
       tooltip: {}
     }
   };
