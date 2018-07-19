@@ -82,7 +82,7 @@ const Tour = (props) => {
       ...buttonStyle,
       ...secButtonStyle
     },
-    overlay: { background: color.flareM },
+    overlay: { background: color.flareM, cursor: "default" },
     overlayLegacy: { background: color.flareM },
     spotlight: {
       animation: "blink 1.5s ease-in-out infinite both",
@@ -95,7 +95,12 @@ const Tour = (props) => {
     },
     spotlightLegacy: {},
     floater: {
-      arrow: {},
+      arrow: {
+        width: "12px !important",
+        height: "24px !important",
+        length: 16,
+        spread: 32
+      },
       tooltip: {}
     }
   };
