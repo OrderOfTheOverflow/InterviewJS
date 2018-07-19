@@ -91,21 +91,22 @@ export default class ComposerView extends React.Component {
       detailsModal: "",
       publishModal: false,
       savedLabel: null,
-      welcomeModal: false
-      // conditions: {
-      //   // has transcript
-      //   hasTranscript: false,
-      //   isTranscriptLongEnough: false,
-      //   // has bubbles
-      //   hasIntervieweeBubble: false,
-      //   hasUserBubble: false,
-      //   // has drafts
-      //   hasUserDraft: false,
-      //   hasIntervieweeDraft: false,
-      //   // what are the last bubbles
-      //   isLastBubbleInterviewees: false,
-      //   isLastBubbleUsers: false
-      // }
+      welcomeModal: false,
+      conditions: {
+        shouldTourRun: false
+        //   // has transcript
+        //   hasTranscript: false,
+        //   isTranscriptLongEnough: false,
+        //   // has bubbles
+        //   hasIntervieweeBubble: false,
+        //   hasUserBubble: false,
+        //   // has drafts
+        //   hasUserDraft: false,
+        //   hasIntervieweeDraft: false,
+        //   // what are the last bubbles
+        //   isLastBubbleInterviewees: false,
+        //   isLastBubbleUsers: false
+      }
     };
     this.deleteInterviewee = this.deleteInterviewee.bind(this);
     this.setCurrentBubbleNone = this.setCurrentBubbleNone.bind(this);
@@ -119,44 +120,42 @@ export default class ComposerView extends React.Component {
     // this.setCondition = this.setCondition.bind(this);
   }
 
-  // componentDidMount() {
-  //   const detectConditions = () => {
-  //     console.log("detecting conditions");
-  //
-  //     // name necessary vars
-  //
-  //     const { props, state } = this;
-  //     const { storyId } = props.params;
-  //     const storyIndex = props.stories.findIndex(
-  //       (story) => story.id === storyId
-  //     );
-  //     const story = props.stories[storyIndex];
-  //     const { srcText, storyline } = story.interviewees[
-  //       state.currentInterviewee
-  //     ];
-  //
-  //     // name conditions
-  //     const shouldTourRun = localStorage.getItem("skipComposerTour") !== "true";
-  //     const hasTranscript = srcText.length > 0;
-  //     const storylineEmpty = storyline.length === 0;
-  //     const isLastBubbleInterviewees =
-  //       storyline[storyline.length - 1].role === "interviewee";
-  //     const isLastBubbleUsers = storyline[storyline.length - 1].role === "user";
-  //
-  //     // create ruleset
-  //     const conditions = {
-  //       shouldTourRun,
-  //       hasTranscript,
-  //       storylineEmpty,
-  //       isLastBubbleInterviewees,
-  //       isLastBubbleUsers
-  //     };
-  //
-  //     // set conditions
-  //     this.setState({ conditions });
-  //   };
-  //   setTimeout(detectConditions, 1000); // increase
-  // }
+  componentDidMount() {
+    const detectConditions = () => {
+      // // name necessary vars
+      //
+      // const { props, state } = this;
+      // const { storyId } = props.params;
+      // const storyIndex = props.stories.findIndex(
+      //   (story) => story.id === storyId
+      // );
+      // const story = props.stories[storyIndex];
+      // const { srcText, storyline } = story.interviewees[
+      //   state.currentInterviewee
+      // ];
+
+      // name conditions
+      const shouldTourRun = localStorage.getItem("skipComposerTour") !== "true";
+      // const hasTranscript = srcText.length > 0;
+      // const storylineEmpty = storyline.length === 0;
+      // const isLastBubbleInterviewees =
+      //   storyline[storyline.length - 1].role === "interviewee";
+      // const isLastBubbleUsers = storyline[storyline.length - 1].role === "user";
+
+      // create ruleset
+      const conditions = {
+        shouldTourRun
+        // hasTranscript,
+        // storylineEmpty,
+        // isLastBubbleInterviewees,
+        // isLastBubbleUsers
+      };
+
+      // set conditions
+      this.setState({ conditions });
+    };
+    setTimeout(detectConditions, 5000); // increase
+  }
   //
   // setCondition(condition, val) {
   //   this.setState({
@@ -363,10 +362,9 @@ export default class ComposerView extends React.Component {
           key="ComposerWelcomeModal"
         />
       ) : null,
-      // this.state.conditions.shouldTourRun ? (
-      // <ComposerHelp key="ComposerHelp" conditions={this.state.conditions} />
-      <ComposerHelp key="ComposerHelp" />
-      // ) : null
+      this.state.conditions.shouldTourRun ? (
+        <ComposerHelp key="ComposerHelp" conditions={this.state.conditions} />
+      ) : null
     ];
   }
 }

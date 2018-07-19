@@ -107,7 +107,7 @@ export default class IntervieweePane extends React.Component {
   }
 
   updateDraft(data, type, clean) {
-    console.log(clean);
+    // console.log(clean);
     this.setState({
       draft: { ...this.state.draft, [type]: data },
       clean: { ...this.state.clean, [type]: clean }
