@@ -7,14 +7,7 @@ import "./tour.css";
 
 const Tour = (props) => {
   const buttonStyle = {
-    borderColor: color.flareBlk,
-    borderRadius: "30px",
-    borderStyle: "solid",
-    borderWidth: "1px",
-    fontFamily: font.serif,
-    fontSize: "13px",
-    lineHeight: "1.2em",
-    padding: "5px 10px"
+    display: "none"
   };
 
   const secButtonStyle = {
@@ -49,23 +42,16 @@ const Tour = (props) => {
     },
     tooltipContainer: {},
     tooltipTitle: {
-      color: color.white,
-      fontFamily: font.serif,
-      fontSize: "14px",
-      marginBottom: "10px",
-      padding: "0",
-      textAlign: "left"
+      margin: "0",
+      padding: "0"
     },
     tooltipContent: {
-      color: color.flareBlk,
-      fontFamily: font.serif,
-      fontSize: "14px",
-      marginTop: "10px",
+      margin: "0",
       padding: "0",
       textAlign: "left"
     },
     tooltipFooter: {
-      marginTop: "15px"
+      display: "none"
     },
     buttonNext: {
       ...buttonStyle,

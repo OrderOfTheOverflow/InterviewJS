@@ -1,115 +1,56 @@
 import { bool, shape } from "prop-types";
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
+import styled from "styled-components";
 
-import { Tour } from "interviewjs-styleguide";
+import {
+  Tour,
+  color,
+  font,
+  radius,
+  setSpace,
+  setType
+} from "interviewjs-styleguide";
 
-const STEPS = [
-  {
-    // 0
-    title: "Paste or type in your interview transcript here.",
-    target: ".jr-step-00",
-    placement: "right",
-    disableBeacon: true,
-    locale: {
-      close: "Next"
-    }
-  },
-  {
-    // 1
-    title: "Select some text to highlight a meaningful quote.",
-    target: ".jr-step-01",
-    placement: "right-start",
-    disableBeacon: true,
-    locale: {
-      close: "Got it"
-    }
-  },
-  {
-    // 2
-    title: "You can preview and clean up that quote here",
-    target: ".jr-step-02",
-    placement: "top",
-    disableBeacon: true,
-    locale: {
-      close: "Looking good"
-    }
-  },
-  {
-    // 3
-    title: "Script a question leading to selected quote.",
-    target: ".jr-step-03",
-    placement: "left",
-    disableBeacon: true,
-    locale: {
-      close: "Done"
-    }
-  },
-  {
-    // 4
-    title: "Double-check scripted user actions here.",
-    target: ".jr-step-04",
-    placement: "top",
-    disableBeacon: true,
-    locale: {
-      close: "Looking good"
-    }
-  },
-  {
-    // 5
-    title: "Add scripted user actions to the storyline.",
-    target: ".jr-step-05",
-    placement: "left",
-    disableBeacon: true,
-    locale: {
-      close: "Done"
-    }
-  },
-  {
-    // 6
-    title: "Add previously selected quote to the storyline.",
-    target: ".jr-step-06",
-    placement: "right",
-    disableBeacon: true,
-    locale: {
-      close: "Done"
-    }
-  },
-  {
-    // 7
-    title:
-      "Interviewee bubbles and user actions will show up here as you add them.",
-    target: ".jr-step-07",
-    placement: "right",
-    disableBeacon: true,
-    locale: {
-      close: "Gotcha"
-    }
-  },
-  {
-    // 8
-    title: "Enjoy creating your story!",
-    target: ".jr-step-08",
-    placement: "center",
-    disableBeacon: true,
-    locale: {
-      close: "Thanks"
-    }
-  }
-];
+const TourText = styled.h2`
+  ${setSpace("pan")};
+  ${setSpace("mbm")};
+  ${setSpace("mtn")};
+  ${setType("x")};
+  color: ${color.white};
+  font-family: ${font.serif};
+`;
+const TourAction = styled.button`
+  ${setSpace("mbn")};
+  ${setSpace("phs")};
+  ${setSpace("pvx")};
+  ${setType("x")};
+  background: ${color.white};
+  cursor: pointer;
+  border-radius: ${radius.a};
+  border: 1px solid ${color.white};
+  box-shadow: none;
+  color: ${color.greenHD};
+  font-family: ${font.serif};
+  outline: none;
+`;
 
 export default class ReactiveHelp extends Component {
   constructor(props) {
     super(props);
     this.state = {
       run: false,
-      stepIndex: 0,
-      steps: STEPS
+      stepIndex: 0
     };
     this.evalConditions = this.evalConditions.bind(this);
+    this.advanceTour = this.advanceTour.bind(this);
   }
 
   componentDidMount() {
     setTimeout(this.evalConditions, 2000);
+  }
+
+  advanceTour() {
+    console.log("advancing tour");
   }
 
   evalConditions() {
@@ -156,7 +97,127 @@ export default class ReactiveHelp extends Component {
   }
 
   render() {
-    const { stepIndex, steps, run } = this.state;
+    const { stepIndex, run } = this.state;
+
+    const steps = [
+      {
+        // 0
+        content: (
+          <Fragment>
+            <TourText>
+              Paste or type in your interview transcript here.
+            </TourText>
+            <TourAction>Next</TourAction>
+          </Fragment>
+        ),
+        target: ".jr-step-00",
+        placement: "right",
+        disableBeacon: true
+      },
+      {
+        // 1
+        content: (
+          <Fragment>
+            <TourText>
+              Select some text to highlight a meaningful quote.
+            </TourText>
+            <TourAction>Got it</TourAction>
+          </Fragment>
+        ),
+        target: ".jr-step-01",
+        placement: "right-start",
+        disableBeacon: true
+      },
+      {
+        // 2
+        content: (
+          <Fragment>
+            <TourText>You can preview and clean up that quote here.</TourText>
+            <TourAction>Looking good</TourAction>
+          </Fragment>
+        ),
+        target: ".jr-step-02",
+        placement: "top",
+        disableBeacon: true
+      },
+      {
+        // 3
+        content: (
+          <Fragment>
+            <TourText>Script a question leading to selected quote.</TourText>
+            <TourAction>Done</TourAction>
+          </Fragment>
+        ),
+        target: ".jr-step-03",
+        placement: "left",
+        disableBeacon: true
+      },
+      {
+        // 4
+        content: (
+          <Fragment>
+            <TourText>Double-check scripted user actions here.</TourText>
+            <TourAction>Looking good</TourAction>
+          </Fragment>
+        ),
+        target: ".jr-step-04",
+        placement: "top",
+        disableBeacon: true
+      },
+      {
+        // 5
+        content: (
+          <Fragment>
+            <TourText>Add scripted user actions to the storyline.</TourText>
+            <TourAction>Done</TourAction>
+          </Fragment>
+        ),
+        target: ".jr-step-05",
+        placement: "left",
+        disableBeacon: true
+      },
+      {
+        // 6
+        content: (
+          <Fragment>
+            <TourText>Add previously selected quote to the storyline.</TourText>
+            <TourAction>Done</TourAction>
+          </Fragment>
+        ),
+        title: "",
+        target: ".jr-step-06",
+        placement: "right",
+        disableBeacon: true
+      },
+      {
+        // 7
+        content: (
+          <Fragment>
+            <TourText>
+              Interviewee bubbles and user actions will show up here as you add
+              them.
+            </TourText>
+            <TourAction>Gotcha</TourAction>
+          </Fragment>
+        ),
+        target: ".jr-step-07",
+        placement: "right",
+        disableBeacon: true
+      },
+      {
+        // 8
+        content: (
+          <Fragment>
+            <TourText>Enjoy creating your story!</TourText>
+            <TourAction>Thanks</TourAction>
+          </Fragment>
+        ),
+        target: ".jr-step-08",
+        placement: "center",
+        disableBeacon: true
+      }
+    ];
+
     return (
       <Tour
         continuous={false}
