@@ -51,6 +51,32 @@ export default class ReactiveHelp extends Component {
 
   advanceTour() {
     console.log("advancing tour");
+
+    const { stepIndex } = this.state;
+    const {
+      hasTranscript,
+      hasIntervieweeDraft,
+      hasUserDraft,
+      isLastBubbleUsers,
+      isLastBubbleInterviewees
+    } = this.props.conditions;
+
+    console.log({ stepIndex });
+    console.log({ hasTranscript });
+    console.log({ hasIntervieweeDraft });
+
+    switch (stepIndex) {
+      case 0:
+        return hasTranscript ? this.setState({ stepIndex: 1 }) : null;
+      case 1:
+        return hasIntervieweeDraft ? this.setState({ stepIndex: 2 }) : null;
+      case 2:
+        return this.setState({ stepIndex: 3 });
+      case 3:
+        return hasUserDraft ? this.setState({ stepIndex: 4 }) : null;
+      default:
+        return null;
+    }
   }
 
   evalConditions() {
@@ -107,7 +133,7 @@ export default class ReactiveHelp extends Component {
             <TourText>
               Paste or type in your interview transcript here.
             </TourText>
-            <TourAction>Next</TourAction>
+            <TourAction onClick={this.advanceTour}>Next</TourAction>
           </Fragment>
         ),
         target: ".jr-step-00",
@@ -121,7 +147,7 @@ export default class ReactiveHelp extends Component {
             <TourText>
               Select some text to highlight a meaningful quote.
             </TourText>
-            <TourAction>Got it</TourAction>
+            <TourAction onClick={this.advanceTour}>Got it</TourAction>
           </Fragment>
         ),
         target: ".jr-step-01",
@@ -133,7 +159,7 @@ export default class ReactiveHelp extends Component {
         content: (
           <Fragment>
             <TourText>You can preview and clean up that quote here.</TourText>
-            <TourAction>Looking good</TourAction>
+            <TourAction onClick={this.advanceTour}>Looking good</TourAction>
           </Fragment>
         ),
         target: ".jr-step-02",
@@ -145,7 +171,7 @@ export default class ReactiveHelp extends Component {
         content: (
           <Fragment>
             <TourText>Script a question leading to selected quote.</TourText>
-            <TourAction>Done</TourAction>
+            <TourAction onClick={this.advanceTour}>Done</TourAction>
           </Fragment>
         ),
         target: ".jr-step-03",
@@ -157,7 +183,7 @@ export default class ReactiveHelp extends Component {
         content: (
           <Fragment>
             <TourText>Double-check scripted user actions here.</TourText>
-            <TourAction>Looking good</TourAction>
+            <TourAction onClick={this.advanceTour}>Looking good</TourAction>
           </Fragment>
         ),
         target: ".jr-step-04",
@@ -169,7 +195,7 @@ export default class ReactiveHelp extends Component {
         content: (
           <Fragment>
             <TourText>Add scripted user actions to the storyline.</TourText>
-            <TourAction>Done</TourAction>
+            <TourAction onClick={this.advanceTour}>Done</TourAction>
           </Fragment>
         ),
         target: ".jr-step-05",
@@ -181,7 +207,7 @@ export default class ReactiveHelp extends Component {
         content: (
           <Fragment>
             <TourText>Add previously selected quote to the storyline.</TourText>
-            <TourAction>Done</TourAction>
+            <TourAction onClick={this.advanceTour}>Done</TourAction>
           </Fragment>
         ),
         title: "",
@@ -197,7 +223,7 @@ export default class ReactiveHelp extends Component {
               Interviewee bubbles and user actions will show up here as you add
               them.
             </TourText>
-            <TourAction>Gotcha</TourAction>
+            <TourAction onClick={this.advanceTour}>Gotcha</TourAction>
           </Fragment>
         ),
         target: ".jr-step-07",
@@ -209,7 +235,7 @@ export default class ReactiveHelp extends Component {
         content: (
           <Fragment>
             <TourText>Enjoy creating your story!</TourText>
-            <TourAction>Thanks</TourAction>
+            <TourAction onClick={this.advanceTour}>Thanks</TourAction>
           </Fragment>
         ),
         target: ".jr-step-08",
@@ -236,6 +262,7 @@ export default class ReactiveHelp extends Component {
         showSkipButton={false}
         spotlightClicks
         steps={steps}
+        stepIndex={stepIndex}
       />
     );
   }
