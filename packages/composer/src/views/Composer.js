@@ -95,17 +95,6 @@ export default class ComposerView extends React.Component {
       welcomeModal: false,
       conditions: {
         shouldTourRun: false
-        // // has transcript
-        // hasTranscript: false,
-        // // has bubbles
-        // hasIntervieweeBubble: false,
-        // hasUserBubble: false,
-        // // has drafts
-        // hasUserDraft: false,
-        // hasIntervieweeDraft: false,
-        // // what are the last bubbles
-        // isLastBubbleInterviewees: false,
-        // isLastBubbleUsers: false
       }
     };
     this.deleteInterviewee = this.deleteInterviewee.bind(this);
@@ -126,8 +115,8 @@ export default class ComposerView extends React.Component {
   }
 
   componentDidMount() {
-    this.detectTimer = setTimeout(this.detectConditions, 2000);
-    this.runTimer = setTimeout(this.runTour, 3000);
+    this.detectTimer = setTimeout(this.detectConditions, 2500);
+    this.runTimer = setTimeout(this.runTour, 5000);
   }
 
   componentDidUpdate() {}
@@ -140,10 +129,9 @@ export default class ComposerView extends React.Component {
   }
 
   setCondition(condition, val) {
-    console.group("Setting Condition");
-    console.log({ condition });
-    console.log({ val });
-    console.groupEnd();
+    // console.group("Setting Condition");
+    // console.log(condition, val);
+    // console.groupEnd();
 
     this.setState({
       conditions: {
@@ -388,6 +376,7 @@ export default class ComposerView extends React.Component {
           key="ComposerHelp"
           conditions={this.state.conditions}
           storyline={storyline}
+          setCondition={this.setCondition}
         />
       ) : null
     ];

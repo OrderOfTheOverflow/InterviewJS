@@ -35,7 +35,6 @@ const Tour = (props) => {
       background: color.flareM
     },
     tooltip: {
-      animation: "pulsate-fwd 1.5s ease-in-out infinite both",
       borderRadius: radius.s,
       padding: "15px",
       width: "240px"

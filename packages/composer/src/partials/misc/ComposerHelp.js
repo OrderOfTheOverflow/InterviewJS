@@ -40,8 +40,13 @@ export default class ReactiveHelp extends Component {
       hasTranscript,
       hasIntervieweeDraft,
       hasUserDraft,
-      aboutToHaveUserDraft
+      aboutToHaveUserDraft,
+      tourOver
     } = nextProps.conditions;
+
+    console.group("Next props");
+    console.log(nextProps.conditions);
+    console.groupEnd();
 
     const { storyline } = nextProps;
 
@@ -52,19 +57,29 @@ export default class ReactiveHelp extends Component {
 
     const getStepIndex = () => {
       const ruleset0 = !hasTranscript && storylineEmpty;
-      const ruleset1 = hasTranscript && storylineEmpty && !hasIntervieweeDraft;
+      const ruleset1 =
+        hasTranscript &&
+        storylineEmpty &&
+        !hasIntervieweeDraft &&
+        !aboutToHaveUserDraft;
       const ruleset2 =
         hasTranscript &&
         storylineEmpty &&
         hasIntervieweeDraft &&
         !aboutToHaveUserDraft;
-      const ruleset3 =
-        hasTranscript && hasIntervieweeDraft && !aboutToHaveUserDraft;
-      const ruleset4 = aboutToHaveUserDraft && !hasUserDraft && storylineEmpty;
+      const ruleset3 = ruleset2;
+      const ruleset4 =
+        hasTranscript &&
+        storylineEmpty &&
+        hasIntervieweeDraft &&
+        !hasUserDraft &&
+        aboutToHaveUserDraft;
       const ruleset5 = aboutToHaveUserDraft && hasUserDraft && storylineEmpty;
       const ruleset6 = aboutToHaveUserDraft && hasUserDraft && storylineEmpty;
-      const ruleset7 = !storylineEmpty && lastRole === "user";
-      const ruleset8 = !storylineEmpty && lastRole === "interviewee";
+      const ruleset7 = !storylineEmpty && lastRole === "user" && !tourOver;
+      const ruleset8 =
+        !storylineEmpty && lastRole === "interviewee" && !tourOver;
+      const ruleset9 = tourOver;
 
       if (ruleset0) {
         return 0;
@@ -84,8 +99,10 @@ export default class ReactiveHelp extends Component {
         return 7;
       } else if (ruleset8) {
         return 8;
+      } else if (ruleset9) {
+        return 9;
       }
-      return 0;
+      return nextState.stepIndex;
     };
 
     return {
@@ -109,37 +126,11 @@ export default class ReactiveHelp extends Component {
   }
 
   advanceTour(stepIndex) {
+    if (stepIndex === 9) {
+      this.props.setCondition("tourOver", true);
+      localStorage.setItem("skipComposerTour", "true");
+    }
     this.setState({ stepIndex });
-    //
-    // const { stepIndex } = this.state;
-    // const {
-    //   hasTranscript,
-    //   hasIntervieweeDraft,
-    //   hasUserDraft,
-    //   isLastBubbleUsers,
-    //   isLastBubbleInterviewees
-    // } = this.props.conditions;
-    //
-    // console.log({ stepIndex });
-    // console.log({ hasTranscript });
-    // console.log({ hasIntervieweeDraft });
-    //
-    // switch (stepIndex) {
-    //   case 0:
-    //     return hasTranscript ? this.setState({ stepIndex: 1 }) : null;
-    //   case 1:
-    //     return hasIntervieweeDraft ? this.setState({ stepIndex: 2 }) : null;
-    //   case 2:
-    //     return this.setState({ stepIndex: 3 });
-    //   case 3:
-    //     return hasUserDraft ? this.setState({ stepIndex: 4 }) : null;
-    //   case 4:
-    //     return hasUserDraft ? this.setState({ stepIndex: 5 }) : null;
-    //   case 5:
-    //     return hasUserDraft ? this.setState({ stepIndex: 6 }) : null;
-    //   default:
-    //     return null;
-    // }
   }
 
   startTour() {
@@ -155,10 +146,10 @@ export default class ReactiveHelp extends Component {
   render() {
     const { stepIndex, run } = this.state;
 
-    console.group("Tour conditions");
-    console.log(this.state);
-    console.log(this.props.conditions);
-    console.groupEnd();
+    // console.group("Tour conditions");
+    // console.log(this.state);
+    // console.log(this.props.conditions);
+    // console.groupEnd();
 
     const steps = [
       {
@@ -168,7 +159,6 @@ export default class ReactiveHelp extends Component {
             <TourText>
               Paste or type in your interview transcript here.
             </TourText>
-            {/* <TourAction onClick={this.advanceTour}>Next</TourAction> */}
           </Fragment>
         ),
         target: ".jr-step-00",
@@ -182,7 +172,6 @@ export default class ReactiveHelp extends Component {
             <TourText>
               Select some text to highlight a meaningful quote.
             </TourText>
-            {/* <TourAction onClick={this.advanceTour}>Got it</TourAction> */}
           </Fragment>
         ),
         target: ".jr-step-01",
@@ -208,7 +197,6 @@ export default class ReactiveHelp extends Component {
         content: (
           <Fragment>
             <TourText>Script a question leading to selected quote.</TourText>
-            {/* <TourAction onClick={this.advanceTour}>Done</TourAction> */}
           </Fragment>
         ),
         target: ".jr-step-03",
@@ -220,7 +208,6 @@ export default class ReactiveHelp extends Component {
         content: (
           <Fragment>
             <TourText>Go ahead, type in or select a user action.</TourText>
-            <TourAction onClick={() => this.advanceTour(5)}>Done</TourAction>
           </Fragment>
         ),
         target: ".jr-step-04",

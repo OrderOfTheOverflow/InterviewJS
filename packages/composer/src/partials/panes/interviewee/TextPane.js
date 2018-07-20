@@ -94,8 +94,8 @@ export default class TextPane extends Component {
   }
   onChange(e) {
     const { value } = e.target;
-    this.setState({ srcText: value });
     this.props.setCondition("hasTranscript", value.length > 30);
+    this.setState({ srcText: value });
   }
   onSourceChange(e) {
     const { value } = e.target;
