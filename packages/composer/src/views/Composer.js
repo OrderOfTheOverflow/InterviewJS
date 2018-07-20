@@ -119,14 +119,22 @@ export default class ComposerView extends React.Component {
     // tour bits
     this.detectConditions = this.detectConditions.bind(this);
     // this.setCondition = this.setCondition.bind(this);
+    //
+    this.timer = null;
   }
 
   componentDidMount() {
-    setTimeout(this.detectConditions, 1000);
+    this.timer = setTimeout(this.detectConditions, 1000);
   }
 
   componentDidUpdate() {
     setTimeout(this.detectConditions, 1000);
+  componentDidUpdate() {}
+
+  componentWillUnmount() {
+    if (this.timer) {
+      clearTimeout(this.timer);
+    }
   }
 
   //
