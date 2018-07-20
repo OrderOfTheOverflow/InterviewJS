@@ -133,7 +133,7 @@ export default class ReactiveHelp extends Component {
             <TourText>
               Paste or type in your interview transcript here.
             </TourText>
-            <TourAction onClick={this.advanceTour}>Next</TourAction>
+            {/* <TourAction onClick={this.advanceTour}>Next</TourAction> */}
           </Fragment>
         ),
         target: ".jr-step-00",
@@ -147,7 +147,7 @@ export default class ReactiveHelp extends Component {
             <TourText>
               Select some text to highlight a meaningful quote.
             </TourText>
-            <TourAction onClick={this.advanceTour}>Got it</TourAction>
+            {/* <TourAction onClick={this.advanceTour}>Got it</TourAction> */}
           </Fragment>
         ),
         target: ".jr-step-01",
@@ -158,7 +158,7 @@ export default class ReactiveHelp extends Component {
         // 2
         content: (
           <Fragment>
-            <TourText>You can preview and clean up that quote here.</TourText>
+            <TourText>You can preview and clean up your quotes here.</TourText>
             <TourAction onClick={this.advanceTour}>Looking good</TourAction>
           </Fragment>
         ),
@@ -171,7 +171,7 @@ export default class ReactiveHelp extends Component {
         content: (
           <Fragment>
             <TourText>Script a question leading to selected quote.</TourText>
-            <TourAction onClick={this.advanceTour}>Done</TourAction>
+            {/* <TourAction onClick={this.advanceTour}>Done</TourAction> */}
           </Fragment>
         ),
         target: ".jr-step-03",
@@ -182,28 +182,40 @@ export default class ReactiveHelp extends Component {
         // 4
         content: (
           <Fragment>
-            <TourText>Double-check scripted user actions here.</TourText>
-            <TourAction onClick={this.advanceTour}>Looking good</TourAction>
+            <TourText>Go ahead, type in or select an suggestion here</TourText>
+            <TourAction onClick={this.advanceTour}>Done</TourAction>
           </Fragment>
         ),
         target: ".jr-step-04",
-        placement: "top",
+        placement: "left",
         disableBeacon: true
       },
       {
         // 5
         content: (
           <Fragment>
-            <TourText>Add scripted user actions to the storyline.</TourText>
-            <TourAction onClick={this.advanceTour}>Done</TourAction>
+            <TourText>Double-check scripted user actions here.</TourText>
+            <TourAction onClick={this.advanceTour}>Looking good</TourAction>
           </Fragment>
         ),
         target: ".jr-step-05",
-        placement: "left",
+        placement: "top",
         disableBeacon: true
       },
       {
         // 6
+        content: (
+          <Fragment>
+            <TourText>Add scripted user actions to the storyline.</TourText>
+            <TourAction onClick={this.advanceTour}>Done</TourAction>
+          </Fragment>
+        ),
+        target: ".jr-step-06",
+        placement: "left",
+        disableBeacon: true
+      },
+      {
+        // 7
         content: (
           <Fragment>
             <TourText>Add previously selected quote to the storyline.</TourText>
@@ -211,12 +223,12 @@ export default class ReactiveHelp extends Component {
           </Fragment>
         ),
         title: "",
-        target: ".jr-step-06",
+        target: ".jr-step-07",
         placement: "right",
         disableBeacon: true
       },
       {
-        // 7
+        // 8
         content: (
           <Fragment>
             <TourText>
@@ -226,19 +238,19 @@ export default class ReactiveHelp extends Component {
             <TourAction onClick={this.advanceTour}>Gotcha</TourAction>
           </Fragment>
         ),
-        target: ".jr-step-07",
+        target: ".jr-step-08",
         placement: "right",
         disableBeacon: true
       },
       {
-        // 8
+        // 9
         content: (
           <Fragment>
             <TourText>Enjoy creating your story!</TourText>
             <TourAction onClick={this.advanceTour}>Thanks</TourAction>
           </Fragment>
         ),
-        target: ".jr-step-08",
+        target: ".jr-step-09",
         placement: "center",
         disableBeacon: true
       }
