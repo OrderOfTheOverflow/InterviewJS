@@ -2,7 +2,7 @@ import {} from "prop-types";
 import Joyride from "react-joyride";
 import React from "react";
 
-import { color, font, radius } from "../../../utils";
+import { color, radius } from "../../../utils";
 import "./tour.css";
 
 const Tour = (props) => {
