@@ -103,8 +103,11 @@ export default class TextTab extends Component {
     const { isLoading, options, draft } = this.state;
 
     return (
-      <Container padded>
-        <FormItem>
+      <Container padded style={{ height: "100%" }}>
+        <FormItem
+          style={{ height: "100%" }}
+          className={this.props.primary ? `jr-step-04` : ""}
+        >
           <Label>User action</Label>
           <Select
             isDisabled={isLoading}

@@ -38,11 +38,12 @@ export default class PriActionEdit extends Component {
       <ActionEdit
         {...this.props}
         onClick={(e) => this.unlockAction(e)}
-        className="jr-step-03 "
+        className="jr-step-03"
+        primary
       >
         <Container dir="column" style={{ height: "100%" }}>
           <Action secondary fixed onClick={(e) => this.unlockAction(e)}>
-            Create an action
+            Script a question
           </Action>
           <Separator silent size="s" />
           <ActionTeaser>

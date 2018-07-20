@@ -1,5 +1,6 @@
 import React from "react";
 import css from "styled-components";
+import { throttle } from "lodash";
 import { arrayOf, func, object, shape, string } from "prop-types";
 
 import {
@@ -94,18 +95,17 @@ export default class ComposerView extends React.Component {
       welcomeModal: false,
       conditions: {
         shouldTourRun: false
-        //   // has transcript
-        //   hasTranscript: false,
-        //   isTranscriptLongEnough: false,
-        //   // has bubbles
-        //   hasIntervieweeBubble: false,
-        //   hasUserBubble: false,
-        //   // has drafts
-        //   hasUserDraft: false,
-        //   hasIntervieweeDraft: false,
-        //   // what are the last bubbles
-        //   isLastBubbleInterviewees: false,
-        //   isLastBubbleUsers: false
+        // // has transcript
+        // hasTranscript: false,
+        // // has bubbles
+        // hasIntervieweeBubble: false,
+        // hasUserBubble: false,
+        // // has drafts
+        // hasUserDraft: false,
+        // hasIntervieweeDraft: false,
+        // // what are the last bubbles
+        // isLastBubbleInterviewees: false,
+        // isLastBubbleUsers: false
       }
     };
     this.deleteInterviewee = this.deleteInterviewee.bind(this);
@@ -118,37 +118,55 @@ export default class ComposerView extends React.Component {
     this.updateStory = this.updateStory.bind(this);
     // tour bits
     this.detectConditions = this.detectConditions.bind(this);
-    // this.setCondition = this.setCondition.bind(this);
+    this.runTour = this.runTour.bind(this);
+    this.setCondition = throttle(this.setCondition.bind(this), 500);
     //
-    this.timer = null;
+    this.runTimer = null;
+    this.detectTimer = null;
   }
 
   componentDidMount() {
-    this.timer = setTimeout(this.detectConditions, 1000);
+    this.detectTimer = setTimeout(this.detectConditions, 2000);
+    this.runTimer = setTimeout(this.runTour, 3000);
   }
 
-  componentDidUpdate() {
-    setTimeout(this.detectConditions, 1000);
   componentDidUpdate() {}
 
   componentWillUnmount() {
-    if (this.timer) {
-      clearTimeout(this.timer);
+    if (this.runTimer) {
+      clearTimeout(this.runTimer);
+      clearTimeout(this.detectTimer);
     }
   }
 
-  //
-  // setCondition(condition, val) {
-  //   this.setState({
-  //     conditions: {
-  //       ...this.state.conditions,
-  //       [condition]: val
-  //     }
-  //   });
-  // }
+  setCondition(condition, val) {
+    console.group("Setting Condition");
+    console.log({ condition });
+    console.log({ val });
+    console.groupEnd();
+
+    this.setState({
+      conditions: {
+        ...this.state.conditions,
+        [condition]: val
+      }
+    });
+  }
 
   setCurrentBubbleNone() {
     this.setState({ currentBubble: null });
+  }
+
+  runTour() {
+    const { state } = this;
+    const shouldTourRun =
+      localStorage.getItem("skipComposerTour") !== "true" &&
+      !state.welcomeModal;
+    const conditions = {
+      ...state.conditions,
+      shouldTourRun
+    };
+    this.setState({ conditions });
   }
 
   detectConditions() {
@@ -158,26 +176,15 @@ export default class ComposerView extends React.Component {
     const storyIndex = props.stories.findIndex((story) => story.id === storyId);
     const story = props.stories[storyIndex];
     const { srcText, storyline } = story.interviewees[state.currentInterviewee];
-    const lastBubble = storyline[storyline.length - 1];
 
     // name conditions
-    const shouldTourRun =
-      localStorage.getItem("skipComposerTour") !== "true" &&
-      !state.welcomeModal;
-    const hasTranscript = srcText.length > 0;
+    const hasTranscript = srcText.length > 30;
     const storylineEmpty = storyline.length === 0;
-    const isLastBubbleInterviewees = lastBubble
-      ? lastBubble.role === "interviewee"
-      : false;
-    const isLastBubbleUsers = lastBubble ? lastBubble.role === "user" : false;
 
     // create ruleset
     const conditions = {
-      shouldTourRun,
       hasTranscript,
-      storylineEmpty,
-      isLastBubbleInterviewees,
-      isLastBubbleUsers
+      storylineEmpty
     };
 
     // set conditions
@@ -285,7 +292,7 @@ export default class ComposerView extends React.Component {
               </Action>
             </Container>
           </PageHead>
-          <PageBody className="jr-step-08">
+          <PageBody className="jr-step-09">
             <Container flex={[1, 1, `${100 / 3}%`]}>
               <IntervieweePane
                 {...props}
@@ -377,7 +384,11 @@ export default class ComposerView extends React.Component {
         />
       ) : null,
       this.state.conditions.shouldTourRun ? (
-        <ComposerHelp key="ComposerHelp" conditions={this.state.conditions} />
+        <ComposerHelp
+          key="ComposerHelp"
+          conditions={this.state.conditions}
+          storyline={storyline}
+        />
       ) : null
     ];
   }

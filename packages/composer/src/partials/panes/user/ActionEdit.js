@@ -7,6 +7,7 @@ import { Text, Link, Image, Media, Embed, Map } from "./tabs";
 
 const ActionEditEl = styled.div`
   border-radius: ${radius.l} ${radius.l} ${radius.n} ${radius.n};
+  position: relative;
   width: 100%;
 
   ${({ isActive }) =>
@@ -54,7 +55,13 @@ export default class ActionEdit extends Component {
           return <Map {...this.props} draft={this.props.draft.map} />;
         default:
         case "text":
-          return <Text {...this.props} draft={this.props.draft.text} />;
+          return (
+            <Text
+              {...this.props}
+              draft={this.props.draft.text}
+              primary={this.props.primary}
+            />
+          );
       }
     };
 

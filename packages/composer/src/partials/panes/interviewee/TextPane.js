@@ -93,11 +93,14 @@ export default class TextPane extends Component {
     this.saveChanges();
   }
   onChange(e) {
-    this.setState({ srcText: e.target.value });
+    const { value } = e.target;
+    this.setState({ srcText: value });
+    this.props.setCondition("hasTranscript", value.length > 30);
   }
   onSourceChange(e) {
-    this.setState({ source: e.target.value });
-    const draft = { value: this.state.draft.value, source: e.target.value };
+    const { value } = e.target;
+    this.setState({ source: value });
+    const draft = { value: this.state.draft.value, source: value };
     this.props.updateDraft(draft);
   }
   onSelect(e) {
@@ -106,6 +109,7 @@ export default class TextPane extends Component {
     const sel = currentTarget.value.substring(selectionStart, selectionEnd);
     const newDraft = { value: sel, source: this.state.source };
     this.props.updateDraft(newDraft, "text");
+    this.props.setCondition("hasIntervieweeDraft", sel.length > 0);
   }
   onDraftEdit(e) {
     const { value } = e.currentTarget;

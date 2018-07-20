@@ -12,118 +12,153 @@ import {
 } from "interviewjs-styleguide";
 
 const TourText = styled.h2`
+  ${setSpace("man")};
   ${setSpace("pan")};
-  ${setSpace("mbm")};
-  ${setSpace("mtn")};
   ${setType("x")};
   color: ${color.white};
   font-family: ${font.serif};
 `;
 const TourAction = styled.button`
   ${setSpace("mbn")};
+  ${setSpace("mtm")};
   ${setSpace("phs")};
   ${setSpace("pvx")};
   ${setType("x")};
   background: ${color.white};
-  cursor: pointer;
   border-radius: ${radius.a};
   border: 1px solid ${color.white};
   box-shadow: none;
   color: ${color.greenHD};
+  cursor: pointer;
   font-family: ${font.serif};
   outline: none;
 `;
 
 export default class ReactiveHelp extends Component {
+  static getDerivedStateFromProps(nextProps, nextState) {
+    const {
+      hasTranscript,
+      hasIntervieweeDraft,
+      hasUserDraft,
+      aboutToHaveUserDraft
+    } = nextProps.conditions;
+
+    const { storyline } = nextProps;
+
+    const lastItem = storyline[storyline.length - 1];
+    const lastRole = lastItem ? lastItem.role : null;
+
+    const storylineEmpty = storyline.length === 0;
+
+    const getStepIndex = () => {
+      const ruleset0 = !hasTranscript && storylineEmpty;
+      const ruleset1 = hasTranscript && storylineEmpty && !hasIntervieweeDraft;
+      const ruleset2 =
+        hasTranscript &&
+        storylineEmpty &&
+        hasIntervieweeDraft &&
+        !aboutToHaveUserDraft;
+      const ruleset3 =
+        hasTranscript && hasIntervieweeDraft && !aboutToHaveUserDraft;
+      const ruleset4 = aboutToHaveUserDraft && !hasUserDraft && storylineEmpty;
+      const ruleset5 = aboutToHaveUserDraft && hasUserDraft && storylineEmpty;
+      const ruleset6 = aboutToHaveUserDraft && hasUserDraft && storylineEmpty;
+      const ruleset7 = !storylineEmpty && lastRole === "user";
+      const ruleset8 = !storylineEmpty && lastRole === "interviewee";
+
+      if (ruleset0) {
+        return 0;
+      } else if (ruleset1) {
+        return 1;
+      } else if (ruleset2) {
+        return 2;
+      } else if (ruleset3) {
+        return 3;
+      } else if (ruleset4) {
+        return 4;
+      } else if (ruleset5) {
+        return 5;
+      } else if (ruleset6) {
+        return 6;
+      } else if (ruleset7) {
+        return 7;
+      } else if (ruleset8) {
+        return 8;
+      }
+      return 0;
+    };
+
+    return {
+      ...nextState,
+      stepIndex: getStepIndex()
+    };
+  }
+
   constructor(props) {
     super(props);
     this.state = {
       run: false,
       stepIndex: 0
     };
-    this.evalConditions = this.evalConditions.bind(this);
+    this.startTour = this.startTour.bind(this);
     this.advanceTour = this.advanceTour.bind(this);
   }
 
   componentDidMount() {
-    setTimeout(this.evalConditions, 2000);
+    this.startTour();
   }
 
-  advanceTour() {
-    console.log("advancing tour");
-
-    const { stepIndex } = this.state;
-    const {
-      hasTranscript,
-      hasIntervieweeDraft,
-      hasUserDraft,
-      isLastBubbleUsers,
-      isLastBubbleInterviewees
-    } = this.props.conditions;
-
-    console.log({ stepIndex });
-    console.log({ hasTranscript });
-    console.log({ hasIntervieweeDraft });
-
-    switch (stepIndex) {
-      case 0:
-        return hasTranscript ? this.setState({ stepIndex: 1 }) : null;
-      case 1:
-        return hasIntervieweeDraft ? this.setState({ stepIndex: 2 }) : null;
-      case 2:
-        return this.setState({ stepIndex: 3 });
-      case 3:
-        return hasUserDraft ? this.setState({ stepIndex: 4 }) : null;
-      default:
-        return null;
-    }
+  advanceTour(stepIndex) {
+    this.setState({ stepIndex });
+    //
+    // const { stepIndex } = this.state;
+    // const {
+    //   hasTranscript,
+    //   hasIntervieweeDraft,
+    //   hasUserDraft,
+    //   isLastBubbleUsers,
+    //   isLastBubbleInterviewees
+    // } = this.props.conditions;
+    //
+    // console.log({ stepIndex });
+    // console.log({ hasTranscript });
+    // console.log({ hasIntervieweeDraft });
+    //
+    // switch (stepIndex) {
+    //   case 0:
+    //     return hasTranscript ? this.setState({ stepIndex: 1 }) : null;
+    //   case 1:
+    //     return hasIntervieweeDraft ? this.setState({ stepIndex: 2 }) : null;
+    //   case 2:
+    //     return this.setState({ stepIndex: 3 });
+    //   case 3:
+    //     return hasUserDraft ? this.setState({ stepIndex: 4 }) : null;
+    //   case 4:
+    //     return hasUserDraft ? this.setState({ stepIndex: 5 }) : null;
+    //   case 5:
+    //     return hasUserDraft ? this.setState({ stepIndex: 6 }) : null;
+    //   default:
+    //     return null;
+    // }
   }
 
-  evalConditions() {
-    const {
-      hasTranscript,
-      hasIntervieweeDraft,
-      hasUserDraft,
-      isLastBubbleUsers,
-      isLastBubbleInterviewees
-    } = this.props.conditions;
-
-    console.group("Eval conditions");
-    console.log(this.props.conditions);
-    console.groupEnd();
-
-    const ruleset0 = !hasTranscript;
-    const ruleset1 = hasTranscript && !hasIntervieweeDraft;
-    const ruleset2 = hasTranscript && hasIntervieweeDraft;
-    const ruleset3 = ruleset1 && hasIntervieweeDraft;
-    const ruleset4 = ruleset3 && !hasUserDraft;
-    const ruleset5 = ruleset3 && hasUserDraft;
-    const ruleset6 = ruleset4 && isLastBubbleUsers;
-    const ruleset7 = isLastBubbleInterviewees;
-    // const ruleset8 = ruleset4 && conditions.isLastBubbleUsers;
-
-    if (ruleset0) {
+  startTour() {
+    const { hasTranscript, storylineEmpty } = this.props.conditions;
+    if (!hasTranscript && storylineEmpty) {
       this.setState({ run: true, stepIndex: 0 });
-    } else if (ruleset1) {
+    } else if (hasTranscript && storylineEmpty) {
       this.setState({ run: true, stepIndex: 1 });
-    } else if (ruleset2) {
-      this.setState({ run: true, stepIndex: 2 });
-    } else if (ruleset3) {
-      this.setState({ run: true, stepIndex: 3 });
-    } else if (ruleset4) {
-      this.setState({ run: true, stepIndex: 4 });
-    } else if (ruleset5) {
-      this.setState({ run: true, stepIndex: 5 });
-    } else if (ruleset6) {
-      this.setState({ run: true, stepIndex: 6 });
-    } else if (ruleset7) {
-      this.setState({ run: true, stepIndex: 7 });
     }
     return null;
   }
 
   render() {
     const { stepIndex, run } = this.state;
+
+    console.group("Tour conditions");
+    console.log(this.state);
+    console.log(this.props.conditions);
+    console.groupEnd();
 
     const steps = [
       {
@@ -159,7 +194,9 @@ export default class ReactiveHelp extends Component {
         content: (
           <Fragment>
             <TourText>You can preview and clean up your quotes here.</TourText>
-            <TourAction onClick={this.advanceTour}>Looking good</TourAction>
+            <TourAction onClick={() => this.advanceTour(3)}>
+              Looking good
+            </TourAction>
           </Fragment>
         ),
         target: ".jr-step-02",
@@ -182,8 +219,8 @@ export default class ReactiveHelp extends Component {
         // 4
         content: (
           <Fragment>
-            <TourText>Go ahead, type in or select an suggestion here</TourText>
-            <TourAction onClick={this.advanceTour}>Done</TourAction>
+            <TourText>Go ahead, type in or select a user action.</TourText>
+            <TourAction onClick={() => this.advanceTour(5)}>Done</TourAction>
           </Fragment>
         ),
         target: ".jr-step-04",
@@ -195,7 +232,9 @@ export default class ReactiveHelp extends Component {
         content: (
           <Fragment>
             <TourText>Double-check scripted user actions here.</TourText>
-            <TourAction onClick={this.advanceTour}>Looking good</TourAction>
+            <TourAction onClick={() => this.advanceTour(6)}>
+              Looking good
+            </TourAction>
           </Fragment>
         ),
         target: ".jr-step-05",
@@ -206,8 +245,7 @@ export default class ReactiveHelp extends Component {
         // 6
         content: (
           <Fragment>
-            <TourText>Add scripted user actions to the storyline.</TourText>
-            <TourAction onClick={this.advanceTour}>Done</TourAction>
+            <TourText>Add scripted user action to the storyline.</TourText>
           </Fragment>
         ),
         target: ".jr-step-06",
@@ -219,7 +257,6 @@ export default class ReactiveHelp extends Component {
         content: (
           <Fragment>
             <TourText>Add previously selected quote to the storyline.</TourText>
-            <TourAction onClick={this.advanceTour}>Done</TourAction>
           </Fragment>
         ),
         title: "",
@@ -235,7 +272,7 @@ export default class ReactiveHelp extends Component {
               Interviewee bubbles and user actions will show up here as you add
               them.
             </TourText>
-            <TourAction onClick={this.advanceTour}>Gotcha</TourAction>
+            <TourAction onClick={() => this.advanceTour(9)}>Gotcha</TourAction>
           </Fragment>
         ),
         target: ".jr-step-08",
@@ -247,7 +284,9 @@ export default class ReactiveHelp extends Component {
         content: (
           <Fragment>
             <TourText>Enjoy creating your story!</TourText>
-            <TourAction onClick={this.advanceTour}>Thanks</TourAction>
+            <TourAction onClick={() => this.setState({ run: false })}>
+              Thanks!
+            </TourAction>
           </Fragment>
         ),
         target: ".jr-step-09",
