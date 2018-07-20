@@ -168,15 +168,18 @@ export default class UserPane extends React.Component {
         }
       });
     } else {
-      this.setState({
-        draft: {
-          ...this.state.draft,
-          [action]: {
-            ...this.state.draft[action],
-            isActive: !this.state.draft[action].isActive
+      this.setState(
+        {
+          draft: {
+            ...this.state.draft,
+            [action]: {
+              ...this.state.draft[action],
+              isActive: !this.state.draft[action].isActive
+            }
           }
-        }
-      });
+        },
+        () => this.props.setCondition("aboutToHaveUserDraft", true)
+      );
     }
   }
   switchMIME(action, mime) {
@@ -188,15 +191,18 @@ export default class UserPane extends React.Component {
     });
   }
   updateDraft(action, mime, draft) {
-    this.setState({
-      draft: {
-        ...this.state.draft,
-        [action]: {
-          ...this.state.draft[action],
-          [mime]: draft
+    this.setState(
+      {
+        draft: {
+          ...this.state.draft,
+          [action]: {
+            ...this.state.draft[action],
+            [mime]: draft
+          }
         }
-      }
-    });
+      },
+      () => this.props.setCondition("hasUserDraft", true)
+    );
   }
 
   addStorylineItem() {
@@ -286,7 +292,7 @@ export default class UserPane extends React.Component {
           side="right"
           updateStorylineItem={this.updateStorylineItem}
           draft={
-            <Draft>
+            <Draft className="jr-step-05">
               {["continue", "explore"].map((action) => {
                 if (this.state.draft[action].isActive) {
                   const { mime } = this.state.draft[action];

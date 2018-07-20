@@ -2,7 +2,13 @@ import { func, shape, string } from "prop-types";
 import css from "styled-components";
 import React, { Component } from "react";
 
-import { color, font, setSpace, setType, TextInput } from "interviewjs-styleguide";
+import {
+  color,
+  font,
+  setSpace,
+  setType,
+  TextInput
+} from "interviewjs-styleguide";
 import PaneFrame from "../PaneFrame";
 
 const SrcText = css.textarea`
@@ -80,18 +86,21 @@ export default class TextPane extends Component {
       this.setState({ srcText });
     } else if (draft !== this.props.draft) {
       this.setState({ draft, source: draft.source });
-    } 
+    }
     return null;
   }
   onBlur() {
     this.saveChanges();
   }
   onChange(e) {
-    this.setState({ srcText: e.target.value });
+    const { value } = e.target;
+    this.props.setCondition("hasTranscript", value.length > 30);
+    this.setState({ srcText: value });
   }
   onSourceChange(e) {
-    this.setState({source: e.target.value})
-    const draft = { value: this.state.draft.value, source: e.target.value };
+    const { value } = e.target;
+    this.setState({ source: value });
+    const draft = { value: this.state.draft.value, source: value };
     this.props.updateDraft(draft);
   }
   onSelect(e) {
@@ -100,6 +109,7 @@ export default class TextPane extends Component {
     const sel = currentTarget.value.substring(selectionStart, selectionEnd);
     const newDraft = { value: sel, source: this.state.source };
     this.props.updateDraft(newDraft, "text");
+    this.props.setCondition("hasIntervieweeDraft", sel.length > 0);
   }
   onDraftEdit(e) {
     const { value } = e.currentTarget;
@@ -114,23 +124,35 @@ export default class TextPane extends Component {
     return (
       <PaneFrame
         {...this.props}
-        draft={<Draft onChange={this.onDraftEdit} value={this.state.draft.value} />}
+        draft={
+          <Draft
+            onChange={this.onDraftEdit}
+            value={this.state.draft.value}
+            className="jr-step-02"
+          />
+        }
         hasDraft={this.props.draft.value !== ""}
         side="left"
       >
-        <SrcText onBlur={this.onBlur} onChange={this.onChange} onSelect={this.onSelect} value={this.state.srcText} />
+        <SrcText
+          className="jr-step-00 jr-step-01"
+          onBlur={this.onBlur}
+          onChange={this.onChange}
+          onSelect={this.onSelect}
+          value={this.state.srcText}
+        />
         <SourceText
-            input
-            onChange={this.onSourceChange}
-            placeholder="Add a source to your bubble here (Optional)"
-            required
-            type="url"
-            value={this.state.source}
-          />
+          input
+          onChange={this.onSourceChange}
+          placeholder="Add a source to your bubble here (Optional)"
+          required
+          type="url"
+          value={this.state.source}
+        />
         {this.state.srcText.length === 0 ? (
           <SrcPlaceholder>
-            Here’s where you can type your interview notes or copy and paste existing transcripts to convert into chat
-            bubbles
+            Here’s where you can type your interview notes or copy and paste
+            existing transcripts to convert into chat bubbles
           </SrcPlaceholder>
         ) : null}
       </PaneFrame>
@@ -140,16 +162,16 @@ export default class TextPane extends Component {
 
 TextPane.propTypes = {
   draft: shape({
-    value: string,
+    value: string
   }),
   srcText: string,
   updateDraft: func.isRequired,
-  updateSrcText: func.isRequired,
+  updateSrcText: func.isRequired
 };
 
 TextPane.defaultProps = {
   draft: {
-    value: "",
+    value: ""
   },
-  srcText: "",
+  srcText: ""
 };
