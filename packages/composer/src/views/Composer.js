@@ -129,10 +129,6 @@ export default class ComposerView extends React.Component {
   }
 
   setCondition(condition, val) {
-    // console.group("Setting Condition");
-    // console.log(condition, val);
-    // console.groupEnd();
-
     this.setState({
       conditions: {
         ...this.state.conditions,
