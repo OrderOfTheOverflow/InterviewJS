@@ -78,7 +78,11 @@ const customStyles = {
     ...base,
     color: color.greyLLt,
     fontStyle: "italic",
-    fontWeight: "normal"
+    fontWeight: "normal",
+    overflow: "hidden",
+    whiteSpace: "nowrap",
+    marginRight: "40px",
+    width: "90%"
   }),
   valueContainer: (base) => ({
     ...base,
