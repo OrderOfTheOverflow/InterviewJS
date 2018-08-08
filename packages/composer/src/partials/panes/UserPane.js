@@ -111,8 +111,6 @@ export default class UserPane extends React.Component {
       const continueMime = content[0].mime ? content[0].mime : "text";
       const exploreMime = content[1].mime ? content[1].mime : "text";
 
-      console.log({ content });
-
       this.setState({
         draft: {
           continue: {
