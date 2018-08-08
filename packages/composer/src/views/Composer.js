@@ -166,7 +166,7 @@ export default class ComposerView extends React.Component {
     const { srcText, storyline } = story.interviewees[state.currentInterviewee];
 
     // name conditions
-    const hasTranscript = srcText.length > 30;
+    const hasTranscript = srcText ? srcText.length > 30 : false;
     const storylineEmpty = storyline.length === 0;
 
     // create ruleset
