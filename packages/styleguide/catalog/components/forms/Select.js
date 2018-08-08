@@ -41,7 +41,8 @@ const customStyles = {
   }),
   menuList: (base) => ({
     ...base,
-    padding: "8px 0 0 8px"
+    padding: "8px 0 0 8px",
+    maxHeight: "200px"
   }),
   control: (base, state) => ({
     ...base,
