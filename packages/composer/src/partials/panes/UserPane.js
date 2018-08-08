@@ -87,48 +87,6 @@ const Draft = styled.div`
 `;
 
 export default class UserPane extends React.Component {
-  static getDerivedStateFromProps(nextProps, nextState) {
-    if (
-      !nextProps.currentBubble ||
-      nextProps.currentBubble.role === "interviewee"
-    )
-      return null;
-
-    const { currentBubble } = nextProps;
-    const { content } = currentBubble;
-
-    const isBinary = content[0].enabled && content[1].enabled;
-    const isContinueActive = isBinary ? true : content[0].enabled;
-    const isExploreActive = isBinary ? true : content[1].enabled;
-    const continueMIME = content[0].mime ? content[0].mime : "text";
-    const exploreMIME = content[0].mime ? content[1].mime : "text";
-
-    return {
-      ...nextState,
-      draft: {
-        continue: {
-          ...nextState.draft.continue,
-          isActive: isContinueActive,
-          mime: continueMIME,
-          [continueMIME]: {
-            value: content[0].value ? content[0].value : "",
-            option: content[0].option ? content[0].option : "",
-            title: content[0].title ? content[0].title : ""
-          }
-        },
-        explore: {
-          ...nextState.draft.explore,
-          isActive: isExploreActive,
-          mime: exploreMIME,
-          [exploreMIME]: {
-            value: content[1].value ? content[1].value : "",
-            option: content[1].option ? content[1].option : "",
-            title: content[1].title ? content[1].title : ""
-          }
-        }
-      }
-    };
-  }
   constructor(props) {
     super(props);
     this.state = {
@@ -141,6 +99,45 @@ export default class UserPane extends React.Component {
     this.switchMIME = this.switchMIME.bind(this);
     this.toggleAction = this.toggleAction.bind(this);
     this.updateDraft = this.updateDraft.bind(this);
+  }
+  componentDidUpdate(prevProps) {
+    if (
+      this.props.currentBubble &&
+      prevProps.currentBubbleIndex !== this.props.currentBubbleIndex &&
+      this.props.currentBubble.role === "user"
+    ) {
+      const { content } = this.props.currentBubble;
+
+      const continueMime = content[0].mime ? content[0].mime : "text";
+      const exploreMime = content[1].mime ? content[1].mime : "text";
+
+      this.setState({
+        draft: {
+          continue: {
+            ...this.state.draft.continue,
+            mime: continueMime,
+            isActive: content[0].enabled,
+            [continueMime]: {
+              value: content[0].value ? content[0].value : "",
+              title: content[0].title ? content[0].title : "",
+              option: content[0].option ? content[0].option : ""
+            }
+          },
+          explore: {
+            ...this.state.draft.explore,
+            mime: exploreMime,
+            isActive: content[1].enabled,
+            [exploreMime]: {
+              value: content[1].value ? content[1].value : "",
+              title: content[1].title ? content[1].title : "",
+              option: content[1].option ? content[1].option : ""
+            }
+          }
+        }
+      });
+      return null;
+    }
+    return null;
   }
   toggleAction(action) {
     const isExploreActive = this.state.draft.explore.isActive;
