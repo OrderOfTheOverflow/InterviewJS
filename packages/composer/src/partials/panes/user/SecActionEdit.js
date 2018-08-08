@@ -38,11 +38,11 @@ export default class SecActionEdit extends Component {
       <ActionEdit {...this.props} onClick={(e) => this.unlockAction(e)}>
         <Container dir="column" style={{ height: "100%" }}>
           <Action secondary fixed onClick={(e) => this.unlockAction(e)}>
-            Give choice
+            Second choice
           </Action>
           <Separator silent size="s" />
           <ActionTeaser>
-            Script two actions to give your end-reader a choice
+            Allow the end reader to choose between two actions
           </ActionTeaser>
         </Container>
       </ActionEdit>
