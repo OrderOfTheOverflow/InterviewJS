@@ -84,7 +84,6 @@ export default class IntervieweePane extends Component {
       this.props.currentBubble.role === "interviewee"
     ) {
       const { content, type } = this.props.currentBubble;
-      console.log(this.props.currentBubble);
       this.setState({
         draft: {
           ...this.state.draft,
