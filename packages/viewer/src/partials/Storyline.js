@@ -134,11 +134,7 @@ class Storyline extends Component {
             ];
           case "link":
             return (
-              <a
-                href={content.value}
-                target="_blank"
-                style={{ color: "white" }}
-              >
+              <a href={content.value} target="_blank">
                 {content.title ? content.title : content.value}
               </a>
             );
@@ -216,7 +212,7 @@ class Storyline extends Component {
             return <div dangerouslySetInnerHTML={{ __html: bubble.value }} />;
           } else if (bubble.mime === "link") {
             return (
-              <a href={bubble.value} target="_blank">
+              <a href={bubble.value} target="_blank" style={{ color: "white" }}>
                 {bubble.title ? bubble.title : bubble.value}
               </a>
             );
