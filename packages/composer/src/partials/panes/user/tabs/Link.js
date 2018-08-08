@@ -43,7 +43,7 @@ export default class LinkTab extends Component {
             i
           </Legend>
         </FormItem>
-        <Separator silent />
+        <Separator silent size="s" />
         <FormItem>
           <Label>Display text (optional)</Label>
           <TextInput

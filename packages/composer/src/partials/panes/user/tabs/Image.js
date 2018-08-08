@@ -122,12 +122,6 @@ export default class ImageTab extends Component {
   }
 
   render() {
-    // const { state, props } = this;
-    // console.group("IMAGE PROPS:");
-    // console.log({ state });
-    // console.log({ props });
-    // console.groupEnd();
-
     const { title } = this.props.draft;
     return (
       <Container padded>
@@ -157,7 +151,7 @@ export default class ImageTab extends Component {
             i
           </Legend>
         </FormItem>
-        <Separator silent />
+        <Separator silent size="s" />
         <FormItem>
           <Label>Image caption</Label>
           <TextInput

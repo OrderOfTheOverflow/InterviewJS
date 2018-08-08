@@ -48,7 +48,7 @@ export default class MapTab extends Component {
             onChange={(e) => this.handleChange(e)}
             placeholder="Insert an iframe to embed a Google Map directly into your chat"
             required
-            rows={10}
+            rows={5}
             type="url"
             value={value}
           />

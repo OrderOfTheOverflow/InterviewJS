@@ -47,7 +47,7 @@ export default class EmbedTab extends Component {
             onChange={(e) => this.handleChange(e)}
             placeholder="Insert an iframe to display web content directly into your chat"
             required
-            rows={10}
+            rows={5}
             type="url"
             value={value}
           />
