@@ -1,6 +1,6 @@
 export const breakpoints = {
   hdesktop: "@media all and (min-width: 1440px) and (min-height: 900px)",
-  desktop: "@media all and (min-width: 1024px) and (min-height: 768px)",
+  desktop: "@media all and (min-width: 1024px) and (min-height: 740px)",
   tablet: "@media all and (min-width: 768px)",
   phone: "@media all",
   onlyhdesktop: "@media all and (min-width: 1440px)",
