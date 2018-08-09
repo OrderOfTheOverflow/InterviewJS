@@ -55,7 +55,7 @@
   },
   "scripts": {
     "start": "react-app-rewired start",
-    "build": "react-app-rewired build",
+    "build": "react-app-rewired build && cd ./build && zip -9 -r ./archive.zip * -x '*.DS_Store'",
     "test": "react-app-rewired test --env=jsdom",
     "eject": "react-app-rewired eject",
     "prettier": "prettier --print-width=120 --trailing-comma es5",
