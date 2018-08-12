@@ -3,7 +3,9 @@ import styled from "styled-components";
 import React from "react";
 
 import {
+  Tip,
   Container,
+  Icon,
   Separator,
   TileAction,
   color,
@@ -83,6 +85,28 @@ const Draft = styled.div`
   & > * {
     ${setSpace("mhx")};
     max-width: 40%;
+  }
+`;
+
+const DisableSecAction = styled.a`
+  background: ${color.white};
+  border-radius: ${radius.s};
+  border: 1px solid ${color.greyHL};
+  color: ${color.redM};
+  cursor: pointer;
+  height: 30px;
+  left: 0;
+  line-height: 30px;
+  margin-left: -15px;
+  margin-top: -15px;
+  padding: 0;
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  width: 30px;
+  i:before,
+  i {
+    line-height: 28px;
   }
 `;
 
@@ -377,6 +401,15 @@ export default class UserPane extends React.Component {
                   story={this.props.story}
                   user={this.props.user}
                 />
+                {this.state.draft.explore.isActive ? (
+                  <DisableSecAction
+                    onClick={() => this.toggleAction("explore")}
+                  >
+                    <Tip title="Remove second choice">
+                      <Icon name="cross" />
+                    </Tip>
+                  </DisableSecAction>
+                ) : null}
               </UserAction>
             </Container>
           </UserActions>
