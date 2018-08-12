@@ -5,8 +5,8 @@ import { createStore, compose, applyMiddleware } from "redux";
 import { syncHistoryWithStore } from "react-router-redux";
 import { browserHistory } from "react-router";
 import thunkMiddleware from "redux-thunk";
-import { persistStore, persistReducer } from "redux-persist";
-import storage from "redux-persist/lib/storage";
+// import { persistStore, persistReducer } from "redux-persist";
+// import storage from "redux-persist/lib/storage";
 
 import Raven from "raven-js";
 import createRavenMiddleware from "raven-for-redux";
@@ -34,14 +34,14 @@ if (document.location.hostname !== "localhost") {
   }).install();
 }
 
-// PERSIST
-const persistConfig = {
-  key: "root",
-  storage,
-  blacklist: ["routing"],
-};
-
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+// // PERSIST
+// const persistConfig = {
+//   key: "root",
+//   storage,
+//   blacklist: ["routing"],
+// };
+//
+// const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const defaultState = {
   stories: document.location.hostname === "localhost" ? stories : [],
@@ -75,14 +75,16 @@ const enhancers = compose(
   window.devToolsExtension ? window.devToolsExtension() : f => f
 );
 
-let store;
-switch (document.location.hostname === "localhost" ? null : "persist") {
-  case "persist":
-    store = createStore(persistedReducer, defaultState, enhancers);
-    break;
-  default:
-    store = createStore(rootReducer, defaultState, enhancers);
-}
+// let store;
+// switch (document.location.hostname === "localhost" ? null : "persist") {
+//   case "persist":
+//     store = createStore(persistedReducer, defaultState, enhancers);
+//     break;
+//   default:
+//     store = createStore(rootReducer, defaultState, enhancers);
+// }
+
+const store = createStore(rootReducer, defaultState, enhancers);
 
 export const history = syncHistoryWithStore(browserHistory, store);
 export const configureStore = () => {
@@ -96,4 +98,4 @@ export const configureStore = () => {
   return store;
 };
 
-export const persistor = persistStore(configureStore());
+// export const persistor = persistStore(configureStore());
