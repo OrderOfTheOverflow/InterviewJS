@@ -1,4 +1,4 @@
-import { bool, shape } from "prop-types";
+import { bool, func, shape } from "prop-types";
 import React, { Component, Fragment } from "react";
 import styled from "styled-components";
 
@@ -128,7 +128,7 @@ export default class ReactiveHelp extends Component {
   advanceTour(stepIndex) {
     if (stepIndex === 9) {
       this.props.setCondition("tourOver", true);
-      localStorage.setItem("skipComposerTour", "true");
+      this.props.disableTourForThisStory();
     }
     this.setState({ stepIndex });
   }
@@ -307,6 +307,7 @@ export default class ReactiveHelp extends Component {
 }
 
 ReactiveHelp.propTypes = {
+  disableTourForThisStory: func.isRequired,
   conditions: shape({
     hasIntervieweeDraft: bool,
     hasTranscript: bool,

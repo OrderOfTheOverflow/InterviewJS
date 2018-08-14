@@ -107,6 +107,7 @@ export default class ComposerView extends React.Component {
     this.updateStory = this.updateStory.bind(this);
     // tour bits
     this.detectConditions = this.detectConditions.bind(this);
+    this.disableTourForThisStory = this.disableTourForThisStory.bind(this);
     this.runTour = this.runTour.bind(this);
     this.setCondition = throttle(this.setCondition.bind(this), 500);
     //
@@ -141,10 +142,16 @@ export default class ComposerView extends React.Component {
     this.setState({ currentBubble: null });
   }
 
+  disableTourForThisStory() {
+    const { storyId } = this.props.params;
+    localStorage.setItem(`skipComposerTour-${storyId}`, "true");
+  }
+
   runTour() {
+    const { storyId } = this.props.params;
     const { state } = this;
     const shouldTourRun =
-      localStorage.getItem("skipComposerTour") !== "true" &&
+      localStorage.getItem(`skipComposerTour-${storyId}`) !== "true" &&
       !state.welcomeModal;
     const conditions = {
       ...state.conditions,
@@ -373,6 +380,7 @@ export default class ComposerView extends React.Component {
           conditions={this.state.conditions}
           storyline={storyline}
           setCondition={this.setCondition}
+          disableTourForThisStory={this.disableTourForThisStory}
         />
       ) : null
     ];
