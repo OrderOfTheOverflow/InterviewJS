@@ -313,7 +313,7 @@ export default class UserPane extends React.Component {
           side="right"
           updateStorylineItem={this.updateStorylineItem}
           draft={
-            <Draft className="jr-step-05">
+            <Draft className="jr-step-06">
               {["continue", "explore"].map((action) => {
                 if (this.state.draft[action].isActive) {
                   const { mime } = this.state.draft[action];

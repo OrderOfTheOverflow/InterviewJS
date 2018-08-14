@@ -3,6 +3,7 @@ import React, { Component, Fragment } from "react";
 import styled from "styled-components";
 
 import {
+  Icon,
   Tour,
   color,
   font,
@@ -156,9 +157,7 @@ export default class ReactiveHelp extends Component {
         // 0
         content: (
           <Fragment>
-            <TourText>
-              Paste or type in your interview transcript here.
-            </TourText>
+            <TourText>Paste text into transcript.</TourText>
           </Fragment>
         ),
         target: ".jr-step-00",
@@ -204,13 +203,27 @@ export default class ReactiveHelp extends Component {
         disableBeacon: true
       },
       {
+        // 3b
+        content: (
+          <Fragment>
+            <TourText>
+              Give the end-user a choice between two questions—you’ll need one
+              answer each!
+            </TourText>
+          </Fragment>
+        ),
+        target: ".jr-step-04",
+        placement: "left",
+        disableBeacon: true
+      },
+      {
         // 4
         content: (
           <Fragment>
             <TourText>Go ahead, type in or select a user action.</TourText>
           </Fragment>
         ),
-        target: ".jr-step-04",
+        target: ".jr-step-05",
         placement: "left",
         disableBeacon: true
       },
@@ -224,7 +237,7 @@ export default class ReactiveHelp extends Component {
             </TourAction>
           </Fragment>
         ),
-        target: ".jr-step-05",
+        target: ".jr-step-06",
         placement: "top",
         disableBeacon: true
       },
@@ -232,10 +245,10 @@ export default class ReactiveHelp extends Component {
         // 6
         content: (
           <Fragment>
-            <TourText>Add scripted user action to the storyline.</TourText>
+            <TourText>Add scripted user actions to the storyline.</TourText>
           </Fragment>
         ),
-        target: ".jr-step-06",
+        target: ".jr-step-07",
         placement: "left",
         disableBeacon: true
       },
@@ -247,7 +260,7 @@ export default class ReactiveHelp extends Component {
           </Fragment>
         ),
         title: "",
-        target: ".jr-step-07",
+        target: ".jr-step-08",
         placement: "right",
         disableBeacon: true
       },
@@ -257,12 +270,12 @@ export default class ReactiveHelp extends Component {
           <Fragment>
             <TourText>
               Interviewee bubbles and user actions will show up here as you add
-              them.
+              them. You can drag and drop to rearrange them.
             </TourText>
             <TourAction onClick={() => this.advanceTour(9)}>Gotcha</TourAction>
           </Fragment>
         ),
-        target: ".jr-step-08",
+        target: ".jr-step-09",
         placement: "right",
         disableBeacon: true
       },
@@ -270,13 +283,28 @@ export default class ReactiveHelp extends Component {
         // 9
         content: (
           <Fragment>
+            <TourText>
+              Edit or delete any storyline item via contextual menu (<Icon name="hdots" />)
+              available when hovering over bubbles with your mouse cursor.
+            </TourText>
+            <TourAction onClick={() => this.advanceTour(10)}>Gotcha</TourAction>
+          </Fragment>
+        ),
+        target: ".jr-step-10",
+        placement: "right",
+        disableBeacon: true
+      },
+      {
+        // 10
+        content: (
+          <Fragment>
             <TourText>Enjoy creating your story!</TourText>
             <TourAction onClick={() => this.setState({ run: false })}>
-              Thanks!
+              Ok!
             </TourAction>
           </Fragment>
         ),
-        target: ".jr-step-09",
+        target: ".jr-step-11",
         placement: "center",
         disableBeacon: true
       }

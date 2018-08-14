@@ -281,7 +281,7 @@ export default class ComposerView extends React.Component {
               </Action>
             </Container>
           </PageHead>
-          <PageBody className="jr-step-09">
+          <PageBody className="jr-step-10">
             <Container flex={[1, 1, `${100 / 3}%`]}>
               <IntervieweePane
                 {...props}

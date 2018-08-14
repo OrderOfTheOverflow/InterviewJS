@@ -104,7 +104,7 @@ const PaneFrame = (props) => {
               </Action>
             ) : (
               <Action
-                className={props.side === "right" ? "jr-step-06" : "jr-step-07"}
+                className={props.side === "right" ? "jr-step-07" : "jr-step-08"}
                 disabled={!hasDraft}
                 iconic
                 onClick={hasDraft ? props.addStorylineItem : null}

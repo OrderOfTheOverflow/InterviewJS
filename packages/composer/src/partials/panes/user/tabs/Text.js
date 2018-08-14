@@ -106,7 +106,7 @@ export default class TextTab extends Component {
       <Container padded style={{ height: "100%" }}>
         <FormItem
           style={{ height: "100%" }}
-          className={this.props.primary ? `jr-step-04` : ""}
+          className={this.props.primary ? `jr-step-05` : ""}
         >
           <Label>User action</Label>
           <Select
