@@ -21,6 +21,7 @@ const ActionEditEl = styled.div`
     background: transparent;
     position: relative;
     top: -1px;
+    width: 100%;
     & > * {
       background: transparent;
       flex-basis: ${100 / 6}%;

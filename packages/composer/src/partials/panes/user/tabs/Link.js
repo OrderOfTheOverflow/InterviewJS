@@ -13,19 +13,23 @@ import {
 export default class LinkTab extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      draft: this.props.draft
+    };
     this.handleChange = this.handleChange.bind(this);
   }
   handleChange = (e) => {
     const { name, value } = e.target;
     const draft = {
-      ...this.props.draft,
+      ...this.state.draft,
       [name]: value
     };
-    this.props.updateDraft("link", draft);
+    this.setState({ draft }, () =>
+      this.props.updateDraft("link", this.state.draft)
+    );
   };
   render() {
-    const { value, title } = this.props.draft;
+    const { value, title } = this.state.draft;
     return (
       <Container padded>
         <FormItem>
@@ -43,7 +47,7 @@ export default class LinkTab extends Component {
             i
           </Legend>
         </FormItem>
-        <Separator silent />
+        <Separator silent size="s" />
         <FormItem>
           <Label>Display text (optional)</Label>
           <TextInput

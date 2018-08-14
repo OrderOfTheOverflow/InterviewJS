@@ -88,7 +88,7 @@ const PaneFrame = (props) => {
     <Frame {...props} dir="column" padded>
       <Container flex={[1, 1, `auto`]}>{props.children}</Container>
       <Separator silent size="s" />
-      <Container flex={[0, 0, `180px`]}>
+      <Container flex={[0, 0, `140px`]}>
         <DraftHolder>
           <Draft fill="grey">{props.draft}</Draft>
           <SubmitButton side={props.side}>
