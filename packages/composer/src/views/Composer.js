@@ -120,8 +120,6 @@ export default class ComposerView extends React.Component {
     this.runTimer = setTimeout(this.runTour, 5000);
   }
 
-  componentDidUpdate() {}
-
   componentWillUnmount() {
     if (this.runTimer) {
       clearTimeout(this.runTimer);
