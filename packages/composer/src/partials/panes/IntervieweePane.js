@@ -156,6 +156,7 @@ export default class IntervieweePane extends Component {
     });
 
     this.props.showSavedIndicator();
+    this.props.setCondition("hasIntervieweeBubble", true);
   }
   updateStorylineItem() {
     const { storyIndex, currentInterviewee, currentBubbleIndex } = this.props;

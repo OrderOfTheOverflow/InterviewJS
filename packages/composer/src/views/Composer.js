@@ -94,7 +94,17 @@ export default class ComposerView extends React.Component {
       savedLabel: null,
       welcomeModal: false,
       conditions: {
-        shouldTourRun: false
+        contextualMenuUnderstood: false,
+        ExploreActionExplained: false,
+        hasContinueActionToggled: false,
+        hascontinueActionValue: false,
+        hasExploreActionToggled: false,
+        hasexploreActionValue: false,
+        hasIntervieweeBubble: false,
+        hasUserBubble: false,
+        intervieweeDraftLooksGood: false,
+        shouldTourRun: false,
+        userDraftLooksGood: false
       }
     };
     this.deleteInterviewee = this.deleteInterviewee.bind(this);
@@ -119,8 +129,6 @@ export default class ComposerView extends React.Component {
     this.detectTimer = setTimeout(this.detectConditions, 2500);
     this.runTimer = setTimeout(this.runTour, 5000);
   }
-
-  componentDidUpdate() {}
 
   componentWillUnmount() {
     if (this.runTimer) {
@@ -174,6 +182,7 @@ export default class ComposerView extends React.Component {
 
     // create ruleset
     const conditions = {
+      ...this.state.conditions,
       hasTranscript,
       storylineEmpty
     };
@@ -283,7 +292,7 @@ export default class ComposerView extends React.Component {
               </Action>
             </Container>
           </PageHead>
-          <PageBody className="jr-step-09">
+          <PageBody className="jr-step-11">
             <Container flex={[1, 1, `${100 / 3}%`]}>
               <IntervieweePane
                 {...props}
