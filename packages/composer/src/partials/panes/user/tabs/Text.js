@@ -105,8 +105,8 @@ export default class TextTab extends Component {
     return (
       <Container padded style={{ height: "100%" }}>
         <FormItem
-          style={{ height: "100%" }}
-          className={this.props.primary ? `jr-step-05` : ""}
+          style={{ height: "85%" }}
+          className={this.props.primary ? `jr-step-04` : ""}
         >
           <Label>User action</Label>
           <Select
@@ -122,7 +122,7 @@ export default class TextTab extends Component {
             }
             value={draft.value}
           />
-          <Legend tip="Use this box to script the second user interaction or question.">
+          <Legend tip="Use this box to script a text user interaction or question.">
             i
           </Legend>
         </FormItem>

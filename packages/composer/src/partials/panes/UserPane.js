@@ -199,7 +199,16 @@ export default class UserPane extends React.Component {
             }
           }
         },
-        () => this.props.setCondition("aboutToHaveUserDraft", true)
+        () =>
+          this.props.setCondition(
+            "hasContinueActionToggled",
+            this.state.draft.continue.isActive
+          ),
+        () =>
+          this.props.setCondition(
+            "hasExploreActionToggled",
+            this.state.draft.explore.isActive
+          )
       );
     }
   }
@@ -222,7 +231,11 @@ export default class UserPane extends React.Component {
           }
         }
       },
-      () => this.props.setCondition("hasUserDraft", true)
+      () =>
+        this.props.setCondition(
+          `has${action}ActionValue`,
+          draft.value.length > 0
+        )
     );
   }
 
@@ -305,7 +318,10 @@ export default class UserPane extends React.Component {
         <PaneFrame
           {...this.props}
           active
-          addStorylineItem={this.addStorylineItem}
+          addStorylineItem={(data) => {
+            this.addStorylineItem(data);
+            this.props.setCondition("hasUserBubble", true);
+          }}
           hasDraft={
             this.state.draft.continue.isActive ||
             this.state.draft.explore.isActive

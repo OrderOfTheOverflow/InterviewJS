@@ -38,16 +38,19 @@ const TourAction = styled.button`
 export default class ReactiveHelp extends Component {
   static getDerivedStateFromProps(nextProps, nextState) {
     const {
-      hasTranscript,
+      contextualMenuUnderstood,
+      dragAndDropUnderstood,
+      ExploreActionExplained,
+      hasContinueActionToggled,
+      hascontinueActionValue,
+      hasExploreActionToggled,
+      hasIntervieweeBubble,
       hasIntervieweeDraft,
-      hasUserDraft,
-      aboutToHaveUserDraft,
-      tourOver
+      hasTranscript,
+      hasUserBubble,
+      intervieweeDraftLooksGood,
+      userDraftLooksGood
     } = nextProps.conditions;
-
-    console.group("Next props");
-    console.log(nextProps.conditions);
-    console.groupEnd();
 
     const { storyline } = nextProps;
 
@@ -57,51 +60,83 @@ export default class ReactiveHelp extends Component {
     const storylineEmpty = storyline.length === 0;
 
     const getStepIndex = () => {
-      const ruleset0 = !hasTranscript && storylineEmpty;
-      const ruleset1 =
+      // 0 - does not have transcript
+      if (!hasTranscript && storylineEmpty && !intervieweeDraftLooksGood) {
+        return 0;
+      }
+      // 1 - has transcript, does not have selection
+      else if (
         hasTranscript &&
         storylineEmpty &&
         !hasIntervieweeDraft &&
-        !aboutToHaveUserDraft;
-      const ruleset2 =
-        hasTranscript &&
-        storylineEmpty &&
-        hasIntervieweeDraft &&
-        !aboutToHaveUserDraft;
-      const ruleset3 = ruleset2;
-      const ruleset4 =
-        hasTranscript &&
-        storylineEmpty &&
-        hasIntervieweeDraft &&
-        !hasUserDraft &&
-        aboutToHaveUserDraft;
-      const ruleset5 = aboutToHaveUserDraft && hasUserDraft && storylineEmpty;
-      const ruleset6 = aboutToHaveUserDraft && hasUserDraft && storylineEmpty;
-      const ruleset7 = !storylineEmpty && lastRole === "user" && !tourOver;
-      const ruleset8 =
-        !storylineEmpty && lastRole === "interviewee" && !tourOver;
-      const ruleset9 = tourOver;
-
-      if (ruleset0) {
-        return 0;
-      } else if (ruleset1) {
+        !intervieweeDraftLooksGood
+      ) {
         return 1;
-      } else if (ruleset2) {
+      }
+      // 2 - has selection
+      else if (
+        hasTranscript &&
+        storylineEmpty &&
+        hasIntervieweeDraft &&
+        !intervieweeDraftLooksGood
+      ) {
         return 2;
-      } else if (ruleset3) {
+      }
+      // 3 - has selection and `looks good`
+      else if (
+        hasTranscript &&
+        storylineEmpty &&
+        hasIntervieweeDraft &&
+        intervieweeDraftLooksGood &&
+        !hasContinueActionToggled
+      ) {
         return 3;
-      } else if (ruleset4) {
+      }
+      // 4 - has 1st action toggled
+      else if (
+        intervieweeDraftLooksGood &&
+        hasContinueActionToggled &&
+        !hascontinueActionValue
+      ) {
         return 4;
-      } else if (ruleset5) {
+      }
+      // 5 - has 1st action toggled and value set
+      else if (
+        intervieweeDraftLooksGood &&
+        hasContinueActionToggled &&
+        hascontinueActionValue &&
+        !hasExploreActionToggled &&
+        !ExploreActionExplained
+      ) {
         return 5;
-      } else if (ruleset6) {
+      }
+      // 6 - has 1st action toggled and value set and `gotcha` or has 2nd action toggled and value set
+      else if (ExploreActionExplained && !userDraftLooksGood) {
         return 6;
-      } else if (ruleset7) {
+      }
+      // 7 - has at least 1 action toggled and value set and `looks good`
+      else if (userDraftLooksGood && !hasUserBubble) {
         return 7;
-      } else if (ruleset8) {
+      }
+      // 8 - has one storyline item that is of role 'user'
+      else if (hasUserBubble && storyline.length === 1 && lastRole === "user") {
         return 8;
-      } else if (ruleset9) {
+      }
+      // 9 - the last storyline item is `interviewee`
+      else if (
+        hasIntervieweeBubble &&
+        lastRole === "interviewee" &&
+        !dragAndDropUnderstood
+      ) {
         return 9;
+      }
+      // 10 - has user bubble, an interviewee bubble and the last `gotcha`
+      else if (dragAndDropUnderstood && !contextualMenuUnderstood) {
+        return 10;
+      }
+      // 11 - has user bubble, an interviewee bubble and another `gotcha`
+      else if (contextualMenuUnderstood) {
+        return 11;
       }
       return nextState.stepIndex;
     };
@@ -127,7 +162,7 @@ export default class ReactiveHelp extends Component {
   }
 
   advanceTour(stepIndex) {
-    if (stepIndex === 9) {
+    if (stepIndex === 11) {
       this.props.setCondition("tourOver", true);
       this.props.disableTourForThisStory();
     }
@@ -146,12 +181,6 @@ export default class ReactiveHelp extends Component {
 
   render() {
     const { stepIndex, run } = this.state;
-
-    // console.group("Tour conditions");
-    // console.log(this.state);
-    // console.log(this.props.conditions);
-    // console.groupEnd();
-
     const steps = [
       {
         // 0
@@ -182,7 +211,12 @@ export default class ReactiveHelp extends Component {
         content: (
           <Fragment>
             <TourText>You can preview and clean up your quotes here.</TourText>
-            <TourAction onClick={() => this.advanceTour(3)}>
+            <TourAction
+              onClick={() => {
+                this.advanceTour(3);
+                this.props.setCondition("intervieweeDraftLooksGood", true);
+              }}
+            >
               Looking good
             </TourAction>
           </Fragment>
@@ -203,13 +237,10 @@ export default class ReactiveHelp extends Component {
         disableBeacon: true
       },
       {
-        // 3b
+        // 4
         content: (
           <Fragment>
-            <TourText>
-              Give the end-user a choice between two questions—you’ll need one
-              answer each!
-            </TourText>
+            <TourText>Go ahead, type in or select a user action.</TourText>
           </Fragment>
         ),
         target: ".jr-step-04",
@@ -217,10 +248,23 @@ export default class ReactiveHelp extends Component {
         disableBeacon: true
       },
       {
-        // 4
+        // 5
         content: (
           <Fragment>
-            <TourText>Go ahead, type in or select a user action.</TourText>
+            <TourText>
+              You can give the end-user a choice between two questions—you’ll
+              need one answer each! Left action will point to the first
+              following interviewee bubble, right action will fast forward to
+              the second following interviewee bubble.
+            </TourText>
+            <TourAction
+              onClick={() => {
+                this.advanceTour(5);
+                this.props.setCondition("ExploreActionExplained", true);
+              }}
+            >
+              Got it
+            </TourAction>
           </Fragment>
         ),
         target: ".jr-step-05",
@@ -228,11 +272,16 @@ export default class ReactiveHelp extends Component {
         disableBeacon: true
       },
       {
-        // 5
+        // 6
         content: (
           <Fragment>
             <TourText>Double-check scripted user actions here.</TourText>
-            <TourAction onClick={() => this.advanceTour(6)}>
+            <TourAction
+              onClick={() => {
+                this.advanceTour(7);
+                this.props.setCondition("userDraftLooksGood", true);
+              }}
+            >
               Looking good
             </TourAction>
           </Fragment>
@@ -242,7 +291,7 @@ export default class ReactiveHelp extends Component {
         disableBeacon: true
       },
       {
-        // 6
+        // 7
         content: (
           <Fragment>
             <TourText>Add scripted user actions to the storyline.</TourText>
@@ -253,7 +302,7 @@ export default class ReactiveHelp extends Component {
         disableBeacon: true
       },
       {
-        // 7
+        // 8
         content: (
           <Fragment>
             <TourText>Add previously selected quote to the storyline.</TourText>
@@ -265,14 +314,21 @@ export default class ReactiveHelp extends Component {
         disableBeacon: true
       },
       {
-        // 8
+        // 9
         content: (
           <Fragment>
             <TourText>
               Interviewee bubbles and user actions will show up here as you add
               them. You can drag and drop to rearrange them.
             </TourText>
-            <TourAction onClick={() => this.advanceTour(9)}>Gotcha</TourAction>
+            <TourAction
+              onClick={() => {
+                this.props.setCondition("dragAndDropUnderstood", true);
+                this.advanceTour(9);
+              }}
+            >
+              Gotcha
+            </TourAction>
           </Fragment>
         ),
         target: ".jr-step-09",
@@ -280,22 +336,29 @@ export default class ReactiveHelp extends Component {
         disableBeacon: true
       },
       {
-        // 9
+        // 10
         content: (
           <Fragment>
             <TourText>
               Edit or delete any storyline item via contextual menu (<Icon name="hdots" />)
               available when hovering over bubbles with your mouse cursor.
             </TourText>
-            <TourAction onClick={() => this.advanceTour(10)}>Gotcha</TourAction>
+            <TourAction
+              onClick={() => {
+                this.advanceTour(10);
+                this.props.setCondition("contextualMenuUnderstood", true);
+              }}
+            >
+              Gotcha
+            </TourAction>
           </Fragment>
         ),
         target: ".jr-step-10",
-        placement: "right",
+        placement: "left",
         disableBeacon: true
       },
       {
-        // 10
+        // 11
         content: (
           <Fragment>
             <TourText>Enjoy creating your story!</TourText>
