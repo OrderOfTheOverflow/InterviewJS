@@ -126,8 +126,8 @@ export default class ComposerView extends React.Component {
   }
 
   componentDidMount() {
-    this.detectTimer = setTimeout(this.detectConditions, 2500);
-    this.runTimer = setTimeout(this.runTour, 5000);
+    this.detectTimer = setTimeout(this.detectConditions, 500);
+    this.runTimer = setTimeout(this.runTour, 1000);
   }
 
   componentWillUnmount() {
