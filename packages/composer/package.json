@@ -58,7 +58,7 @@
     "lint-staged": "7.0.0",
     "node-plop": "0.13.0",
     "plop": "2.0.0",
-    "prettier": "1.12.0",
+    "prettier": "1.14.2",
     "react-app-rewire-babel-loader": "0.1.1",
     "react-app-rewire-define-plugin": "^1.0.0",
     "react-app-rewired": "1.5.0"
