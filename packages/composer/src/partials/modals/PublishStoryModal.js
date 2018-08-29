@@ -298,7 +298,7 @@ export default class PublishStoryModal extends Component {
             </PreviewWrapper>
             <Separator size="m" silent />
             <PageSubtitle typo="h4">
-              You can edit your story any time. The link will stay the same.
+              You can edit a story any time by accessing it via your library. Re-publish to save the changes—the link stays the same.
             </PageSubtitle>
             <Separator size="m" silent />
             <Actionbar>
