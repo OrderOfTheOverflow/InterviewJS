@@ -186,7 +186,9 @@ export default class ReactiveHelp extends Component {
         // 0
         content: (
           <Fragment>
-            <TourText>Paste text into transcript.</TourText>
+            <TourText>
+              Paste text into transcript (not verbatim quote).
+            </TourText>
           </Fragment>
         ),
         target: ".jr-step-00",
@@ -254,8 +256,8 @@ export default class ReactiveHelp extends Component {
             <TourText>
               You can give the end-user a choice between two questions—you’ll
               need one answer each! Left action will point to the first
-              following interviewee bubble, right action will fast forward to
-              the second following interviewee bubble.
+              following interviewee message, right action will fast forward to
+              the second following interviewee message.
             </TourText>
             <TourAction
               onClick={() => {
@@ -318,7 +320,7 @@ export default class ReactiveHelp extends Component {
         content: (
           <Fragment>
             <TourText>
-              Interviewee bubbles and user actions will show up here as you add
+              Interviewee messages and user actions will show up here as you add
               them. You can drag and drop to rearrange them.
             </TourText>
             <TourAction
@@ -340,8 +342,9 @@ export default class ReactiveHelp extends Component {
         content: (
           <Fragment>
             <TourText>
-              Edit or delete any storyline item via contextual menu (<Icon name="hdots" />)
-              available when hovering over bubbles with your mouse cursor.
+              Edit or delete any storyline item via contextual menu (
+              <Icon name="hdots" />) available when hovering over messages with
+              your mouse cursor.
             </TourText>
             <TourAction
               onClick={() => {
