@@ -103,7 +103,7 @@ export default class MetaForm extends React.Component {
       const targetWidth =
         offScreenImage.width > maxWidth ? maxWidth : offScreenImage.width;
       const targetHeight = parseInt(
-        targetWidth * offScreenImage.height / offScreenImage.width,
+        (targetWidth * offScreenImage.height) / offScreenImage.width,
         10
       );
       console.log(
@@ -126,12 +126,12 @@ export default class MetaForm extends React.Component {
           transferable: true
         })
         .then(
-          (result) =>
+          result =>
             key === "logo"
               ? pica.toBlob(result, type, 0.9)
               : pica.toBlob(result, "image/jpeg", 0.9)
         )
-        .then((blob) => {
+        .then(blob => {
           // const reader = new FileReader();
           // reader.onloadend = () => {
           //   console.log("data url length", reader.result.length);
@@ -154,7 +154,7 @@ export default class MetaForm extends React.Component {
               contentType: type
             }
           )
-            .then(async (result) => {
+            .then(async result => {
               console.log(result);
               this.setState({
                 formData: {
@@ -172,17 +172,17 @@ export default class MetaForm extends React.Component {
                   [`${key}Filename`]: this.state.formData[[`${key}Filename`]]
                 });
             })
-            .catch((err) => console.log(err));
+            .catch(err => console.log(err));
           //
         })
-        .catch((error) => console.log(error));
+        .catch(error => console.log(error));
     });
     offScreenImage.src = preview;
   }
 
   render() {
     return (
-      <Form onSubmit={(e) => this.handleSubmit(e)}>
+      <Form onSubmit={e => this.handleSubmit(e)}>
         <FormItem>
           <Label>Title</Label>
           <CharacterCount>
@@ -193,8 +193,8 @@ export default class MetaForm extends React.Component {
             maxLength="60"
             minLength="5"
             name="title"
-            onBlur={(e) => this.handleBlur(e)}
-            onChange={(e) => this.handleChange(e)}
+            onBlur={e => this.handleBlur(e)}
+            onChange={e => this.handleChange(e)}
             placeholder="Make it short and simple!"
             required
             valid={this.state.formValidation.title}
@@ -215,8 +215,8 @@ export default class MetaForm extends React.Component {
                 input
                 maxLength="35"
                 name="author"
-                onBlur={(e) => this.handleBlur(e)}
-                onChange={(e) => this.handleChange(e)}
+                onBlur={e => this.handleBlur(e)}
+                onChange={e => this.handleChange(e)}
                 place="left"
                 required={this.props.required}
                 placeholder="Author’s name"
@@ -230,11 +230,10 @@ export default class MetaForm extends React.Component {
               <TextInput
                 input
                 name="authorLink"
-                onBlur={(e) => this.handleBlur(e)}
-                onChange={(e) => this.handleChange(e)}
+                onBlur={e => this.handleBlur(e)}
+                onChange={e => this.handleChange(e)}
                 place="middle"
                 placeholder="Link"
-                required={this.props.required}
                 value={this.state.formData.authorLink}
               />
               <Legend tip="Add a link e.g. to your website or twitter">
@@ -248,8 +247,8 @@ export default class MetaForm extends React.Component {
                 input
                 maxLength="35"
                 name="pubDate"
-                onBlur={(e) => this.handleBlur(e)}
-                onChange={(e) => this.handleChange(e)}
+                onBlur={e => this.handleBlur(e)}
+                onChange={e => this.handleChange(e)}
                 place="right"
                 placeholder="Date of publication"
                 required={this.props.required}
@@ -266,10 +265,10 @@ export default class MetaForm extends React.Component {
               <Label>Cover photo</Label>
               <Dropzone
                 accept="image/jpeg, image/jpg, image/svg, image/gif, image/png"
-                ref={(node) => {
+                ref={node => {
                   this.dropzoneRef = node;
                 }}
-                onDrop={(accepted) => {
+                onDrop={accepted => {
                   this.handleFile("cover", accepted);
                 }}
                 style={{ display: "none" }}
@@ -320,10 +319,10 @@ export default class MetaForm extends React.Component {
               <Label>Your logo</Label>
               <Dropzone
                 accept="image/jpeg, image/jpg, image/svg, image/gif, image/png"
-                ref={(node) => {
+                ref={node => {
                   this.dropzoneRef2 = node;
                 }}
-                onDrop={(accepted) => {
+                onDrop={accepted => {
                   this.handleFile("logo", accepted);
                 }}
                 style={{ display: "none" }}
@@ -373,8 +372,8 @@ export default class MetaForm extends React.Component {
           <Label>Language</Label>
           <TextInput
             name="language"
-            onBlur={(e) => this.handleBlur(e)}
-            onChange={(e) => this.handleChange(e)}
+            onBlur={e => this.handleBlur(e)}
+            onChange={e => this.handleChange(e)}
             placeholder="Make it short and simple!"
             required
             select
