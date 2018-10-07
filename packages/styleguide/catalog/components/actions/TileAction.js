@@ -22,6 +22,7 @@ const TileAction = styled.button`
   width: 174px;
   outline: none;
   overflow-y: auto;
+  text-decoration: ${({ underline }) => (underline ? `underline` : `none`)};
   padding: 1px;
   position: relative;
   text-align: center;
@@ -101,12 +102,14 @@ const TileAction = styled.button`
 
 TileAction.propTypes = {
   primary: bool,
-  secondary: bool
+  secondary: bool,
+  underline: bool
 };
 
 TileAction.defaultProps = {
   primary: false,
-  secondary: true
+  secondary: true,
+  underline: null
 };
 
 export default TileAction;

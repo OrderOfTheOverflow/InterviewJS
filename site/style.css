@@ -109,6 +109,13 @@ ol li{
   font-size: 18px;
   margin:10px;
 }
+ul li{
+  font-size: 18px;
+  margin:10px;
+}
+.green{
+  color:rgb(44, 162, 94)
+}
 .first-bubble{
   background-color: rgba(255,255,255,.10);
   padding:10px 20px;

@@ -243,7 +243,7 @@ export default class Storyline extends React.Component {
       this.props.currentInterviewee
     ];
 
-    const renderUserAction = (action) => {
+    const renderUserAction = action => {
       const { mime } = action;
       if (mime === "image") {
         return (
@@ -254,7 +254,11 @@ export default class Storyline extends React.Component {
           </TileAction>
         );
       } else if (mime === "link") {
-        return <TileAction primary>{action.title || action.value}</TileAction>;
+        return (
+          <TileAction primary underline>
+            {action.title || action.value}
+          </TileAction>
+        );
       } else if (mime === "embed" || mime === "media" || mime === "map") {
         return (
           <TileAction primary key={action.value}>
@@ -273,15 +277,15 @@ export default class Storyline extends React.Component {
       );
     };
 
-    const renderUserActions = (content) =>
-      content.map((action) => {
+    const renderUserActions = content =>
+      content.map(action => {
         if (action.enabled) {
           return renderUserAction(action);
         }
         return null;
       });
 
-    const renderUserBubble = (data) => {
+    const renderUserBubble = data => {
       const { content, role } = data;
       return (
         <Bubble
@@ -294,7 +298,7 @@ export default class Storyline extends React.Component {
         </Bubble>
       );
     };
-    const renderIntervieweeBubble = (data) => {
+    const renderIntervieweeBubble = data => {
       const { content, type, role } = data;
       if (type === "text") {
         return (
@@ -304,9 +308,9 @@ export default class Storyline extends React.Component {
             theme={{ backg: interviewee.color, font: "PT sans" }}
           >
             <div>
-              {content.value
-                .split(/\r?\n/)
-                .map((line, i) => <div key={i}>{line}</div>)}
+              {content.value.split(/\r?\n/).map((line, i) => (
+                <div key={i}>{line}</div>
+              ))}
               {content.source ? <a href={content.source}>source</a> : null}
             </div>
           </Bubble>
@@ -318,7 +322,11 @@ export default class Storyline extends React.Component {
             persona={role}
             theme={{ backg: interviewee.color, font: "PT sans" }}
           >
-            <a href={content.value} target="_blank">
+            <a
+              href={content.value}
+              target="_blank"
+              style={{ textDecoration: "underline !important" }}
+            >
               {content.title ? content.title : content.value}
             </a>
           </Bubble>
@@ -382,7 +390,7 @@ export default class Storyline extends React.Component {
 
     return (
       <StorylineEl
-        onDragOver={(e) => this.dragOver(e)}
+        onDragOver={e => this.dragOver(e)}
         className="jr-step-09 jr-step-10"
       >
         {Object.keys(storyline).map((storyItem, i) => {
@@ -396,8 +404,8 @@ export default class Storyline extends React.Component {
               editable={this.props.currentBubble === i}
               forceEdit={this.state.dropdown === i}
               key={storyItem}
-              onDragEnd={(e) => this.dragEnd(e)}
-              onDragStart={(e) => this.dragStart(e)}
+              onDragEnd={e => this.dragEnd(e)}
+              onDragStart={e => this.dragStart(e)}
               persona={role}
               fadeOut={
                 this.props.currentBubble !== null &&
@@ -449,7 +457,7 @@ export default class Storyline extends React.Component {
           );
         })}
         <div
-          ref={(el) => {
+          ref={el => {
             this.anchor = el;
           }}
         />
