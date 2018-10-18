@@ -1,6 +1,6 @@
 import { func, number, object } from "prop-types";
-import css from "styled-components";
-import React from "react";
+import styled from "styled-components";
+import React, { Component } from "react";
 
 import {
   Container,
@@ -8,6 +8,7 @@ import {
   PaneTab,
   PaneTabs,
   Tip,
+  color,
   radius
 } from "interviewjs-styleguide";
 
@@ -20,54 +21,47 @@ import {
   TextPane
 } from "./interviewee";
 
-const PaneEl = css(Container)`
+import PaneTitle from "./PaneTitle";
+
+const EMPTY_DRAFT = {
+  text: { value: "", source: "" },
+  link: { value: "", title: "" },
+  image: {
+    value: "",
+    title: "",
+    filename: ""
+  },
+  embed: { value: "" },
+  map: { value: "" },
+  media: { value: "" }
+};
+
+const PaneEl = styled(Container)`
   align-items: stretch;
   height: 100%;
   overflow: visible;
+  width: 100%;
   ${PaneTabs} {
-    border-radius: ${radius.h} 21px 0 0;
-    transform: translateY(-1px);
+    background: ${color.white};
+    border-radius: ${radius.l} ${radius.l} 0 0;
+    overflow: hidden;
+    & > * {
+      transform: translateY(-1px);
+    }
     & > *:first-child {
-      border-radius: ${radius.h} 0 0 0;
+      border-radius: ${radius.l} 0 0 0;
     }
     & > *:last-child {
-      border-radius: 0 ${radius.h} 0 0;
+      border-radius: 0 ${radius.l} 0 0;
     }
   }
 `;
 
-export default class IntervieweePane extends React.Component {
-  static getDerivedStateFromProps(nextProps, nextState) {
-    if (nextProps.editMode) {
-      const { currentBubble } = nextProps;
-      return {
-        draft: {
-          [currentBubble.type]: {
-            value: currentBubble.content.value,
-            title: currentBubble.content.title
-              ? currentBubble.content.title
-              : null
-          }
-        },
-        tab: currentBubble.type
-      };
-    }
-    return nextState;
-  }
+export default class IntervieweePane extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      draft: {
-        text: { value: "" },
-        link: { value: "", title: "" },
-        image: {
-          value: "",
-          title: ""
-        },
-        embed: { value: "" },
-        map: { value: "" },
-        media: { value: "" }
-      },
+      draft: EMPTY_DRAFT,
       clean: {
         embed: "",
         map: "",
@@ -81,6 +75,24 @@ export default class IntervieweePane extends React.Component {
     this.updateDraft = this.updateDraft.bind(this);
     this.updateSrcText = this.updateSrcText.bind(this);
     this.updateStorylineItem = this.updateStorylineItem.bind(this);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (
+      this.props.currentBubble &&
+      prevProps.currentBubbleIndex !== this.props.currentBubbleIndex &&
+      this.props.currentBubble.role === "interviewee"
+    ) {
+      const { content, type } = this.props.currentBubble;
+      this.setState({
+        draft: {
+          ...this.state.draft,
+          [type]: content
+        },
+        tab: type || "text"
+      });
+    }
+    return null;
   }
 
   updateSrcText(data) {
@@ -98,7 +110,7 @@ export default class IntervieweePane extends React.Component {
   }
 
   updateDraft(data, type, clean) {
-    console.log(clean);
+    // console.log(clean);
     this.setState({
       draft: { ...this.state.draft, [type]: data },
       clean: { ...this.state.clean, [type]: clean }
@@ -107,17 +119,7 @@ export default class IntervieweePane extends React.Component {
 
   constructDrafts() {
     this.setState({
-      draft: {
-        text: { value: "" },
-        link: { value: "", title: "" },
-        image: {
-          value: "",
-          title: ""
-        },
-        embed: { value: "" },
-        map: { value: "" },
-        media: { value: "" }
-      },
+      draft: EMPTY_DRAFT,
       clean: {
         embed: "",
         map: "",
@@ -147,10 +149,14 @@ export default class IntervieweePane extends React.Component {
     );
 
     this.setState({
-      draft: { ...this.state.draft, [source]: { value: "", title: "" } }
+      draft: {
+        ...this.state.draft,
+        [source]: { value: "", title: "", source: "", filename: "" }
+      }
     });
 
     this.props.showSavedIndicator();
+    this.props.setCondition("hasIntervieweeBubble", true);
   }
   updateStorylineItem() {
     const { storyIndex, currentInterviewee, currentBubbleIndex } = this.props;
@@ -170,7 +176,9 @@ export default class IntervieweePane extends React.Component {
         ...this.state.draft,
         [this.state.tab]: {
           value: "",
-          title: ""
+          title: "",
+          source: "",
+          filename: ""
         }
       }
     });
@@ -185,12 +193,15 @@ export default class IntervieweePane extends React.Component {
   }
 
   render() {
+    console.log(this.props.currentBubbleIndex);
+
     const { tab } = this.state;
     const { currentInterviewee, story } = this.props;
     return (
       <PaneEl fill="white" rounded shift dir="column">
+        <PaneTitle>Interviewee</PaneTitle>
         <Container flex={[0, 0, "auto"]}>
-          <PaneTabs className="jr-step3">
+          <PaneTabs>
             <PaneTab
               active={tab === "text"}
               onClick={() => this.switchTab("text")}
@@ -313,11 +324,15 @@ IntervieweePane.propTypes = {
   showSavedIndicator: func.isRequired,
   currentBubble: object,
   currentInterviewee: number.isRequired,
+  currentBubbleIndex: number,
   story: object.isRequired /* eslint react/forbid-prop-types: 0 */,
   storyIndex: number.isRequired,
-  updateInterviewee: func.isRequired
+  updateInterviewee: func.isRequired,
+  setCurrentBubbleNone: func.isRequired,
+  updateStorylineItem: func.isRequired
 };
 
 IntervieweePane.defaultProps = {
-  currentBubble: null
+  currentBubble: null,
+  currentBubbleIndex: null
 };

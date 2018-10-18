@@ -11,7 +11,7 @@ const gmFrame = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m
 
 export default () => markdown`
 
-  ## Plain (textual) interviewee bubble types
+  ## Plain (textual) bubble types
 
   ${(
     <ReactSpecimen dark span={3}>
@@ -22,23 +22,30 @@ export default () => markdown`
   )}
   ${(
     <ReactSpecimen dark span={3}>
-      <Bubble persona="interviewee" displayType="plain">
-        <a href="">Link bubble</a>
+      <Bubble persona="user" displayType="plain">
+        <a href="#">Link bubble</a>
       </Bubble>
     </ReactSpecimen>
   )}
 
-  ## Rich interviewee bubble types
+  ## Rich bubble types
 
   ${(
-    <ReactSpecimen dark>
+    <ReactSpecimen dark span={3}>
       <Bubble persona="interviewee" displayType="rich">
         <img src={SampleImage} alt="" />
       </Bubble>
     </ReactSpecimen>
   )}
+  ${(
+    <ReactSpecimen dark span={3}>
+      <Bubble persona="user" displayType="rich">
+        <img src={SampleImage} alt="" />
+      </Bubble>
+    </ReactSpecimen>
+  )}
 
-  ## Embed interviewee bubble types
+  ## Embed bubble types
 
   ${(
     <ReactSpecimen dark span={3}>
@@ -49,7 +56,7 @@ export default () => markdown`
   )}
   ${(
     <ReactSpecimen dark span={3}>
-      <Bubble persona="interviewee" displayType="embed">
+      <Bubble persona="user" displayType="embed">
         <div dangerouslySetInnerHTML={{ __html: gmFrame }} />
       </Bubble>
     </ReactSpecimen>

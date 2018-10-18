@@ -1,10 +1,11 @@
-import css from "styled-components";
+import styled from "styled-components";
 import React from "react";
 import { bool, string } from "prop-types";
 
 import { color, font, radius, setSpace, setType, time } from "../../../utils";
+import { Preloader } from "../";
 
-const Input = css.input`
+const Input = styled.input`
   ${setSpace("phm")};
   ${setSpace("pvm")};
   ${setType("x")};
@@ -41,8 +42,7 @@ const Input = css.input`
       ? `
     min-height: 100px;
   `
-      : ``}
-  ${({ place }) => {
+      : ``} ${({ place }) => {
     if (place === "left") {
       return `border-radius: ${radius.m} 0 0 ${radius.m}; left: 1px`;
     } else if (place === "right") {
@@ -56,15 +56,17 @@ const Input = css.input`
   ${({ nooffset }) => (nooffset ? `right: 0; left: 0;` : ``)};
 
   ${({ disabled }) => (disabled ? `opacity: .75;` : "")};
-
 `;
 
-const Button = css(Input.withComponent("button"))`
+const Button = styled(Input.withComponent("button"))`
   text-align: left;
   cursor: pointer;
 `;
 
 const Textarea = Input.withComponent("textarea");
+const Select = styled(Input.withComponent("select"))`
+  appearance: none;
+`;
 
 const TextInput = (props) => {
   if (props.file) {
@@ -72,29 +74,47 @@ const TextInput = (props) => {
       e.preventDefault();
       props.onClick();
     };
+    if (props.loading) {
+      return (
+        <Button {...props} onClick={(e) => handler(e)}>
+          <Preloader />
+        </Button>
+      );
+    }
     return (
       <Button {...props} onClick={(e) => handler(e)}>
-        {props.selected ? "" : "Select file…"}
+        {props.uploaded ? props.uploaded : "Select file…"}
       </Button>
     );
   }
-  return props.area ? <Textarea {...props} /> : <Input {...props} />;
+  if (props.area) {
+    return <Textarea {...props} />;
+  } else if (props.select) {
+    return <Select {...props} />;
+  }
+  return <Input {...props} />;
 };
 
 TextInput.propTypes = {
   area: bool,
   file: bool,
   input: bool,
+  loading: bool,
   nooffset: bool,
-  place: string
+  place: string,
+  select: bool,
+  uploaded: string
 };
 
 TextInput.defaultProps = {
   area: false,
   file: false,
   input: false,
+  loading: null,
   nooffset: false,
-  place: null
+  place: null,
+  select: false,
+  uploaded: null
 };
 
 export default TextInput;

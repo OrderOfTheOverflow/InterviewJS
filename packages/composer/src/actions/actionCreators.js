@@ -16,9 +16,12 @@ export function createStory({
   context = "",
   cover = null,
   logo = null,
+  coverFilename = null,
+  logoFilename = null,
   interviewees = [
     {
       avatar: "",
+      avatarFilename: null,
       bio: "",
       color: "",
       id: `iv_${uuidv4()}`,
@@ -40,6 +43,8 @@ export function createStory({
       authorLink,
       context,
       cover,
+      coverFilename,
+      logoFilename,
       interviewees,
       intro,
       logo,

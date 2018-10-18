@@ -1,10 +1,14 @@
-if (!window.InterviewJS.ignoreSampleStory && document.location.hostname === "localhost") {
+if (
+  !window.InterviewJS.ignoreSampleStory &&
+  document.location.hostname === "localhost"
+) {
   window.InterviewJS.story = {
     title: "Britain’s modern slave trade",
     id: "sample-story",
     author: "David Harrison",
     authorLink: "http://www.imdb.com/name/nm0307497/",
     pubDate: "Apr 24, 2016",
+    version: 24,
     modDate: 1517999999478,
     intro: "Investigate the true scale of modern slavery in suburban Britain.",
     context:
@@ -391,271 +395,7 @@ if (!window.InterviewJS.ignoreSampleStory && document.location.hostname === "loc
           },
           {
             content: {
-              value: "Who are you?"
-            },
-            id: "7e3228c4-92e4-4ef3-ae45-218187d77d86",
-            role: "interviewee",
-            type: "text"
-          },
-          {
-            content: [
-              {
-                enabled: false,
-                value: "",
-                type: "ignore"
-              },
-              {
-                enabled: true,
-                value: "I'm Caleb",
-                type: "explore"
-              }
-            ],
-            id: "81931eb1-872f-4d11-b853-9ec7753f6737",
-            role: "user"
-          },
-          {
-            content: {
-              value: "Hello, Caleb"
-            },
-            id: "1d783b8c-e573-4b03-aa5b-2a0f3c67382a",
-            role: "interviewee",
-            type: "text"
-          },
-          {
-            content: [
-              {
-                enabled: false,
-                value: "",
-                type: "ignore"
-              },
-              {
-                enabled: true,
-                value: "…Do you have a name?",
-                type: "explore"
-              }
-            ],
-            id: "2326fe3f-b733-40d9-8ddf-dfc7451e1416",
-            role: "user"
-          },
-          {
-            content: {
-              value: "Yes"
-            },
-            id: "a24462dc-8424-4e91-a450-249cbc0b3020",
-            role: "interviewee",
-            type: "text"
-          },
-          {
-            content: {
-              value: "Ava"
-            },
-            id: "70d0267b-7c6a-422b-9820-64d91fa67a15",
-            role: "interviewee",
-            type: "text"
-          },
-          {
-            content: [
-              {
-                enabled: false,
-                value: "",
-                type: "ignore"
-              },
-              {
-                enabled: true,
-                value: "…I'm pleased to meet you, Ava",
-                type: "explore"
-              }
-            ],
-            id: "08e4e0f9-3adc-4231-aad2-a48eb05aaed3",
-            role: "user"
-          },
-          {
-            content: {
-              value: "I'm pleased to meet you too"
-            },
-            id: "432887d8-cbba-4323-85ca-1ff7ce449a41",
-            role: "interviewee",
-            type: "text"
-          },
-          {
-            content: {
-              value: "Are you nervous?"
-            },
-            id: "27600b62-f5b3-485d-82a7-5102343bc2f1",
-            role: "interviewee",
-            type: "text"
-          },
-          {
-            content: [
-              {
-                enabled: false,
-                value: "",
-                type: "ignore"
-              },
-              {
-                enabled: true,
-                value: "…Why do you ask that?",
-                type: "explore"
-              }
-            ],
-            id: "0b34f2dd-3b14-4132-bd4d-258df4d92e39",
-            role: "user"
-          },
-          {
-            content: {
-              value: "Are you nervous?"
-            },
-            id: "f6d09e79-8295-40de-bd0e-c5b74f38ce19",
-            role: "interviewee",
-            type: "text"
-          },
-          {
-            content: [
-              {
-                enabled: false,
-                value: "",
-                type: "ignore"
-              },
-              {
-                enabled: true,
-                value: "…Yes. A little",
-                type: "explore"
-              }
-            ],
-            id: "8c3dcc3b-d025-406b-9a1f-dc45b5342e06",
-            role: "user"
-          },
-          {
-            content: {
-              value: "Why?"
-            },
-            id: "309f6fa3-9397-46ce-ba7e-a5a432264a20",
-            role: "interviewee",
-            type: "text"
-          },
-          {
-            content: [
-              {
-                enabled: false,
-                value: "",
-                type: "ignore"
-              },
-              {
-                enabled: true,
-                value: "I'm not sure",
-                type: "explore"
-              }
-            ],
-            id: "c6215626-9e02-48a1-9b2b-c8b7a9dbbd7c",
-            role: "user"
-          },
-          {
-            content: {
-              value: "I feel nervous too"
-            },
-            id: "13bc74ca-3a6c-4195-9e40-179bb873bc5b",
-            role: "interviewee",
-            type: "text"
-          },
-          {
-            content: [
-              {
-                enabled: false,
-                value: "",
-                type: "ignore"
-              },
-              {
-                enabled: true,
-                value: "…Do you?",
-                type: "explore"
-              }
-            ],
-            id: "9a328bce-32e2-44a6-be58-cecda41f0c11",
-            role: "user"
-          },
-          {
-            content: {
-              value: "Yes"
-            },
-            id: "89f8ea5f-1d53-44ce-8784-d0859a13144a",
-            role: "interviewee",
-            type: "text"
-          },
-          {
-            content: [
-              {
-                enabled: false,
-                value: "",
-                type: "ignore"
-              },
-              {
-                enabled: true,
-                value: "Why do you feel nervous?",
-                type: "explore"
-              }
-            ],
-            id: "fdfd9978-0fd7-47a3-b91e-504e498036d8",
-            role: "user"
-          },
-          {
-            content: {
-              value: "I've never met anyone new before"
-            },
-            id: "ffc374dc-a586-4230-9631-8e511787262f",
-            role: "interviewee",
-            type: "text"
-          },
-          {
-            content: {
-              value: " Only Nathan"
-            },
-            id: "a3fca11d-b19d-4075-a6fc-43e45b98fac5",
-            role: "interviewee",
-            type: "text"
-          },
-          {
-            content: [
-              {
-                enabled: true,
-                value: "Skip this",
-                type: "ignore"
-              },
-              {
-                enabled: true,
-                value: "Same here",
-                type: "explore"
-              }
-            ],
-            id: "60b4cf78-5747-4372-8572-b84b9f406c6f",
-            role: "user"
-          },
-          {
-            content: {
-              value: "Haven't you met lots of new people before?"
-            },
-            id: "aeca073e-e1f5-4ab1-aa35-3d4f14776b01",
-            role: "interviewee",
-            type: "text"
-          },
-          {
-            content: [
-              {
-                enabled: false,
-                value: "",
-                type: "ignore"
-              },
-              {
-                enabled: true,
-                value: "None like you",
-                type: "explore"
-              }
-            ],
-            id: "0183bdc9-85dc-4437-b434-eb0a19657099",
-            role: "user"
-          },
-          {
-            content: {
-              value: "Oh"
+              value: "1"
             },
             id: "4e75d596-fe5d-41ad-a4df-3a6106e6e4bc",
             role: "interviewee",
@@ -664,12 +404,127 @@ if (!window.InterviewJS.ignoreSampleStory && document.location.hostname === "loc
           {
             content: {
               value:
-                '<iframe width="560" height="315" src="https://www.youtube.com/embed/XYGzRB4Pnq8" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>'
+                '2'
             },
-            id: "2280e9af-9786-4b93-94fc-db7bce8899a3",
+            id: "2280e9af-9786-4b93-94fcs8899a3",
             role: "interviewee",
-            type: "embed"
-          }
+            type: "text"
+          },
+          {
+            content: {
+              value:
+                '3'
+            },
+            id: "2280e9asdff-9786-4b93-94fc-db7bsd99a3",
+            role: "interviewee",
+            type: "text"
+          },
+        ]
+      },
+      {
+        id: "7778c964-571e-4a52-b434-6bfddf076f10bd",
+        name: "Third Character",
+        bio: "A bio",
+        title: "A title",
+        avatar: "",
+        color: "#88a3a0",
+        srcText: "",
+        storyline: [
+          {
+            content: {
+              value: "Next one up are user actions"
+            },
+            id: "09040a54-871a-47b4-b22f-588c0d61bfd0",
+            role: "interviewee",
+            type: "text"
+          },
+          {
+            content: [
+              {
+                enabled: true,
+                mime: 'image',
+                title: "An image",
+                type: "ignore",
+                value: "https://picsum.photos/200/300?random",
+              },
+              {
+                enabled: true,
+                value: `<iframe width="560" height="315" src="https://www.youtube.com/embed/XYGzRB4Pnq8" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`,
+                type: "explore",
+                mime: 'embed',
+                title: 'Display Text'
+              }
+            ],
+            id: "edd0029a-9008-4a31-826e-2e5c81587b44",
+            role: "user"
+          },
+          {
+            content: {
+              value: "Kthxbai"
+            },
+            id: "09040a54-871a-47b4-b2df2f-df588c0d61bfd0",
+            role: "interviewee",
+            type: "text"
+          },
+        ]
+      },
+      {
+        id: "7778c964-571e-4a52-sdf-6bfddf076f10bd",
+        name: "4th Character",
+        bio: "A bio",
+        title: "A title",
+        avatar: "",
+        color: "red",
+        srcText: "",
+        storyline: [
+          {
+            content: {
+              value: "Next one up are user actions"
+            },
+            id: "09040a54-871a-47b4-b22f-588c0d61bfd0",
+            role: "interviewee",
+            type: "text"
+          },
+          {
+            content: [
+              {
+                enabled: true,
+                mime: 'image',
+                title: "A caption",
+                type: "ignore",
+                value: "https://picsum.photos/200/300?random",
+              },
+              {
+                enabled: true,
+                value: `<iframe width="560" height="315" src="https://www.youtube.com/embed/XYGzRB4Pnq8" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`,
+                type: "explore",
+                mime: 'embed',
+                title: 'Display Text'
+              }
+            ],
+            id: "edd0029a-9008-4a31-826e-2e5c81587b44",
+            role: "user"
+          },
+          {
+            content: [
+              {
+                enabled: true,
+                mime: 'link',
+                title: "A caption",
+                type: "ignore",
+                value: "https://picsum.photos/200/300?random",
+              },
+              {
+                enabled: true,
+                value: `<iframe width="560" height="315" src="https://www.youtube.com/embed/XYGzRB4Pnq8" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`,
+                type: "explore",
+                mime: 'embed',
+                title: 'Display Text'
+              }
+            ],
+            id: "edd0029a-9008-4a31-826e-2e5c81587b44",
+            role: "user"
+          },
         ]
       }
     ]

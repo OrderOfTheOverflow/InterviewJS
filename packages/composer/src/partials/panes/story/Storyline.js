@@ -15,6 +15,7 @@ import {
   Dropdown,
   DropdownContent,
   Icon,
+  TileAction,
   color,
   radius,
   setSpace,
@@ -109,9 +110,9 @@ const BubbleEdit = styled.div`
   }
 `;
 const UserButtons = styled(Container)`
-  align-content: flex-end;
-  align-items: flex-end;
-  justify-content: flex-end;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   & > * {
     ${setSpace("mlx")};
@@ -241,35 +242,63 @@ export default class Storyline extends React.Component {
     const interviewee = this.props.story.interviewees[
       this.props.currentInterviewee
     ];
-    const renderUserBubble = (data) => {
+
+    const renderUserAction = action => {
+      const { mime } = action;
+      if (mime === "image") {
+        return (
+          <TileAction primary key={action.value}>
+            <span className="span">
+              <img className="img" src={action.value} alt="interviewjsasset" />
+            </span>
+          </TileAction>
+        );
+      } else if (mime === "link") {
+        return (
+          <TileAction primary underline>
+            {action.title || action.value}
+          </TileAction>
+        );
+      } else if (mime === "embed" || mime === "media" || mime === "map") {
+        return (
+          <TileAction primary key={action.value}>
+            <div
+              className="iframe"
+              dangerouslySetInnerHTML={{ __html: action.value }}
+            />
+          </TileAction>
+        );
+      }
+      return (
+        // assume mime === 'text' because legacy
+        <TileAction primary key={action.value}>
+          {action.value}
+        </TileAction>
+      );
+    };
+
+    const renderUserActions = content =>
+      content.map(action => {
+        if (action.enabled) {
+          return renderUserAction(action);
+        }
+        return null;
+      });
+
+    const renderUserBubble = data => {
       const { content, role } = data;
       return (
         <Bubble
           persona={role}
           plain
+          style={{ paddingLeft: "0", paddingRight: "0" }}
           theme={{ backg: skin.speakerBackg, font: "PT sans" }}
         >
-          <UserButtons dir="row">
-            {content[0].enabled ? (
-              <Action
-                primary={!content[1].enabled}
-                secondary={!!content[1].enabled}
-                theme={{ font: "PT sans" }}
-                fixed
-              >
-                {content[0].value}
-              </Action>
-            ) : null}
-            {content[1].enabled ? (
-              <Action primary fixed theme={{ font: "PT sans" }}>
-                {content[1].value}
-              </Action>
-            ) : null}
-          </UserButtons>
+          <UserButtons dir="row">{renderUserActions(content)}</UserButtons>
         </Bubble>
       );
     };
-    const renderIntervieweeBubble = (data) => {
+    const renderIntervieweeBubble = data => {
       const { content, type, role } = data;
       if (type === "text") {
         return (
@@ -278,7 +307,12 @@ export default class Storyline extends React.Component {
             persona={role}
             theme={{ backg: interviewee.color, font: "PT sans" }}
           >
-            {content.value}
+            <div>
+              {content.value.split(/\r?\n/).map((line, i) => (
+                <div key={i}>{line}</div>
+              ))}
+              {content.source ? <a href={content.source}>source</a> : null}
+            </div>
           </Bubble>
         );
       } else if (type === "link") {
@@ -288,7 +322,11 @@ export default class Storyline extends React.Component {
             persona={role}
             theme={{ backg: interviewee.color, font: "PT sans" }}
           >
-            <a href={content.value} target="_blank">
+            <a
+              href={content.value}
+              target="_blank"
+              style={{ textDecoration: "underline !important" }}
+            >
               {content.title ? content.title : content.value}
             </a>
           </Bubble>
@@ -351,7 +389,10 @@ export default class Storyline extends React.Component {
     };
 
     return (
-      <StorylineEl onDragOver={(e) => this.dragOver(e)}>
+      <StorylineEl
+        onDragOver={e => this.dragOver(e)}
+        className="jr-step-09 jr-step-10"
+      >
         {Object.keys(storyline).map((storyItem, i) => {
           const { role } = storyline[storyItem];
           const item = storyline[storyItem];
@@ -363,8 +404,8 @@ export default class Storyline extends React.Component {
               editable={this.props.currentBubble === i}
               forceEdit={this.state.dropdown === i}
               key={storyItem}
-              onDragEnd={(e) => this.dragEnd(e)}
-              onDragStart={(e) => this.dragStart(e)}
+              onDragEnd={e => this.dragEnd(e)}
+              onDragStart={e => this.dragStart(e)}
               persona={role}
               fadeOut={
                 this.props.currentBubble !== null &&
@@ -416,7 +457,7 @@ export default class Storyline extends React.Component {
           );
         })}
         <div
-          ref={(el) => {
+          ref={el => {
             this.anchor = el;
           }}
         />

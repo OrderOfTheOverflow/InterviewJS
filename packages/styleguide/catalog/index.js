@@ -51,6 +51,11 @@ const pages = [
         path: "actions/inverted-variations",
         title: "Inverted",
         content: require("./pages/actions-inverted.js")
+      },
+      {
+        path: "actions/tile",
+        title: "Tile Actions",
+        content: require("./pages/actions-tile.js")
       }
     ]
   },
@@ -85,7 +90,7 @@ const pages = [
       {
         content: require("./pages/bubble-types.js"),
         path: "/bubbles-types",
-        title: "Interviewee bubble types"
+        title: "Bubble types"
       },
       {
         content: require("./pages/bubblegroups.js"),
@@ -178,6 +183,11 @@ const pages = [
         content: require("./pages/text-extends.js")
       }
     ]
+  },
+  {
+    content: require("./pages/tours.js"),
+    path: "/tours",
+    title: "Tours"
   }
 ];
 

@@ -16,10 +16,19 @@ import {
   color,
   radius,
   setHeight,
-  setSpace,
+  setSpace
 } from "interviewjs-styleguide";
 
-import { Cover, Topbar, Page, PageBody, PageHead, StoryDetailsModal } from "../partials";
+import {
+  Cover,
+  Topbar,
+  Page,
+  PageBody,
+  PageHead,
+  StoryDetailsModal
+} from "../partials";
+
+import LOCALES from "../locales";
 
 const Interviewees = css.ul`
   text-align: center;
@@ -57,6 +66,13 @@ export default class IntroView extends Component {
     super(props);
     this.state = { storyDetailsModal: false };
     this.toggleDetailsModal = this.toggleDetailsModal.bind(this);
+    const { clearStorage } = this.props.params;
+    if (
+      typeof clearStorage !== "undefined" &&
+      clearStorage === "nolocalstorage"
+    ) {
+      localStorage.clear();
+    }
   }
 
   componentDidMount() {
@@ -79,8 +95,13 @@ export default class IntroView extends Component {
       window.InterviewJS &&
       window.InterviewJS.getStoryURL
     ) {
-      const storyURL = window.InterviewJS.getStoryURL(this.props.params.storyId);
-      if (storyURL) axios.get(storyURL).then(response => this.props.createStory(response.data));
+      const storyURL = window.InterviewJS.getStoryURL(
+        this.props.params.storyId
+      );
+      if (storyURL)
+        axios
+          .get(storyURL)
+          .then((response) => this.props.createStory(response.data));
     }
   }
 
@@ -90,6 +111,9 @@ export default class IntroView extends Component {
 
   render() {
     const { story } = this.props;
+    const LOCALE = story.locale ? story.locale : "en";
+    const LANG = LOCALES[LOCALE];
+
     if (!story || Object.keys(story).length === 0) return null; // FIXME show spinner
 
     return [
@@ -99,10 +123,10 @@ export default class IntroView extends Component {
           <Cover image={story.cover}>
             <PageTitle typo="h1">{story.title}</PageTitle>
             <Separator size="s" silent />
-            <Aside typo="p6">Featuring:</Aside>
+            <Aside typo="p6">{LANG.introFeaturing}</Aside>
             <Separator size="s" silent />
             <Interviewees offset={story.interviewees.length > 1}>
-              {story.interviewees.map(interviewee => (
+              {story.interviewees.map((interviewee) => (
                 <Tip title={interviewee.name} key={interviewee.id}>
                   <Interviewee>
                     <Avatar image={interviewee.avatar} size="l" />
@@ -115,11 +139,11 @@ export default class IntroView extends Component {
         <PageBody limit="x" flex={[1, 0, `${100 / 4}%`]}>
           <PageSubtitle typo="h3">{story.intro}</PageSubtitle>
           <Separator size="m" silent />
-          <Aside typo="p3">
-            InterviewJS brings you journalism through a messenger platform: real people, real stories.
-          </Aside>
+          <Aside typo="p3">{LANG.introText}</Aside>
           <Separator size="l" silent />
-          {story.logo ? <Logo src={story.logo} alt="Story author’s logo" /> : null}
+          {story.logo ? (
+            <Logo src={story.logo} alt="Story author’s logo" />
+          ) : null}
           <Aside typo="p6">
             {story.author ? <span>{story.author}</span> : null}
             {story.author && story.pubDate ? `, ` : null}
@@ -127,8 +151,12 @@ export default class IntroView extends Component {
           </Aside>
           <Separator size="m" silent />
           <Actionbar>
-            <Action fixed onClick={() => this.props.router.push(`/${story.id}/context`)} primary>
-              Continue
+            <Action
+              fixed
+              onClick={() => this.props.router.push(`/${story.id}/context`)}
+              primary
+            >
+              {LANG.introButton}
             </Action>
           </Actionbar>
         </PageBody>
@@ -139,8 +167,9 @@ export default class IntroView extends Component {
           isOpen={this.state.storyDetailsModal}
           key="detailsModal"
           story={story}
+          LANG={LANG}
         />
-      ) : null,
+      ) : null
     ];
   }
 }
@@ -149,11 +178,11 @@ IntroView.propTypes = {
   createStory: func.isRequired,
   router: object,
   story: object,
-  params: object,
+  params: object
 };
 
 IntroView.defaultProps = {
   router: null,
   story: null,
-  params: {},
+  params: {}
 };

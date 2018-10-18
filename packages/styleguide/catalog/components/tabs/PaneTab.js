@@ -10,8 +10,8 @@ const PaneTabEl = css.li`
   border-width: 1px;
   flex: 1 1 100%;
   & > button {
-    ${setSpace("phm")};
     ${setSpace("pvs")};
+    display: inline-block;
     ${setType("s")};
     background: none;
     border: none;

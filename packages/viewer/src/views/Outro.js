@@ -20,6 +20,8 @@ import {
   Topbar
 } from "../partials";
 
+import LOCALES from "../locales";
+
 export default class OutroView extends Component {
   constructor(props) {
     super(props);
@@ -72,7 +74,9 @@ export default class OutroView extends Component {
     const histories = [];
     interviewees.forEach((interviewee) => {
       const localHistory = JSON.parse(
-        localStorage.getItem(`history-${story.id}-${interviewee.id}`)
+        localStorage.getItem(
+          `history-${story.id}-${story.version}-${interviewee.id}`
+        )
       );
       return localHistory ? histories.push(localHistory) : null;
     });
@@ -96,21 +100,24 @@ export default class OutroView extends Component {
   render() {
     this.getScore();
     const { story } = this.props;
+
+    const LOCALE = story.locale ? story.locale : "en";
+    const LANG = LOCALES[LOCALE];
+
     if (!story || Object.keys(story).length === 0) return null; // FIXME show spinner
 
     const resultScore = this.getScore();
     const getResultScore = () => {
       if (resultScore >= 95) {
-        return `Well done, you have explored the maximum amount of information possible.
-        Would you like to have your say now?`;
+        return LANG.outroScore95;
       } else if (resultScore >= 70) {
-        return `Nice one, you have explored ${resultScore}% of the story. Go back to the interviews for more or have your say now.`;
+        return `${LANG.outroScore70a} ${resultScore}% ${LANG.outroScore70b}`;
       } else if (resultScore >= 50) {
-        return `You have explored ${resultScore}% of the story, you can revisit the interviews at any time or have your say now.`;
+        return `${LANG.outroScore50a} ${resultScore}% ${LANG.outroScore50b}`;
       } else if (resultScore >= 25) {
-        return `You have explored ${resultScore}% of the story, but there is plenty more to find out, you can revisit the interviews at any time or have your say now.`;
+        return `${LANG.outroScore25a} ${resultScore}% ${LANG.outroScore25b}`;
       }
-      return `Were you in a rush? You have explored ${resultScore}% of the information, but there is plenty more to find out, you can revisit the interviews at any time or have your say now.`;
+      return `${LANG.outroScore0a} ${resultScore}% ${LANG.outroScore0b}`;
     };
     return [
       <Topbar
@@ -131,14 +138,14 @@ export default class OutroView extends Component {
               onClick={() => this.props.router.push(`/${story.id}/listing`)}
               primary
             >
-              Revisit the interviews
+              {LANG.outroRevisit}
             </Action>
             <Action
               fixed
               onClick={() => this.props.router.push(`/${story.id}/poll`)}
               primary
             >
-              Have your say
+              {LANG.outroHaveSay}
             </Action>
           </Actionbar>
         </PageBody>
@@ -149,6 +156,7 @@ export default class OutroView extends Component {
           isOpen={this.state.storyDetailsModal}
           key="detailsModal"
           story={story}
+          LANG={LANG}
         />
       ) : null
     ];

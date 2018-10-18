@@ -5,13 +5,12 @@
   transition: none !important;
 }
 .tippy-popper {
-  max-width: 200px;
   -webkit-perspective: 800px;
-  perspective: 800px;
-  z-index: 9999;
   outline: 0;
-  transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+  perspective: 800px;
   pointer-events: none;
+  transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+  z-index: 9999;
 }
 .tippy-popper.html-template {
   max-width: 96%;
@@ -515,7 +514,8 @@
 }
 .tippy-popper .tippy-tooltip.light-theme {
   color: #26323d;
-  box-shadow: 0 2px 10px 0 rgba(0,0,0,.07), 0 -2px 10px 0 rgba(0,0,0,.07);
+  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.07),
+    0 -2px 10px 0 rgba(0, 0, 0, 0.07);
   background-color: #fff;
 }
 .tippy-popper .tippy-tooltip.light-theme[data-animatefill] {

@@ -239,12 +239,12 @@ function stories(state = [], action) {
 function storiesWrapper(state = [], action) {
   const { type, storyIndex, payload } = action;
 
-  console.log(action);
+  // console.log(action);
   const newState = stories(state, action);
 
   try {
     if (typeof storyIndex !== "number") {
-      console.log("no storyIndex");
+      // console.log("no storyIndex");
       // return newState;
     }
 
@@ -260,7 +260,7 @@ function storiesWrapper(state = [], action) {
     let currentStory = newState.find((story) => story.id === storyId);
     if (type === "DELETE_STORY")
       currentStory = state.find((story) => story.id === storyId);
-    console.log(currentStory);
+    // console.log(currentStory);
 
     if (!currentStory) return newState;
     if (currentStory.ignore) return newState;
@@ -297,7 +297,7 @@ function storiesWrapper(state = [], action) {
         }
       )
         .then((result) => {
-          console.log(result);
+          // console.log(result);
           // now delete
           Storage.remove(`stories/${storyId}/story.json`, {
             bucket: "data.interviewjs.io",

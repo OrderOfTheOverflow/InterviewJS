@@ -5,9 +5,27 @@ import React, { Component } from "react";
 import { object, shape, string, func } from "prop-types";
 import axios from "axios";
 
-import { Action, Actionbar, Container, PageSubtitle, Separator, setSpace } from "interviewjs-styleguide";
+import {
+  Action,
+  Actionbar,
+  Container,
+  PageSubtitle,
+  Separator,
+  setSpace
+} from "interviewjs-styleguide";
 
-import { Chart, Cover, Page, PageBody, PageHead, ShareModal, StoryDetailsModal, Topbar } from "../partials";
+import {
+  Chart,
+  Cover,
+  Page,
+  PageBody,
+  PageHead,
+  ShareModal,
+  StoryDetailsModal,
+  Topbar
+} from "../partials";
+
+import LOCALES from "../locales";
 
 const PollItem = css(Container)`
   &:not(:last-child) {
@@ -20,8 +38,7 @@ export default class ResultsView extends Component {
     super(props);
     this.state = {
       storyDetailsModal: false,
-      shareStoryModal: false,
-      results: window.InterviewJS.poll || [],
+      shareStoryModal: false
     };
 
     this.toggleDetailsModal = this.toggleDetailsModal.bind(this);
@@ -48,8 +65,13 @@ export default class ResultsView extends Component {
       window.InterviewJS &&
       window.InterviewJS.getStoryURL
     ) {
-      const storyURL = window.InterviewJS.getStoryURL(this.props.params.storyId);
-      if (storyURL) axios.get(storyURL).then(response => this.props.createStory(response.data));
+      const storyURL = window.InterviewJS.getStoryURL(
+        this.props.params.storyId
+      );
+      if (storyURL)
+        axios
+          .get(storyURL)
+          .then((response) => this.props.createStory(response.data));
     }
   }
 
@@ -63,6 +85,10 @@ export default class ResultsView extends Component {
 
   render() {
     const { story } = this.props;
+
+    const LOCALE = story.locale ? story.locale : "en";
+    const LANG = LOCALES[LOCALE];
+
     if (!story || Object.keys(story).length === 0) return null; // FIXME show spinner
 
     const { poll } = story;
@@ -77,22 +103,40 @@ export default class ResultsView extends Component {
           <Cover image={story.cover} compact />
         </PageHead>
         <PageBody limit="x" flex={[1, 0, `${100 / 4}%`]}>
-          {poll.filter(item => !!item.id).map(item => (
+          {poll.filter((item) => !!item.id).map((item) => (
             <PollItem key={item.question}>
               <PageSubtitle typo="h3">{item.question}</PageSubtitle>
               <Separator silent size="m" />
               <Chart
                 answer1={item.answer1}
                 answer2={item.answer2}
-                val1={this.state.results.find(result => result.id === item.id) ? this.state.results.find(result => result.id === item.id).answer1 : 0}
-                val2={this.state.results.find(result => result.id === item.id) ? this.state.results.find(result => result.id === item.id).answer2 : 0}
+                val1={
+                  this.props.poll.find((result) => result.id === item.id)
+                    ? this.props.poll.find((result) => result.id === item.id)
+                        .answer1
+                    : 0
+                }
+                val2={
+                  this.props.poll.find((result) => result.id === item.id)
+                    ? this.props.poll.find((result) => result.id === item.id)
+                        .answer2
+                    : 0
+                }
               />
             </PollItem>
           ))}
           <Separator size="m" silent />
           <Actionbar>
+            <Action
+              secondary
+              fixed
+              target="_blank"
+              href="https://interviewjs.io/#examples"
+            >
+              {LANG.resultsMoreButton}
+            </Action>
             <Action primary fixed onClick={this.toggleShareStoryModal}>
-              Share this story
+              {LANG.resultsShareButton}
             </Action>
           </Actionbar>
         </PageBody>
@@ -103,6 +147,7 @@ export default class ResultsView extends Component {
           isOpen={this.state.storyDetailsModal}
           key="detailsModal"
           story={story}
+          LANG={LANG}
         />
       ) : null,
       this.state.shareStoryModal ? (
@@ -112,8 +157,9 @@ export default class ResultsView extends Component {
           key="shareModal"
           story={story}
           body={<Container />}
+          LANG={LANG}
         />
-      ) : null,
+      ) : null
     ];
   }
 }
@@ -122,11 +168,11 @@ ResultsView.propTypes = {
   createStory: func.isRequired,
   router: object,
   story: shape({
-    title: string,
-  }),
+    title: string
+  })
 };
 
 ResultsView.defaultProps = {
   router: null,
-  story: {},
+  story: {}
 };

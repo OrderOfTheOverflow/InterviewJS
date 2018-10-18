@@ -15,7 +15,7 @@ export default class Bubble extends Component {
   componentDidMount() {
     this.preloaderTimer = setTimeout(() => {
       this.setState({ loading: false });
-    }, this.props.delay + 1000);
+    }, this.props.delay + 1500);
     this.renderTimeout = setTimeout(() => {
       this.setState({ rendering: false });
     }, this.props.delay);
@@ -32,7 +32,9 @@ export default class Bubble extends Component {
       if (!rendering) {
         return (
           <UserBubble {...this.props}>
-            <BubbleHTMLWrapper>{children}</BubbleHTMLWrapper>
+            <BubbleHTMLWrapper displayType={displayType}>
+              {children}
+            </BubbleHTMLWrapper>
           </UserBubble>
         );
       }

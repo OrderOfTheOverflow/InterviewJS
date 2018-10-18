@@ -77,6 +77,12 @@ const PlaceHolder = css.div`
   width: 100%
 `;
 
+const LoaderContainer = css.div`
+  position: absolute;
+  top:50%;
+  transform: translateY(-50%);
+`;
+
 const computeId = (userId, storyId) => {
   let namespace = userId;
   if (namespace.indexOf(":") > 0) namespace = namespace.split(":").pop();
@@ -108,12 +114,13 @@ export default class PublishStoryModal extends Component {
       default:
         storyBase = "https://story.interviewjs.io/"; // production
     }
+    // const { story } = this.props;
 
     this.state = {
       step: 0,
       storyKey: null,
       storyBase,
-      embedModal: false,
+      embedModal: false
     };
 
     this.handleStep0 = this.handleStep0.bind(this);
@@ -121,6 +128,11 @@ export default class PublishStoryModal extends Component {
     this.handleStep2 = this.handleStep2.bind(this);
     this.handleStep3 = this.handleStep3.bind(this);
     this.toggleEmbedModal = this.toggleEmbedModal.bind(this);
+  }
+
+  componentDidMount() {
+    const { publishShortcut } = this.state;
+    if (publishShortcut) this.handleStep2();
   }
 
   componentDidUpdate() {
@@ -138,7 +150,7 @@ export default class PublishStoryModal extends Component {
 
   handleStep0(data) {
     this.props.updateStory(data, this.props.storyIndex);
-    this.setState({ step: this.state.step + 1 });
+    return this.setState({ step: this.state.step + 1 });
   }
 
   handleStep1(data) {
@@ -150,7 +162,7 @@ export default class PublishStoryModal extends Component {
     const { story } = this.props;
     if (story.ignore) {
       this.setState({
-        step: this.state.step + 1,
+        step: this.state.publishShortcut ? 3 : this.state.step + 1,
         storyKey: null
       });
 
@@ -173,21 +185,22 @@ export default class PublishStoryModal extends Component {
       .then(async (result) => {
         console.log(result);
         this.setState({
-          step: this.state.step + 1,
-          storyKey: computeId(this.props.user.id, this.props.story.id),
+          step: this.state.publishShortcut ? 3 : this.state.step + 1,
+          storyKey: computeId(this.props.user.id, this.props.story.id)
         });
+        localStorage.setItem(`publishShortcut-${story.id}`, true);
       })
       .catch((err) => console.log(err));
   }
 
   handleStep3() {
-    this.props.handleClose();
+    this.props.router.push("/stories");
   }
 
   toggleEmbedModal() {
     this.setState({
-      embedModal: !this.state.embedModal,
-    })
+      embedModal: !this.state.embedModal
+    });
   }
 
   render() {
@@ -231,7 +244,9 @@ export default class PublishStoryModal extends Component {
         return (
           <Container limit="s" align="center">
             <PageSubtitle typo="h3">
-              Engage your readers. Ask them to have their say…
+              Engage your readers by asking them to have their say. Create
+              questions based on the content of your story with a clear choice.
+              You need at least one question.
             </PageSubtitle>
             <Separator size="m" silent />
             <Poll
@@ -249,15 +264,31 @@ export default class PublishStoryModal extends Component {
               Well done! Your story is now up and running. Here’s a preview:
             </PageSubtitle>
             <Separator size="m" silent />
+            <PageSubtitle typo="h4">
+              Grab the link and share on social:
+            </PageSubtitle>
+            <Separator size="s" silent />
+            {this.state.storyKey ? (
+              <Action target="_blank" href={`${iframeViewer}/`}>
+                {`${iframeViewer}/`}
+              </Action>
+            ) : (
+              ""
+            )}
+            <Separator size="m" silent />
             <PreviewWrapper>
-              <Separator size="l" silent />
-              <Text>Please wait. Your InterviewJS story is being created.</Text>
-              <Separator size="m" silent />
-              <Preloader />
+              <LoaderContainer>
+                <Preloader />
+                <Separator size="s" silent />
+                <Text>
+                  Please wait. Your InterviewJS story is being created.
+                </Text>
+                <Separator size="m" silent />
+              </LoaderContainer>
               <img src={iframeRatioSpacer} alt="" />
               <iframe
                 title="Preview"
-                src={`${iframeViewer}?${uuidv4()}/`}
+                src={`${iframeViewer}?${uuidv4()}/nolocalstorage`}
                 ref={(iframe) => {
                   this.iframe = iframe;
                 }}
@@ -267,30 +298,19 @@ export default class PublishStoryModal extends Component {
             </PreviewWrapper>
             <Separator size="m" silent />
             <PageSubtitle typo="h4">
-              Grab the link and share on social:
+              You can edit a story any time by accessing it via your library. Re-publish to save the changes—the link stays the same.
             </PageSubtitle>
-            <Separator size="s" silent />
-              <Action target="_blank" href={`${iframeViewer}/`}>
-                {`${iframeViewer}/`}
-              </Action>
             <Separator size="m" silent />
             <Actionbar>
               <Action fixed secondary onClick={this.handleStep3}>
-                Back to composer
+                My story library
               </Action>
-              <Action 
-                fixed 
-                primary 
-                onClick={this.toggleEmbedModal}
-              >
+              <Action fixed primary onClick={this.toggleEmbedModal}>
                 Embed
               </Action>
             </Actionbar>
-            <ReactModal 
-              isOpen={this.state.embedModal}
-              ariaHideApp={false}
-            >
-              <Modal handleClose={this.toggleEmbedModal} >
+            <ReactModal isOpen={this.state.embedModal} ariaHideApp={false}>
+              <Modal handleClose={this.toggleEmbedModal}>
                 <ModalHead fill="grey">
                   <PageTitle typo="h2">Embed Code</PageTitle>
                   <Separator size="s" silent />

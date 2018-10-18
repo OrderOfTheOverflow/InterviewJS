@@ -88,7 +88,7 @@ const PaneFrame = (props) => {
     <Frame {...props} dir="column" padded>
       <Container flex={[1, 1, `auto`]}>{props.children}</Container>
       <Separator silent size="s" />
-      <Container flex={[0, 0, `180px`]}>
+      <Container flex={[0, 0, `140px`]}>
         <DraftHolder>
           <Draft fill="grey">{props.draft}</Draft>
           <SubmitButton side={props.side}>
@@ -104,6 +104,7 @@ const PaneFrame = (props) => {
               </Action>
             ) : (
               <Action
+                className={props.side === "right" ? "jr-step-07" : "jr-step-08"}
                 disabled={!hasDraft}
                 iconic
                 onClick={hasDraft ? props.addStorylineItem : null}

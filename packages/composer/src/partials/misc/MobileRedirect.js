@@ -20,7 +20,7 @@ const MobileRedirect = props => (
   <MobileRedirectEl key="Placeholder">
     <Container>
       <PageTitle typo="h2" style={{ textAlign: "center" }}>
-        The composer works exclusively on desktops. Make sure your browser window is expanded.
+        The composer works exclusively on desktops. Make sure your browser window is maximised.
       </PageTitle>
       <Separator silent size="m" />
       <Actionbar>

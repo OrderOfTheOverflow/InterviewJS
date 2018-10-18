@@ -35,7 +35,9 @@ export default class ImagePane extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      draft: this.props.draft
+      draft: this.props.draft,
+      filename: this.props.draft.filename,
+      uploading: false
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -43,7 +45,7 @@ export default class ImagePane extends Component {
   componentWillReceiveProps(nextProps) {
     const { draft } = nextProps;
     if (draft !== this.props.draft) {
-      this.setState({ draft });
+      this.setState({ draft, filename: draft.filename });
     }
     return null;
   }
@@ -82,8 +84,11 @@ export default class ImagePane extends Component {
               ...this.state.draft,
               value: `https://story.interviewjs.io/files/${
                 this.props.user.id
-              }/${this.props.story.id}/${key}`
-            }
+              }/${this.props.story.id}/${key}`,
+              filename: name,
+            },
+            filename: name,
+            uploading: false
           },
           () => this.props.updateDraft(this.state.draft)
         );
@@ -92,6 +97,7 @@ export default class ImagePane extends Component {
   }
 
   handleFile(f) {
+    this.setState({ uploading: true });
     // console.log(f);
     const { type, preview, name } = f[0];
     if (type === "image/gif") {
@@ -172,6 +178,8 @@ export default class ImagePane extends Component {
             </Dropzone>
             <TextInput
               file
+              uploaded={this.state.filename}
+              loading={this.state.uploading}
               onClick={() => {
                 this.dropzoneRef.open();
               }}
@@ -189,6 +197,7 @@ export default class ImagePane extends Component {
               name="title"
               onChange={(e) => this.handleChange(e)}
               value={this.props.draft.title}
+              placeholder="Type your text here"
               required
               type="text"
             />

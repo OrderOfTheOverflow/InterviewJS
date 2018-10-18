@@ -80,7 +80,7 @@ export default class MediaPane extends Component {
       >
         <Separator size="x" silent />
         <FormItem>
-          <Label>YouTube embed code</Label>
+          <Label>Embed video</Label>
           <TextInput
             area
             name="value"

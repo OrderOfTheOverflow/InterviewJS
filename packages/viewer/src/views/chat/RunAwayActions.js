@@ -1,37 +1,39 @@
 /* eslint react/forbid-prop-types: 0 */
 import React from "react";
 import { bool, func, object } from "prop-types";
-import { Action } from "interviewjs-styleguide";
+import { Icon, Tiles, Tile, color } from "interviewjs-styleguide";
 
-const RunAwayActions = props => [
-  props.isSwitchPossible ? (
-    <Action
-      fixed
-      key="talkToSomebodyElse"
-      onClick={() => props.updateHistory("switchTo")}
-      primary
-      theme={{ font: "PT sans" }}
+const RunAwayActions = (props) => (
+  <Tiles force={3}>
+    {props.isSwitchPossible ? (
+      <Tile
+        onClick={() => props.updateHistory("switchTo")}
+        style={{ minWidth: "140px" }}
+      >
+        <Icon name="users" size="l" /> <div>{props.LANG.chatChangeSpeaker}</div>
+      </Tile>
+    ) : null}
+    <Tile onClick={props.resetHistory} style={{ minWidth: "140px" }}>
+      <Icon name="replayconv" size="l" />{" "}
+      <div>{props.LANG.chatResetHistory}</div>
+    </Tile>
+    <Tile
+      paint={color.redM}
+      onClick={() => props.navigateAway(`/${props.story.id}/outro`)}
+      style={{ minWidth: "140px" }}
     >
-      I want to talk to somebody else
-    </Action>
-  ) : null,
-  <Action
-    fixed
-    key="doneChatting"
-    onClick={() => props.navigateAway(`/${props.story.id}/outro`)}
-    primary
-    tone="negative"
-    theme={{ font: "PT sans" }}
-  >
-    I’m done chatting
-  </Action>,
-];
+      <Icon name="exit" size="l" /> <div>{props.LANG.chatQuit}</div>
+    </Tile>
+  </Tiles>
+);
 
 RunAwayActions.propTypes = {
   isSwitchPossible: bool.isRequired,
-  updateHistory: func.isRequired,
+  LANG: object.isRequired,
   navigateAway: func.isRequired,
+  resetHistory: func.isRequired,
   story: object,
+  updateHistory: func.isRequired
 };
 
 export default RunAwayActions;
